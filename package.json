@@ -1,0 +1,29 @@
+{
+  "name": "panther-core",
+  "version": "1.0.0",
+  "description": "Core Panther products",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.openans.co.uk:Panther/panther-core.git"
+  },
+  "keywords": [
+    "Panther"
+  ],
+  "author": "vince@openanswers.co.uk",
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/eslint*"
+    ]
+  }
+}
