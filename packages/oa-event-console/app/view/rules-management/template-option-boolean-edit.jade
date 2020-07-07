@@ -1,0 +1,13 @@
+script(id="template-option-boolean-edit" type="text/x-mustache-template")
+  .option-entry.option-entry-edit(
+    data-option-id="{{data.verb}}" 
+    class="verb-{{data.verb}}"
+  )
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.option-delete-button(id="option-delete-button-{{data.uvid}}-{{data.verb}}")
+      .left
+        .option-operator
+          input(class="name-verb-option-debug" 
+          type='text' value="{{data.verb}}"
+          placeholder="Option" name='option').form-control

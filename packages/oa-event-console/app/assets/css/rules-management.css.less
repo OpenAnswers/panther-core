@@ -1,0 +1,1115 @@
+@import "../oa_less/variables.less";
+
+#search-warning {
+  display: none;
+  margin-left: 50px;
+  z-index: 99;
+  height: 55px;
+}
+
+.oa-col-fixed {
+  top: 70px;
+  right: 0;
+  position: fixed;
+  width: 200px;
+}
+
+#search-warning .left {
+  float: left;
+}
+#search-warning .right {
+  float: right;
+}
+
+#search-warning .btn {
+  margin-top: -5px;
+}
+
+///////////////////////////////////////////////
+
+.text-divider {
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+  color: #9e9e9e;
+}
+
+.text-divider hr {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 45%;
+  border-top: 1px solid #e0e0e0;
+}
+
+.text-divider .left {
+  float: left;
+}
+
+.text-divider .right {
+  float: right;
+}
+
+///////////////////////////////////////////////
+
+#modal-move-to-group p {
+  color: #616161;
+}
+
+#modal-error-subtext {
+  color: #9e9e9e;
+  font-size: 0.9em;
+}
+
+///////////////////////////////////////////////
+
+.select-add-value {
+  margin-top: 5px;
+  float: left;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  width: 100%;
+  padding-top: 3px;
+  height: 29px;
+  text-align: center;
+  color: #4083a9;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.select-add-value:hover {
+  background: #fafafa;
+}
+
+///////////////////////////////////////////////
+
+.rule-group-new-rule {
+  //display: none;
+  width: 100%;
+  text-align: center;
+  font-size: 1.1em;
+  margin-bottom: 3px;
+}
+
+#new-rule {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  -webkit-padding-start: 0;
+}
+
+.input-group-addon {
+  background: @selected-bg;
+  border-color: @border;
+  color: @text-color-faded;
+}
+
+// ------------------
+// ### Card Rules
+
+.card .card-global-rule .inner .content .selects .select-entry-view {
+  background-color: @foreground;
+}
+
+.card .card-global-rule .action-entry-view {
+  background-color: @foreground;
+}
+
+.section-topbar-save-rules > .card-rules-warning,
+.section-topbar-reload > .card-rules-reload {
+  width: 100%;
+}
+
+.card-rules-warning {
+  background: @foreground;
+  padding-bottom: 10px;
+  overflow: hidden;
+}
+
+.card-rules-warning .title {
+  //width: 100%;
+  height: 35px;
+  background: #ff6b6b;
+}
+
+.card-rules-warning .title p {
+  color: @text-color;
+  text-align: center;
+  padding-top: 7px;
+  font-weight: bold;
+}
+
+.card-rules-warning .content {
+  color: @text-color-faded;
+  width: 200px;
+  margin: auto;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.card-rules-warning .buttons {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.card-rules-warning .buttons .btn {
+  height: 30px;
+  font-size: 0.8em;
+  padding-top: 5px;
+}
+
+.card-rules-warning .buttons .btn-save {
+  background: #ff6b6b;
+  color: white;
+}
+
+.card-rules-warning .buttons .btn-discard {
+  background: white;
+  border: 1px solid #bdbdbd;
+  color: #9e9e9e;
+}
+
+// Groups
+
+.rule-group-name-edit {
+  padding: 2px;
+}
+
+// --------------------
+// ### Global Rule Cards
+
+.card-global-rule-orderno {
+  float: left;
+  width: 40px;
+  height: 60px;
+  text-align: center;
+}
+
+.card-global-rule-orderno p {
+  font-size: 1.3em;
+  padding-top: 16px;
+  color: #9e9e9e;
+}
+
+.card-global-rule {
+  /*overflow: hidden;*/
+  //margin-left: 15px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.card-global-rule-placeholder {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 15px;
+  background: @foreground;
+  border: 1px solid @border;
+  border-radius: 4px;
+}
+
+.card-global-rule .cover {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: @foreground;
+  opacity: 0.9;
+  z-index: 100;
+}
+
+.card-global-rule .cover-text {
+  display: none;
+  position: absolute;
+  top: 40%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 101;
+  color: @text-color;
+  font-size: 1.2em;
+}
+
+.card-global-rule .cover-text p {
+  margin-top: 10px;
+}
+
+.card-global-rule-collapsed {
+  min-height: 0;
+}
+
+.card-global-rule > form > .inner {
+  padding: 10px;
+  display: none;
+}
+
+.card-global-rule .edit-warning {
+  width: 100%;
+  height: 60px;
+  border-top: 1px solid @border;
+  margin-top: 10px;
+}
+
+.card-global-rule .edit-warning .left {
+  float: left;
+  color: @card-details-color;
+  padding-top: 15px;
+  padding-left: 15px;
+  font-size: 1.2em;
+}
+
+.card-global-rule .edit-warning .right {
+  float: right;
+  padding-right: 15px;
+  padding-top: 13px;
+}
+
+// .card-global-rule .edit-warning .right .btn {
+//   margin-left: 7px;
+// }
+
+.card-global-rule .inner .content .selects {
+  min-height: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #929292;
+}
+
+.card-global-rule .inner .content .select-action-add {
+  cursor: pointer;
+  margin-left: 12px;
+  font-size: 0.9em;
+  //  display: none;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.card-global-rule .inner .content .action-add {
+  margin-bottom: 20px;
+}
+
+.card-global-rule .inner .content .select-action-add a {
+  color: @brand-primary;
+  text-decoration: none;
+}
+
+.card-global-rule .inner .content .selects .select-entry-edit {
+  //  display: none;
+  margin-bottom: 10px;
+}
+
+.card-global-rule .select-entry .inner .right .save-button,
+.card-global-rule .select-entry .inner .right .cancel-button {
+  margin-right: 10px;
+  height: 30px;
+  font-size: 0.9em;
+  margin-top: 9px;
+}
+
+.card-global-rule .select-entry .inner .right .save-button:hover {
+  color: #e0e0e0;
+}
+
+.card-global-rule .select-entry .edit-padding {
+  padding-top: 4px !important;
+}
+
+.card-global-rule .select-entry .normal-padding {
+  padding-left: 11px !important;
+}
+
+.card-global-rule .input-invalid {
+  border-color: #ff9696 !important;
+}
+
+.card-global-rule .select-entry .select-value {
+  float: left;
+  padding-top: 9px;
+  color: #81c784;
+}
+
+.card-global-rule .inner .content .selects .select-entry button,
+.card-global-rule .inner .content .actions .entry {
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.card-global-rule .inner .content .selects {
+  padding-top: 12px;
+}
+
+.card-global-rule .inner .content .actions {
+  min-height: 50px;
+  padding-top: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: @text-color;
+}
+
+.card-global-rule .inner .content .subtitle {
+  font-size: @font-size-h5;
+  color: @card-content-color;
+  margin-left: 10px;
+}
+
+.card-global-rule .title {
+  cursor: move;
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid @border;
+  overflow: visible;
+}
+
+.card-global-rule .title .rule-name {
+  display: inline-block;
+  cursor: text;
+  margin-bottom: 0px;
+}
+
+.card-global-rule .title .rule-name-edit {
+  // display: none;
+}
+
+.card-global-rule .action-entry input {
+  border-radius: 0px !important;
+  border-top-right-radius: @input-border-radius !important;
+  border-bottom-right-radius: @input-border-radius !important;
+}
+
+.card-global-rule .title .left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 10px;
+  height: 60px;
+}
+
+.card-global-rule .title .left p {
+  color: @text-color-faded;
+  font-size: 1.15em;
+  padding-left: 15px;
+  padding-top: 5px;
+}
+
+.card-global-rule .title .left .metadata {
+  padding-left: 15px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: @text-color-faded;
+  font-size: 0.9em;
+}
+
+.card-global-rule .title .right .stats {
+  cursor: text;
+  font-size: 0.8em;
+}
+
+.card-global-rule .title .left .metadata-tags {
+  display: block;
+}
+
+.card-global-rule .title .left .metadata-author {
+  display: none;
+}
+
+.card-global-rule .title .right {
+  float: right;
+  height: 50px;
+}
+
+.card-global-rule .title .right .buttons {
+  float: right;
+  font-size: 1.3em;
+  color: #bdbdbd;
+  margin-top: 10px;
+}
+
+.card-global-rule .title .right .stats {
+  float: right;
+  margin-right: 25px;
+  margin-top: 5px;
+  margin-left: 15px;
+  text-align: center;
+  color: #bdbdbd;
+}
+
+.card-global-rule .title .right .buttons .button-grab {
+  cursor: move;
+}
+.card-global-rule .title .right .buttons .button-grab-disabled {
+  cursor: not-allowed !important;
+}
+.card-global-rule .title .right .buttons .button-edit {
+  cursor: pointer;
+}
+.card-global-rule .title .right .buttons .button-edit-normal {
+}
+.card-global-rule .title .right .buttons .button-edit-active {
+  color: @link-hover-color;
+}
+.card-global-rule .title .right .buttons .button-collapse {
+  cursor: pointer;
+}
+
+.card-global-rule .title .right .buttons .glyphicon:hover {
+  color: #919191;
+}
+
+.card-global-rule .title .tag {
+  float: left;
+  height: 10px;
+  margin-right: 10px;
+}
+
+.card-global-rule .title .tag .colour {
+  float: left;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 4px;
+  margin-right: 6px;
+}
+
+.card-global-rule .title .tag .text {
+  float: left;
+}
+
+.card-global-rule .action-entry {
+  width: 100%;
+  height: 35px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.card-global-rule .action-operator input {
+  border-radius: @input-border-radius !important;
+}
+
+// ------------------------------------
+////////////////////////////////////////
+// This might be the old rules ^ ??
+
+////////////////////////////////////////
+
+.rule-group {
+  width: 100%;
+  border: 1px solid @border;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  background-color: @foreground;
+}
+
+.rule-group-no-rules {
+  width: 100%;
+  text-align: center;
+  color: @text-color-faded;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.rule-group-content {
+  background-color: @foreground-element;
+  padding: 20px 10px 10px 10px;
+  display: none;
+}
+
+.rule-group-content-select .card {
+  background: @foreground;
+  border: 0px;
+  margin-bottom: 0;
+}
+
+.rule-group .inner {
+  /*padding: 0px 10px 0px 10px;*/
+}
+
+.rule-group:hover {
+}
+
+.rule-group-title {
+  height: 41px;
+  color: @text-color-header;
+  font-size: @font-size-h2;
+  background: @foreground;
+  overflow: hidden;
+  border-radius: 6px;
+  //cursor: pointer;
+}
+
+.rule-group-title.title {
+  cursor: move;
+  .right {
+    cursor: pointer;
+  }
+  .rule-badge-rules-hit {
+    cursor: pointer;
+  }
+}
+
+.rule-group-name {
+  float: left;
+  margin-left: 10px;
+  margin-top: 4px;
+}
+
+.rule-group-name-uuid-short {
+  display: inline-block;
+  font-size: 0.7em;
+  margin-top: 8px;
+  float: right;
+}
+
+.rule-group-name-uuid-tally {
+  display: inline-block;
+  font-size: 0.8em;
+  color: #ff6b6b;
+  margin-right: 10px;
+  margin-top: 8px;
+  margin-left: 5px;
+  float: right;
+}
+
+.rule-group-subtitle {
+  float: left;
+  font-size: 0.8em;
+  color: @text-color-faded;
+  margin-left: 10px;
+  padding-top: 8px;
+  display: block;
+}
+
+.rule-group-title .left {
+}
+
+.rule-group-title .right {
+  float: right;
+  padding-right: 18px;
+}
+
+.rule-group-icon {
+  height: 35px;
+  width: 32px;
+  padding-top: 7px;
+  font-size: 1em;
+  color: #9e9e9e;
+  //cursor: pointer;
+  float: right;
+  color: @text-color-faded;
+  font-size: 1em;
+  margin-left: 4px;
+}
+
+.rule-group-icon > .glyphicon {
+  cursor: pointer;
+}
+
+.rule-group-icon .grabber {
+  cursor: move;
+}
+
+.rule-group-icon:hover {
+  color: #919191;
+}
+
+.rule-group-empty {
+  width: 100%;
+  text-align: center;
+  color: @text-color-faded;
+}
+
+.action-view-gem {
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  display: block;
+  float: left;
+  margin-top: 4px;
+}
+
+.action-view-gem-set {
+  background: #80c8ff;
+  border: 1px solid #73aed4;
+}
+.action-view-gem-discard {
+  background: #ff7c7d;
+  border: 1px solid #e36565;
+}
+.action-view-gem-stop {
+  background: #f5e632;
+  border: 1px solid #ded01a;
+}
+.action-view-gem-replace {
+  background: #b4e123;
+  border: 1px solid #a6c738;
+}
+
+.action-view-operator {
+  margin-left: 8px;
+  text-transform: capitalize;
+}
+
+.select-view-value,
+.action-view-value {
+  margin-left: 2px;
+  font-size: 14px;
+  color: #8a8a8a;
+  font-family: monospace;
+}
+
+.select-view-text,
+.action-view-text {
+  color: #9e9e9e;
+}
+
+@rule-height: 35px;
+@rule-entry-margin: 4px;
+
+.select-entry-edit {
+  clear: both;
+}
+
+.card-global-rule .selects-fixed-width {
+  .select-field {
+    width: calc(33% ~"-" @rule-entry-margin);
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+
+  .schedule-field {
+    width: calc(33% ~"-" @rule-entry-margin);
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+
+
+  .select-operator {
+    width: calc(33% ~"-" @rule-entry-margin);
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+}
+
+.card-global-rule .selects-flexible-width {
+  width: 33%;
+  float: left;
+
+  .select-values-delete {
+    margin-top: 4px;
+  }
+}
+
+.selector-select-add {
+  margin-top: 5px;
+  width: 100px;
+  display: block;
+}
+
+.card-global-rule .action-entry-view {
+  min-height: @rule-height;
+  background: @foreground-element;
+  border: 1px solid @border;
+  border-radius: @input-border-radius;
+  padding-top: 3px;
+}
+
+.card-global-rule .action-entry-view .inner {
+  padding: 3px 5px 5px 10px;
+}
+
+.card-global-rule .action-entry .right,
+.card-global-rule .select-entry .right {
+  width: 30px;
+  float: right;
+  text-align: right;
+}
+
+.card-global-rule .action-entry .left,
+.card-global-rule .select-entry .left {
+  width: calc(~"100% - 30px");
+  min-height: @rule-height;
+}
+
+.action-operator {
+  width: calc(33% ~"-" @rule-entry-margin);
+  float: left;
+
+  margin-right: @rule-entry-margin;
+}
+
+.card-global-rule .action-set-fixed-width {
+  .action-operator {
+    width: 50px;
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+
+  .action-field {
+    width: calc(50% ~"-" 25px ~"-" @rule-entry-margin);
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+}
+
+.card-global-rule .action-replace-fixed-width {
+  .action-operator {
+    width: 72px;
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+
+  > .action-replace-this {
+    width: calc(33% ~"-" 23px ~"-" @rule-entry-margin);
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+}
+
+.card-global-rule .action-flexible-width {
+  .action-value {
+    width: calc(50% ~"-" 25px ~"-" @rule-entry-margin);
+    float: left;
+  }
+
+  .action-replace-with {
+    width: calc(33% ~"-" 23px ~"-" @rule-entry-margin);
+    float: left;
+
+    margin-right: @rule-entry-margin;
+  }
+
+  .action-replace-field {
+    width: calc(33% ~"-" 23px ~"-" @rule-entry-margin);
+    float: left;
+  }
+}
+
+.card-global-rule .action-entry .colour {
+  float: left;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  margin-top: 12px;
+  margin-right: 8px;
+  margin-left: 2px;
+}
+
+.card-global-rule .action-entry .text {
+  float: left;
+  margin-top: 9px;
+  color: #929292;
+  margin-right: 4px;
+}
+
+.card-global-rule .action-entry .quote {
+  color: #81c784;
+}
+
+.card-global-rule .action-entry .field {
+  color: #424242;
+}
+
+.card-global-rule .inner .content .selects .select-entry-view {
+  background: @foreground-element;
+  border: 1px solid @border;
+  min-height: 35px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  padding: 5px 5px 5px 10px;
+  /*font-size: 1.2em;*/
+  color: @text-color;
+}
+
+// -----------------------------------------
+// #### Random?? Old Rules??
+
+// This might be able to be deleted now
+// .rule, .filter{
+//   .border-radius( 10px );
+// }
+
+.btn-rule_text {
+  font-family: @font-family-sans-serif;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.rule_text {
+  font-family: @font-family-monospace;
+  font-size: 14px;
+}
+
+.monospace {
+  font-family: @font-family-monospace;
+  font-size: ceil(@font-size-base * 0.9);
+}
+
+#select-match-preview-container {
+  width: 100%;
+  overflow: auto;
+}
+
+.select-match-preview {
+  padding: 5px 10px 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  color: #9e9e9e;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.rule-select-entry,
+.rule-action-entry {
+  width: 100%;
+  margin-bottom: 10px;
+  /*background: #F5F5F5;*/
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+}
+
+.select-reference-mouseover {
+  background-color: #f2f2f2;
+}
+
+.rule-action-text {
+  float: left;
+  color: #9e9e9e;
+  padding-left: 10px;
+  padding-top: 13px;
+}
+
+.rule-select-placeholder,
+.rule-action-placeholder {
+  margin-top: 20px;
+}
+
+.rule-select-delete,
+.rule-action-delete {
+  width: 24px;
+  height: 24px;
+  padding-top: 15px;
+  color: #9e9e9e;
+  cursor: pointer;
+}
+
+.rule-select-cancel {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background-color: @palette-alert-red;
+  color: @text-color-faded;
+  font-size: 1em;
+}
+
+.rule-select-cancel > .inner {
+  padding-top: 2px;
+  padding-left: 4px;
+}
+
+.rule-select-placeholder .placeholder-text {
+  color: @palette-accent;
+}
+
+.rule-select-entry > .inner,
+.rule-action-entry > .inner {
+  padding-left: 0px;
+  padding-right: 10px;
+}
+
+.rule-select-entry > .inner > .left,
+.rule-action-entry > .inner > .left {
+  float: left;
+}
+.rule-select-entry > .inner > .right,
+.rule-action-entry > .inner > .right {
+  float: right;
+}
+
+.rule-select-entry .text,
+.rule-action-entry .text {
+  float: left;
+  font-size: 1.4em;
+  padding-top: 10px;
+}
+
+.rule-select-values,
+.rule-action-values {
+  float: left;
+}
+
+.rule-select-field,
+.rule-action-field {
+  float: left;
+  width: 150px;
+  height: 35px;
+  border-radius: 4px;
+  margin-left: 10px;
+  margin-top: 7px;
+}
+
+.rule-select-field input[type="text"] {
+  width: 100%;
+  height: 100%;
+}
+
+.rule-schedule-field {
+  float: left;
+  width: 150px;
+  height: 35px;
+  border-radius: 4px;
+  margin-left: 10px;
+  margin-top: 7px;
+}
+
+.rule-schedule-field input[type="text"] {
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.rule-select-operator {
+  float: left;
+}
+
+.rule-select-value,
+.rule-action-value {
+  float: left;
+  width: 200px;
+  margin-top: 7px;
+  margin-left: 10px;
+}
+
+// Reference Event highlighting
+
+.reference-event-container {
+  overflow: auto;
+  margin-bottom: 20px;
+}
+
+.reference-event-container .entry {
+  border-bottom: 1px solid @border;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-radius: 4px;
+}
+
+.reference-event-entry > .left {
+  font-weight: bold;
+}
+
+.reference-event-container .entry > .right {
+  text-align: right;
+  background-clip: content-box;
+}
+
+.reference-event-entry-match {
+  background-color: rgba(146, 255, 146, 0.25);
+}
+
+.reference-event-entry-no-match {
+  background: rgba(255, 146, 146, 0.25);
+}
+
+#reference-event-verdict {
+  width: 65%;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  color: #9e9e9e;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#reference-event-verdict > .inner {
+  padding-top: 13px;
+}
+
+.reference-event-verdict-green {
+  border: 1px solid green !important;
+  background: #e8f5e9 !important;
+  color: green !important;
+}
+
+.reference-event-verdict-red {
+  border: 1px solid #f44336 !important;
+  background: #ffebee !important;
+  color: #f44336 !important;
+}
+
+.total-info {
+  float: left;
+  margin-right: 25px;
+}
+
+#total-counter-info {
+  position: relative;
+  font-size: 16px;
+  top: 30px;
+  padding: 0px;
+}
+
+.total-group-text {
+  margin-left: 30px;
+}
+
+.total-matched-group-text, .total-matched-rule-hits {
+  margin-left: 10px;
+}
+
+.total-group-rules-matched, {
+  background-color: #fd7400;
+}
+
+.container-title {
+  float: left;
+}
+
+.top-container {
+  display: inline-block;
+  width: 100%;
+}
+
+.badge {
+  vertical-align: 0;
+}
+
+.total-info .total-group-rules, .total-info .total-global-rules,
+.group-rules {
+  background-color: #5cb85c;
+}
+
+.total-info .total-groups, .group-hits-badge,
+.group-hits {
+  background-color: #3b5998;
+}
+
+.rule-hits-badge, .total-hits, .matched-rule-hits {
+  background-color: #a53030;
+}
+
+.rule-name-uuid-short {
+  font-size: 1.15em;
+}
+
+.rule-name-uuid-tally {
+  background-color: #a53030;
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700;
+  padding: 2px 3px;
+}

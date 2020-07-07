@@ -1,0 +1,13 @@
+li
+  a.group-link(
+    href="#/group/All"
+    data-group="All") All
+li
+  a.group-link(
+    href="#/group/No Group"
+    data-group="No Group") No Group
+each group in config.rules.set.groups.store_order
+  li
+    a.group-link(
+      href="#/group/#{group}"
+      data-group="#{group}") #{group}

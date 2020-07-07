@@ -1,0 +1,24 @@
+//- Render Template
+script(id="event-details-notes-template" type="text/x-handlebars-template")
+  thead
+    tr
+      th.col-xs-3 Time
+      th.col-xs-2 User
+      th.col-xs-7 Message
+  |{{#notes}}
+  tr(data-id="{{_id}}")
+    td.col-xs-3 {{timestamp}}
+    td.col-xs-2 {{user}}
+    td.col-xs-7 {{message}}
+  |{{/notes}}
+
+//- Container content
+table#event-details-modal-notes-table.table.table_nested.table-hover
+.form-inline.form-group
+  form#event-details-add-note(action="")
+    .row.form-row
+      .col-xs-10.col-sm-11
+        input(type='hidden' name='id' value="")
+        input.form-control.notes(type='text' name='note' placeholder="Note")
+      .col-xs-2.col-sm-1(style="text-align: right;")
+        input.btn.btn-primary.btn-success(type='submit' value="Add" style="padding: 6px;")

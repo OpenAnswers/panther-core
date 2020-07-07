@@ -1,0 +1,19 @@
+#!/bin/sh
+# 
+# Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.  
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
+
+if which greadlink 1>/dev/null 2>/dev/null; then
+  readlink=greadlink
+else
+  readlink=readlink
+fi
+
+FILEPATH=$($readlink -f $0)
+SCRIPT_DIRPATH=$(dirname $FILEPATH)
+
+node $SCRIPT_DIRPATH/usermod.js $*
+

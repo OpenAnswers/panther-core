@@ -1,0 +1,24 @@
+agent:
+
+  type: syslog
+
+  severity_map:
+    7: -1 
+    6: -1
+    5: -1
+    4: 2
+    3: 3
+    2: 4
+    1: 5
+    0: 5
+
+  field_map:
+    whatever: 'whatever'
+    fieldname_that_goes_lower: 'fieldname_that_goes_lower'
+    fieldname_that_goes_upper: 'fieldname_that_goes_upper'
+
+  field_transform:
+    fieldname_that_goes_lower: 'to_lower_case'
+    fieldname_that_goes_upper: 'to_upper_case'
+
+  identifier: '{node}:{severity}:{summary}'

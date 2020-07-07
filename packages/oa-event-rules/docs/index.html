@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>index.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="action.html">
+                  action.coffee
+                </a>
+              
+                
+                <a class="source" href="agent.html">
+                  agent.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_generic.html">
+                  agent_generic.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_graylog.html">
+                  agent_graylog.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_http.html">
+                  agent_http.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_syslogd.html">
+                  agent_syslogd.coffee
+                </a>
+              
+                
+                <a class="source" href="agents.html">
+                  agents.coffee
+                </a>
+              
+                
+                <a class="source" href="agentsyslog.html">
+                  agentsyslog.coffee
+                </a>
+              
+                
+                <a class="source" href="day_time.html">
+                  day_time.coffee
+                </a>
+              
+                
+                <a class="source" href="dedupe.html">
+                  dedupe.coffee
+                </a>
+              
+                
+                <a class="source" href="discard.html">
+                  discard.coffee
+                </a>
+              
+                
+                <a class="source" href="event.html">
+                  event.coffee
+                </a>
+              
+                
+                <a class="source" href="event_rules.html">
+                  event_rules.coffee
+                </a>
+              
+                
+                <a class="source" href="group.html">
+                  group.coffee
+                </a>
+              
+                
+                <a class="source" href="groups.html">
+                  groups.coffee
+                </a>
+              
+                
+                <a class="source" href="index.html">
+                  index.coffee
+                </a>
+              
+                
+                <a class="source" href="levels.html">
+                  levels.coffee
+                </a>
+              
+                
+                <a class="source" href="option.html">
+                  option.coffee
+                </a>
+              
+                
+                <a class="source" href="rule.html">
+                  rule.coffee
+                </a>
+              
+                
+                <a class="source" href="rule_set.html">
+                  rule_set.coffee
+                </a>
+              
+                
+                <a class="source" href="schedule.html">
+                  schedule.coffee
+                </a>
+              
+                
+                <a class="source" href="schedules.html">
+                  schedules.coffee
+                </a>
+              
+                
+                <a class="source" href="select.html">
+                  select.coffee
+                </a>
+              
+                
+                <a class="source" href="select_all.html">
+                  select_all.coffee
+                </a>
+              
+                
+                <a class="source" href="select_base.html">
+                  select_base.coffee
+                </a>
+              
+                
+                <a class="source" href="select_ends_with.html">
+                  select_ends_with.coffee
+                </a>
+              
+                
+                <a class="source" href="select_equals.html">
+                  select_equals.coffee
+                </a>
+              
+                
+                <a class="source" href="select_field_exists.html">
+                  select_field_exists.coffee
+                </a>
+              
+                
+                <a class="source" href="select_field_missing.html">
+                  select_field_missing.coffee
+                </a>
+              
+                
+                <a class="source" href="select_greater_than.html">
+                  select_greater_than.coffee
+                </a>
+              
+                
+                <a class="source" href="select_less_than.html">
+                  select_less_than.coffee
+                </a>
+              
+                
+                <a class="source" href="select_match.html">
+                  select_match.coffee
+                </a>
+              
+                
+                <a class="source" href="select_none.html">
+                  select_none.coffee
+                </a>
+              
+                
+                <a class="source" href="select_schedule.html">
+                  select_schedule.coffee
+                </a>
+              
+                
+                <a class="source" href="select_starts_with.html">
+                  select_starts_with.coffee
+                </a>
+              
+                
+                <a class="source" href="transforms.html">
+                  transforms.coffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>index.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>logging</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{ logger, debug } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;oa-logging&#x27;</span>)(<span class="hljs-string">&#x27;oa:event:rules:action&#x27;</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>npm modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>yaml  = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;js-yaml&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>oa modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{ throw_error, _ } = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;oa-helpers&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>This is the entry point for all the rules classes so
+everything is imported here for users to pick and choose
+what they want</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4 id="coffescript">Coffescript</h4>
+<p>  { Action } = require ‘oa-event-rules’</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4 id="javascript">Javascript</h4>
+<p>  Action = require(‘oa-event-rules’).Action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-string">&quot;use strict&quot;</span>
+
+{Action}      = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./action&#x27;</span>
+{Select}      = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./select&#x27;</span>
+{Option}      = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./option&#x27;</span>
+
+levels      = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./levels&#x27;</span>
+dedupe      = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./dedupe&#x27;</span>
+discard     = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./discard&#x27;</span>
+
+event       = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./event&#x27;</span>
+rule        = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./rule&#x27;</span>
+rule_set    = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./rule_set&#x27;</span>
+group       = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./group&#x27;</span>
+groups      = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./groups&#x27;</span>
+event_rules = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./event_rules&#x27;</span>
+{Agents}        = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agents&#x27;</span>
+{Agent}         = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agent&#x27;</span>
+{AgentGeneric}  = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agent_generic&#x27;</span>
+{AgentSyslogd}   = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agent_syslogd&#x27;</span>
+{AgentGraylog}  = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agent_graylog&#x27;</span>
+{AgentHttp}    = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agent_http&#x27;</span>
+
+{ Schedule} = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./schedule&#x27;</span>
+{ Schedules} = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./schedules&#x27;</span>
+
+
+<span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span> =
+  Action:     Action
+  Select:     Select
+  Option:     Option
+
+  Event:      event.Event
+  Rule:       rule.Rule
+  RuleSet:    rule_set.RuleSet
+  Group:      group.Group
+  Groups:     groups.Groups
+
+  Agents:     Agents
+  Agent:         Agent
+  AgentGeneric:  AgentGeneric
+  AgentSyslogd:  AgentSyslogd
+  AgentGraylog:  AgentGraylog
+  AgentHttp:     AgentHttp
+  Schedule:       Schedule
+  Schedules:       Schedules
+
+  EventRules: event_rules.EventRules</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

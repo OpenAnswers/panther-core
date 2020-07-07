@@ -1,0 +1,11 @@
+script(id="template-action-replace-view" type="text/x-mustache-template")
+  .action-entry-view.action-replace(data-action-id="{{ data.verb }}" 
+  data-action-uvid="{{ data.uvid }}" class="action-{{ data.verb }}")
+    .inner
+      span.action-view-gem(class="action-view-gem-{{ data.verb }}")
+      span.action-view-operator {{ data.verb }}
+      span.action-view-value #[code {{ data.this }}]
+      span.action-view-text &nbsp;with&nbsp;
+      span.action-view-value #[code {{ data.with }}]
+      span.action-view-text &nbsp;in the field&nbsp;
+      span.action-view-field #[code {{ data.field }}]

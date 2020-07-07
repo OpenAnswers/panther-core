@@ -1,0 +1,4 @@
+[submodule "w2ui"]
+	path = w2ui
+	url = https://github.com/deployable/w2ui.git
+	branch = oa-1.4

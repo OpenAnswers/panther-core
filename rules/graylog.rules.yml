@@ -1,0 +1,54 @@
+# ## Graylog agent settings
+
+agent:
+  type: graylog
+
+  # Map a syslog severity (left) to an event console severity (right)
+  # Syslog levels are 7-0, 0 being most important
+  # Event console severities is 1-5  (0 or -1 will be removed)
+  severity_map:
+    7: -1
+    6: -1
+    5: -1
+    4: 2
+    3: 3
+    2: 4
+    1: 5
+    0: 5
+
+
+  # Map from input object field name to event console field name
+  field_map:
+    facility: 'facility'
+    combined_message: 'summary'
+    host: 'node'
+    level: 'severity'
+    _applicationName: 'tag'
+    _logger: 'logger'
+    short_message: 'short_message'
+    short_message_trimmed: 'short_message_ident'
+
+
+  # Make some changes to event console fields
+  # Possible options are:
+  #  - `lower_case`
+  field_transform:
+    node: 'to_lower_case'
+
+
+  # Event console Identifier. 
+  # The identifier is the key used by the console to aggregate
+  # multiple log entries into one event. 
+  # This is the default that will be applied unlesss you set 
+  # a different `identifier` field in your rule set 
+  identifier: '{node}:{tag}:{logger}:{severity}:{short_message_ident}'
+
+  rules:
+    - name: 'Seperate syslog tag contains a [pid]'
+      field_exists: daemon
+      match:
+        daemon: "/(.*)[(\\d+)]?/"
+      set:
+        daemon: '{match.1}'
+        daemon_pid: '{match.2}'
+

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>TinyCache</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="tinycache">TinyCache</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>A Tiny Cache
+Doesn’t store falsey values!
+It is a little dumb, but tiny.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+debug   = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;debug&#x27;</span>) <span class="hljs-string">&#x27;oa:tinycache:tinycache&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2 id="error-tinycacheerror">Error TinyCacheError</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TinyCacheError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span></span>
+  name: <span class="hljs-string">&#x27;TinyCacheError&#x27;</span>
+  constructor: <span class="hljs-function"><span class="hljs-params">( @message, options = {} )</span>-&gt;</span>
+    @[key] = value <span class="hljs-keyword">for</span> own key, value <span class="hljs-keyword">of</span> options
+    @name = <span class="hljs-string">&#x27;TinyCacheError&#x27;</span>
+    <span class="hljs-built_in">Error</span>.captureStackTrace(<span class="hljs-built_in">this</span>, TinyCacheError) <span class="hljs-keyword">if</span> <span class="hljs-built_in">Error</span>.captureStackTrace</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2 id="class-tinycache">Class TinyCache</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TinyCache</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><code>new TinyCache({timeout: 100, limit: 100})</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  constructor: <span class="hljs-function"><span class="hljs-params">( options = {} )</span>-&gt;</span>
+    self = @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Set the default timeout for objects in the cache</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @timeout    = options.timeout <span class="hljs-keyword">or</span> <span class="hljs-number">60</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Limit the total number of objects in the cache</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @limit      = options.limit <span class="hljs-keyword">or</span> <span class="hljs-number">1000</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Keep expired objects, up to limit
+Useful for failure caches</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @keep       = !!options.keep <span class="hljs-keyword">or</span> <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Supply a callback to run on expirey
+For example a log call</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @expirey_cb = options.expirey_cb</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>and force expirey</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @force_expirey_cb = options.force_expirey_cb</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Supply a callback to be run on error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @error_cb   = options.error_cb</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Run the expire on a timer, in seconds</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @bg_expire  = options.bg_expire <span class="hljs-keyword">or</span> <span class="hljs-literal">false</span>
+    @bg_expire_timer = <span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Don’t actively expire items on get, unless we hit the limit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @limit_expire_only  = !!options.limit_expire_only
+
+    <span class="hljs-keyword">if</span> @bg_expire
+      @bg_expire_timer = <span class="hljs-built_in">setInterval</span> -&gt;
+        debug <span class="hljs-string">&#x27;background expire triggered&#x27;</span>
+        self.expire.apply self
+      , @bg_expire*<span class="hljs-number">1000</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Initialise the cache store</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @init()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>@promise = options.promise or undefined</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h4 id="set-in-the-store">Set in the store</h4>
+<p><code>set( id, value )</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  set: <span class="hljs-function"><span class="hljs-params">( id, value )</span>-&gt;</span>
+    debug <span class="hljs-string">&#x27;set&#x27;</span>, id
+    <span class="hljs-keyword">unless</span> value
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> TinyCacheError <span class="hljs-string">&quot;Can&#x27;t store falsey values: <span class="hljs-subst">#{value}</span>&quot;</span>, 
+        value: value
+    cache_value = <span class="hljs-keyword">new</span> TinyCacheItem( value, @timeout )
+    @store.<span class="hljs-keyword">delete</span>( id )
+    @store.set( id, cache_value )
+    <span class="hljs-keyword">if</span> !@bg_expire <span class="hljs-keyword">and</span> @store.size &gt; @limit
+      @expire()
+    <span class="hljs-keyword">return</span> value</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h4 id="get-from-the-store">Get from the store</h4>
+<p><code>get( id )</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  get: <span class="hljs-function"><span class="hljs-params">( id )</span>-&gt;</span>
+    debug <span class="hljs-string">&#x27;get&#x27;</span>, id
+    obj = @store.get( id )
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> obj
+    <span class="hljs-keyword">if</span> obj.expired()
+      debug <span class="hljs-string">&#x27;get is expired, return false&#x27;</span>, id, obj.expires
+      <span class="hljs-keyword">if</span> !@limit_expire_only <span class="hljs-keyword">then</span> @del( id )
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+    obj.value()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h4 id="get-from-the-store-even-if-expired">Get from the store, even if expired</h4>
+<p><code>get_any( id )</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  get_any: <span class="hljs-function"><span class="hljs-params">( id )</span>-&gt;</span>
+    debug <span class="hljs-string">&#x27;get&#x27;</span>, id
+    obj = @store.get( id )
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> obj
+    <span class="hljs-keyword">if</span> obj.expired()
+      debug <span class="hljs-string">&#x27;get is expired, getting anyway&#x27;</span>, id, obj.expires
+    obj.value()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h4 id="delete-from-the-store">Delete from the store</h4>
+<p><code>del( id )</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  del: <span class="hljs-function"><span class="hljs-params">( id )</span>-&gt;</span>
+    debug <span class="hljs-string">&#x27;del&#x27;</span>, id
+    @store.<span class="hljs-keyword">delete</span>( id )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <h4 id="trigger-expire-run">Trigger expire run</h4>
+<p>Removes any expired elements in the cache
+<code>expire( id )</code>
+Should add a timer to run expire
+Should add a hard expire as this can grow
+Should add an lru expire</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  expire: <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+    err = <span class="hljs-literal">null</span>
+    debug <span class="hljs-string">&#x27;Running expire&#x27;</span>, @store.keys()
+    <span class="hljs-keyword">if</span> !@limit_expire_only</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>es6 maps and cs don’t mix. can’t break out of a <code>forEach</code> easily.
+@store.forEach ( obj, id, object )=&gt;
+@del id if obj.expired()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      iter = @store.entries()
+      <span class="hljs-keyword">while</span>(item = iter.next(); !item.done)
+        [id, obj] = item.value
+        <span class="hljs-keyword">if</span> obj.expired() <span class="hljs-keyword">then</span> @del( id ) <span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>
+
+    <span class="hljs-keyword">if</span> @store.size &gt; @limit
+      debug <span class="hljs-string">&#x27;Store size [%s] is greater than limit [%s], force expire&#x27;</span>, @store.size, @limit
+      err = <span class="hljs-string">&#x27;had to force expire&#x27;</span>
+      @schedule_expire_force()
+
+    @expirey_cb err, @store.size <span class="hljs-keyword">if</span> @expirey_cb
+    @store.size
+
+  schedule_expire_force: <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> @expire_force_scheduled
+      debug <span class="hljs-string">&#x27;expire force already scheduled or running&#x27;</span>
+      <span class="hljs-keyword">return</span>
+    @expire_force_scheduled = <span class="hljs-literal">true</span>
+    process.nextTick =&gt;
+      @expire_force.apply(@)
+      @expire_force_scheduled = <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h4 id="trigger-expire-run">Trigger expire run</h4>
+<p>Removes the oldest expired elements in the cache higher
+<code>expire_force()</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  expire_force: <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+    err = <span class="hljs-literal">null</span>
+    start_size = @store.size
+    debug <span class="hljs-string">&#x27;Running force expire&#x27;</span>, @store.keys()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> @store.size &gt; @limit
+
+    iter = @store.entries()
+    <span class="hljs-keyword">while</span>(item = iter.next(); !item.done)
+      [id, obj] = item.value
+      @del id
+      ninety_percent = @limit - <span class="hljs-built_in">Math</span>.floor(@store.size/<span class="hljs-number">10</span>)
+      <span class="hljs-keyword">if</span> @store.size &lt; ninety_percent
+        debug <span class="hljs-string">&#x27;back below limit [%s] for current size [%s]&#x27;</span>, @limit, @store.size
+        @force_expirey_cb err, @store.size <span class="hljs-keyword">if</span> @force_expirey_cb
+        <span class="hljs-keyword">return</span> @store.size
+    @force_expirey_cb <span class="hljs-string">&#x27;force expirey did not expire enough&#x27;</span>, @store.size <span class="hljs-keyword">if</span> @force_expirey_cb
+    @store.size</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h4 id="drop-the-store">Drop the store</h4>
+<p>Remove all elements in the store
+<code>dump()</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  drop: <span class="hljs-function">-&gt;</span> @init()
+  init: <span class="hljs-function">-&gt;</span>
+    @store = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>()
+
+  total: <span class="hljs-function">-&gt;</span> @store.size</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>In case you are discarding the TinyCache often enough to care</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  cleanup: <span class="hljs-function">-&gt;</span>
+    debug <span class="hljs-string">&#x27;bg_expire_timer&#x27;</span>, @bg_expire_timer
+    <span class="hljs-keyword">if</span> @bg_expire_timer <span class="hljs-keyword">then</span> <span class="hljs-built_in">clearInterval</span>(@bg_expire_timer)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h1 id="get-or-retrieve-via-a-functioncallback-if-expired">Get or retrieve via a function/callback if expired</h1>
+<p>fetch: ( id, cb )-&gt;
+  value = get id
+  return cb value if value
+  @callback ( err, value )-&gt;
+    set id, value unless err
+    cb err, value</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h1 id="get-or-retrieve-via-a-promise-if-expired">Get or retrieve via a promise, if expired</h1>
+<p>fetchAsync: ( id )-&gt;
+  new Promise ( resolve, reject )-&gt;
+    value = get id
+    return resolve value if value
+    @promise().then ( value )-&gt;
+      set id, value
+      resolve value
+    .catch ( err )-&gt;
+      reject err</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h2 id="class-tinycacheitem">Class TinyCacheItem</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>A single cache item which tracks the value and
+the create/expire/access time</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TinyCacheItem</span></span>
+
+  constructor: <span class="hljs-function"><span class="hljs-params">( value, timeout = <span class="hljs-number">60</span> )</span>-&gt;</span>
+    @created  = <span class="hljs-built_in">Date</span>.now()
+    @accessed = @created
+    @timeout  = timeout
+    @expires  = @created + (@timeout*<span class="hljs-number">1000</span>)
+    @_value   = value</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p><code>.expires</code> is tracked in TinyCache too.
+value_expirey: -&gt;
+  @accessed = Date.now()
+  @expires  = @accessed + (@timeout*1000)
+  @_value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  value: <span class="hljs-function">-&gt;</span>
+    @accessed = <span class="hljs-built_in">Date</span>.now()
+    @_value
+
+  expired: <span class="hljs-function">-&gt;</span> ( <span class="hljs-built_in">Date</span>.now() &gt; @expires )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h4 id="exports">Exports</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span> =
+  TinyCache: TinyCache
+  TinyCacheItem: TinyCacheItem
+  TinyCacheError: TinyCacheError</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

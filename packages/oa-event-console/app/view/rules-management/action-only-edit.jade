@@ -1,0 +1,10 @@
+script(id="template-action-only-edit" type="text/x-mustache-template")
+  .action-entry-edit.collapse(data-action-id="{{ data.verb }}" 
+  data-action-uvid="{{ data.uvid }}" class="action-{{ data.verb }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.action-delete-button
+      .left
+        .action-operator
+          input(type='text' name='operator' value="{{ data.verb }}"
+          placeholder="operator").form-control

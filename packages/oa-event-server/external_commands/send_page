@@ -1,0 +1,5 @@
+#!/bin/sh
+
+date >> /tmp/e.log
+env >> /tmp/e.log
+

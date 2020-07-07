@@ -1,0 +1,58 @@
+agent:
+  type: syslogd
+
+  # Map a syslog severity (left) to an event console severity (right)
+  # Syslog levels are 7-0, 0 being most important 
+  # Event console severities is 1-5  (0 or -1 will be removed)
+  severity_map:
+    7: -1 
+    6: -1
+    5: -1
+    4: 2
+    3: 3
+    2: 4
+    1: 5
+    0: 5
+
+
+  # Syslog fields are mapped to event console fields
+  field_map:
+    facility: 'facility'
+    message: 'summary'
+    host: 'node'
+
+
+  # Make some changes to event console fields
+  # Possible options are:
+  #  - `lower_case`
+  field_transform:
+    node: 'to_lower_case'
+
+
+  # Event console Identifier. 
+  # The identifier is the key used by the console to aggregate
+  # multiple log entries into one event. 
+  # This is the default that will be applied unlesss you set 
+  # a different `identifier` field in your rule set 
+  identifier: '{node}:{severity}:{summary}'
+
+  rules:
+    - name: 'Syslog - Separate the `tag:` and `message` (anything before a ":" and/or " " in the first 32 characters becomes the tag)'
+      match:
+        summary: "/^(.{1,32}?):?\\s([\\s\\S]*)$/"
+      set:
+        daemon: '{match.1}'
+        summary: '{match.2}'
+    - name: Syslog - Trim any whitspace from summary
+      match:
+        summary: "/([\\s\\S]*?)\\s+$/"
+      set:
+        summary: '{match.1}'
+    - name: 'Seperate syslog tag contains a [pid]'
+      field_exists: daemon
+      match:
+        daemon: "/(.*)[(\\d+)]?/"
+      set:
+        daemon: '{match.1}'
+        daemon_pid: '{match.2}'
+

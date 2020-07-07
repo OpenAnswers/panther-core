@@ -1,0 +1,15 @@
+li
+  a.severity-link(
+    href="#/severity/All"
+    data-sev="All") All
+
+//- Loop through the supplied severities variable, skipping clear
+each severity in severities
+  if severity.label == 'Clear'
+    continue
+  else
+    li
+      a.severity-link(
+        href="#/severity/#{severity.label}"
+        data-sev="#{severity.label}"
+        class="severity-#{severity.value}") #{severity.label}

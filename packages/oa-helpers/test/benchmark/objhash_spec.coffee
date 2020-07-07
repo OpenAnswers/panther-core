@@ -1,0 +1,3 @@
+
+{ objhash } = require('../../lib/helpers')
+

@@ -1,0 +1,134 @@
+ /*
+  * Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+  * All rights reserved.  
+  * This file is subject to the terms and conditions defined in the Software License Agreement.
+  */
+
+.x-panel-with-col-lines .x-grid-row .x-grid-cell {
+    border-right-style:  none !important;
+}
+
+.x-grid-row .x-grid-cell {
+    border-style:  none
+}
+
+.alertchart.selected {
+  background-color: rgba(92,255,0,0.23);
+}
+
+tr.mono td.x-grid-cell {
+  /* Configure event font here if desired */
+  font-family: "Roboto", sans-serif;
+}
+
+#sevkey .x-grid-table {
+  border: none;
+}
+
+#sevkey .x-grid-cell {
+  font-size: 12px;
+}
+
+#sevkey .x-grid-cell-inner {
+  padding: 1px;
+}
+
+.solidpanel {
+  color: #FAFAFA;
+  background-color: #157fcc;
+}
+
+#titlestuff-innerCt {
+    margin-left: 5px;
+    margin-top: 2px;
+}
+
+#apptitle-innerCt {
+  font-family: "Roboto";
+  font-weight: bold;
+  font-size: 22px;
+}
+
+#version_number-innerCt {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+#consolemain {
+  border-width: 0px;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  -ms-border-radius: 0; 
+}
+#loggedInAs {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-right: 5px;
+}
+
+.statusBar {
+    background: #E8E8E8;
+}
+
+.statusLabel {
+    color: #6E6E6E;
+    text-shadow: 1px 1px 1px #ffffff;
+    margin-left: 10px;
+    margin-top: 7px;
+}
+
+.statusMessage {
+    color: #333333;
+    text-shadow: 1px 1px 1px #ffffff;
+    margin-left: 20px;
+    margin-top: 7px;
+}
+
+.addFilterTypeSelect {
+    background: red;
+    color: red;
+    text-align: center;
+    border-bottom: 1px solid #D4D4D4;
+    font-family: "Roboto", sans-serif;
+}
+
+.addFilterTypeSelect .title {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #8C8C8C;
+    margin-top: 65px;
+}
+
+.addFilterTypeSelect .subtitle {
+    font-size: 1.2em;
+    color: #6B6B6B;
+}
+
+.cft-addIcon {
+    background: url(../img/icons/add.png);
+}
+
+.cft-editIcon {
+    background: url(../img/icons/pencil.png);
+}
+
+.cft-deleteIcon {
+    background: url(../img/icons/delete.png);
+}
+
+.filterFieldsGrid .x-grid-cell {
+    border-left: 1px solid #BFBFBF;
+    border-bottom: 1px solid #BFBFBF;
+}
+
+.emptyText {
+    text-decoration: italic;
+}
+
+.filterName {
+    color: #6C6C6C;
+    font-size: 1.2em;
+}

@@ -1,0 +1,9 @@
+pkg/
+lib/
+node_modules/
+npm-debug.log
+docs/public/fonts/
+docs/public/images/
+test/func/fixture/event_rules_spec.yml*
+test/func/fixture/re*
+*.swp

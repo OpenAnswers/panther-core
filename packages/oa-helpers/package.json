@@ -1,0 +1,40 @@
+{
+  "name": "oa-helpers",
+  "version": "4.0.3-integration.0",
+  "private": true,
+  "description": "OA Helper methods",
+  "main": "lib/helpers.js",
+  "files": [
+    "lib/*.js"
+  ],
+  "scripts": {
+    "test": "npm run compile && mocha test/*_spec.coffee",
+    "docco": "docco src/*.coffee",
+    "compile": "coffee --compile --map --output lib src",
+    "pack": "npm run build && cd pkg && npm pack ../",
+    "build": "rimraf lib && npm run compile",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ] || ( echo \"git[$git]\"; exit 1)"
+  },
+  "keywords": [
+    "oa",
+    "openanswers",
+    "helpers"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "MIT",
+  "devDependencies": {
+    "benchmark": "^2.1.0",
+    "chai": "^3.5.0",
+    "coffee-script": "^1.9.1",
+    "docco": "^0.7.0",
+    "mocha": "^2.4.5",
+    "rimraf": "^3.0.2",
+    "source-map-support": "^0.4.0"
+  },
+  "dependencies": {
+    "bluebird": "~3.3.5",
+    "debug": "~2.2.0",
+    "lodash": "~4.17.0",
+    "node-uuid": "1.4.7"
+  }
+}

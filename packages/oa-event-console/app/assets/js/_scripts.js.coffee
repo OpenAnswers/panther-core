@@ -1,0 +1,12 @@
+#= require js/notify-combined.js
+#= require js/errors.js
+#= require js/oa-errors.js
+#= require js/logging.js
+#= require js/helpers.js
+#= require js/timer.js
+#= require js/global.js
+#= require js/form.js
+#= require js/message.js
+#= require js/notifications.js
+#= require js/rendered.js
+#= require js/browser.js

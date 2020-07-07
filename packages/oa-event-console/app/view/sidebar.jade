@@ -1,0 +1,23 @@
+block script
+  != js('bower/jquery-timeago.js')
+
+block template
+  script(id="template-sidebar-entry" type="text/x-mustache-template")
+    include ./sidebar-entries/sidebar-entry.jade
+
+  include ./sidebar-entries/activity-templates.jade
+
+  script(id="template-sidebar-user-entry" type="text/x-mustache-template")
+    include ./sidebar-entries/sidebar-user-entry.jade
+
+
+#sidebarContainer
+  #sidebar
+    #sidebarTitle
+      .icons 
+        #sidebar-minimise.glyphicon.glyphicon-triangle-right &nbsp;
+      .title ACTIVITY
+    .entries
+    .user-list
+      .users
+

@@ -1,0 +1,36 @@
+#nothing to see here
+---
+syslog:
+  severity_map:
+    7: -1
+    6: -1
+    5: -1
+    4: 1
+    3: 2 
+    2: 3
+    1: 4
+    0: 5
+
+globals:
+
+  rules: 
+
+    - name: 'global test rule'
+      equals: 
+        node: 'global_node'
+      set:
+        severity: 3
+
+groups:
+
+  group_a:
+
+    equals: 
+      node: 'group_node'
+
+    rules:
+    - name: 'group_a test rule'
+      match: 
+        summary: 'blarg summary'
+      set:
+        severity: 3

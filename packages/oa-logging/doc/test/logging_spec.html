@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="en"><head><title>test/logging_spec</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="test/logging_spec"><meta name="groc-project-path" content="test/logging_spec.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">test/logging_spec.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">mocha   = <span class="hljs-built_in">require</span> <span class="hljs-string">'mocha'</span>
+expect  = <span class="hljs-built_in">require</span>( <span class="hljs-string">'chai'</span> ).expect
+sinon   = <span class="hljs-built_in">require</span> <span class="hljs-string">'sinon'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Test setup for logs</p></div></div><div class="code"><div class="wrapper">winston     = <span class="hljs-built_in">require</span> <span class="hljs-string">'winston'</span>
+spy_logger  = <span class="hljs-built_in">require</span> <span class="hljs-string">'winston-spy'</span>
+
+lib_dir = <span class="hljs-string">"../lib/logging"</span>
+
+describe <span class="hljs-string">'Logging'</span>, <span class="hljs-function">-&gt;</span>
+
+  describe <span class="hljs-string">'require'</span>, <span class="hljs-function">-&gt;</span>
+
+    it <span class="hljs-string">'creates a tagged logger'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+      {EventLogger,logger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:testcase1'</span>)
+      expect( logger ).to.be.an.<span class="hljs-keyword">instanceof</span> EventLogger
+      done()
+
+
+    describe <span class="hljs-string">'logger'</span>, <span class="hljs-function">-&gt;</span>
+
+      describe <span class="hljs-string">'has methods'</span>, <span class="hljs-function">-&gt;</span>
+        
+        {EventLogger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:testcase1'</span>)
+        logger = <span class="hljs-literal">null</span>
+
+        beforeEach -&gt;
+          logger = <span class="hljs-keyword">new</span> EventLogger winston
+
+        it <span class="hljs-string">'.log'</span>, <span class="hljs-function">-&gt;</span>
+          expect( <span class="hljs-keyword">typeof</span> logger.log ).to.equal <span class="hljs-string">'function'</span>
+
+        it <span class="hljs-string">'.silly'</span>, <span class="hljs-function">-&gt;</span>
+          expect( <span class="hljs-keyword">typeof</span> logger.silly ).to.equal <span class="hljs-string">'function'</span>
+
+        it <span class="hljs-string">'.debug'</span>, <span class="hljs-function">-&gt;</span>
+          expect( <span class="hljs-keyword">typeof</span> logger.debug ).to.equal <span class="hljs-string">'function'</span>
+
+        it <span class="hljs-string">'.info'</span>, <span class="hljs-function">-&gt;</span>
+          expect( <span class="hljs-keyword">typeof</span> logger.info ).to.equal <span class="hljs-string">'function'</span>
+
+        it <span class="hljs-string">'.warn'</span>, <span class="hljs-function">-&gt;</span>
+          expect( <span class="hljs-keyword">typeof</span> logger.warn ).to.equal <span class="hljs-string">'function'</span>
+
+        it <span class="hljs-string">'.error'</span>, <span class="hljs-function">-&gt;</span>
+          expect( <span class="hljs-keyword">typeof</span> logger.error ).to.equal <span class="hljs-string">'function'</span>
+
+
+      describe <span class="hljs-string">'logging'</span>, <span class="hljs-function">-&gt;</span>
+
+        spy         = <span class="hljs-literal">null</span>
+        logger      = <span class="hljs-literal">null</span>
+        EventLogger = <span class="hljs-literal">null</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>We use a spy logger to see what should have happened
+Could achieve the same with an event attached to winston</p></div></div><div class="code"><div class="wrapper">        beforeEach (done) -&gt;
+          {EventLogger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:testcase2'</span>)
+          spy = sinon.spy()
+          spy_logger = <span class="hljs-keyword">new</span> winston.Logger
+            <span class="hljs-attribute">transports</span>: [
+              <span class="hljs-keyword">new</span> winston.transports.SpyLogger <span class="hljs-attribute">spy</span>: spy, <span class="hljs-attribute">level</span>: <span class="hljs-string">'debug'</span>
+            ]
+          logger = <span class="hljs-keyword">new</span> EventLogger spy_logger, <span class="hljs-string">'test'</span>
+          
+          done()
+
+        it <span class="hljs-string">'can run log directly'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.log <span class="hljs-string">'info'</span>, <span class="hljs-string">'can run log directly'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expected_args = [[<span class="hljs-string">'info'</span>, <span class="hljs-string">'can run log directly'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]]
+          expect( spy.args ).to.eql expected_args
+          done()
+
+        it <span class="hljs-string">'can call .error'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.error <span class="hljs-string">'emsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql( [[ <span class="hljs-string">'error'</span>, <span class="hljs-string">'emsg'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]] )
+          done()
+  
+        it <span class="hljs-string">'can call the .error_id helper'</span>, <span class="hljs-function">-&gt;</span>
+          id = logger.error_id <span class="hljs-string">'eid msg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( id ).to.be.a.string
+          expect( id ).to.have.lengthOf <span class="hljs-number">8</span>
+          expect( spy.args ).to.eql( [[ <span class="hljs-string">'error'</span>, <span class="hljs-string">'eid msg'</span>, { <span class="hljs-attribute">error_id</span>: id, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> }]] )
+
+        it <span class="hljs-string">'can call .warn'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.warn <span class="hljs-string">'wmsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql( [[ <span class="hljs-string">'warn'</span>, <span class="hljs-string">'wmsg'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]] )
+          done()
+
+        it <span class="hljs-string">'can call .info'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.info <span class="hljs-string">'imsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql( [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'imsg'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]] )
+          done()
+
+        it <span class="hljs-string">'can call .debug'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.debug <span class="hljs-string">'dmsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql( [[ <span class="hljs-string">'debug'</span>, <span class="hljs-string">'dmsg'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]] )
+          done()
+
+        it <span class="hljs-string">'logs with formatting'</span>, <span class="hljs-function">-&gt;</span>
+          logger.info <span class="hljs-string">'test %s'</span>, <span class="hljs-string">'test'</span>
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'test test'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]]
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'logs with more formatting'</span>, <span class="hljs-function">-&gt;</span>
+          logger.info <span class="hljs-string">'test %s %s'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'test 1 2'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]]
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'adds 1 tag to metadata for sub loggers'</span>, <span class="hljs-function">-&gt;</span>
+          <span class="hljs-keyword">new</span> EventLogger( logger, <span class="hljs-string">'t2'</span>).info <span class="hljs-string">'sub2msg'</span>
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'sub2msg'</span>, <span class="hljs-attribute">logger</span>: [<span class="hljs-string">'test'</span>,<span class="hljs-string">'t2'</span>] ]]
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'adds 2 tag to metadata for sub loggers'</span>, <span class="hljs-function">-&gt;</span>
+          logger2 = <span class="hljs-keyword">new</span> EventLogger logger, <span class="hljs-string">'t2'</span>
+          logger3 = <span class="hljs-keyword">new</span> EventLogger logger2 , <span class="hljs-string">'t3'</span>
+          logger3.info <span class="hljs-string">'sub3msg'</span>
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'sub3msg'</span>, <span class="hljs-attribute">logger</span>: [<span class="hljs-string">'test'</span>,<span class="hljs-string">'t2'</span>,<span class="hljs-string">'t3'</span>] ]]
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'adds 3 tag to metadata for sub loggers'</span>, <span class="hljs-function">-&gt;</span>
+          logger2 = <span class="hljs-keyword">new</span> EventLogger logger, <span class="hljs-string">'t2'</span>
+          logger3 = <span class="hljs-keyword">new</span> EventLogger logger2 , <span class="hljs-string">'t3'</span>
+          logger4 = <span class="hljs-keyword">new</span> EventLogger logger3 , <span class="hljs-string">'t4'</span>
+          logger4.info <span class="hljs-string">'sub3msg'</span>
+          expected_args = [[
+            <span class="hljs-string">'info'</span>, <span class="hljs-string">'sub3msg'</span>, <span class="hljs-attribute">logger</span>: [<span class="hljs-string">'test'</span>,<span class="hljs-string">'t2'</span>,<span class="hljs-string">'t3'</span>,<span class="hljs-string">'t4'</span>]
+          ]]
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'logs with metadata'</span>, <span class="hljs-function">-&gt;</span>
+          logger.info <span class="hljs-string">'test'</span>, { <span class="hljs-attribute">nope</span>: <span class="hljs-string">'blah'</span>}
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'test'</span>, <span class="hljs-attribute">nope</span>: <span class="hljs-string">'blah'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]]
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'logs with different metadata'</span>, <span class="hljs-function">-&gt;</span>
+          logger.info <span class="hljs-string">'test'</span>, { <span class="hljs-attribute">nother</span>: <span class="hljs-string">'item'</span>}
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'test'</span>, <span class="hljs-attribute">nother</span>: <span class="hljs-string">'item'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]]
+          expect( spy.args ).to.eql expected_args
+
+        it <span class="hljs-string">'ignores a supplied "logger" field in metadata'</span>, <span class="hljs-function">-&gt;</span>
+          logger.info <span class="hljs-string">'test'</span>, { <span class="hljs-attribute">logger</span>: <span class="hljs-string">'blah'</span>}
+          expected_args = [[ <span class="hljs-string">'info'</span>, <span class="hljs-string">'test'</span>, <span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span> ]]
+          expect( spy.args ).to.eql expected_args
+
+
+      describe <span class="hljs-string">'levels'</span>, <span class="hljs-function">-&gt;</span>
+
+        spy         = <span class="hljs-literal">null</span>
+        logger      = <span class="hljs-literal">null</span>
+        EventLogger = <span class="hljs-literal">null</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>We use a spy logger to see what should have happened
+Could achieve the same with an event attached to winston</p></div></div><div class="code"><div class="wrapper">        beforeEach (done) -&gt;
+          {EventLogger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:testcase2'</span>)
+          spy = sinon.spy()
+          spy_logger = <span class="hljs-keyword">new</span> winston.Logger
+            <span class="hljs-attribute">transports</span>: [
+              <span class="hljs-keyword">new</span> winston.transports.SpyLogger <span class="hljs-attribute">spy</span>: spy, <span class="hljs-attribute">level</span>: <span class="hljs-string">'info'</span>
+            ]
+          logger = <span class="hljs-keyword">new</span> EventLogger spy_logger, <span class="hljs-string">'test'</span>
+          done()
+
+        it <span class="hljs-string">'cant call .debug'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.debug <span class="hljs-string">'dmsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">false</span>
+          expect( spy.args ).to.eql( [] )
+          done()
+
+
+      describe <span class="hljs-string">'set levels'</span>, <span class="hljs-function">-&gt;</span>
+
+        spy         = <span class="hljs-literal">null</span>
+        logger      = <span class="hljs-literal">null</span>
+        EventLogger = <span class="hljs-literal">null</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>We use a spy logger to see what should have happened
+Could achieve the same with an event attached to winston</p></div></div><div class="code"><div class="wrapper">        beforeEach (done) -&gt;
+          {EventLogger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:testcase2'</span>)
+          spy = sinon.spy()
+          spy_logger = <span class="hljs-keyword">new</span> winston.Logger
+            <span class="hljs-attribute">transports</span>: [
+              <span class="hljs-keyword">new</span> winston.transports.SpyLogger <span class="hljs-attribute">spy</span>: spy, <span class="hljs-attribute">level</span>: <span class="hljs-string">'debug'</span>
+            ]
+          logger = <span class="hljs-keyword">new</span> EventLogger spy_logger, <span class="hljs-string">'test'</span>
+          
+          done()
+
+        it <span class="hljs-string">'can call .debug'</span>, <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+          logger.debug <span class="hljs-string">'dmsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql( [[<span class="hljs-string">'debug'</span>,<span class="hljs-string">'dmsg'</span>,<span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span>]] )
+          done()
+
+        it <span class="hljs-string">'cant call .debug'</span>, <span class="hljs-function"><span class="hljs-params">( done )</span>-&gt;</span>
+          logger.set_level <span class="hljs-string">'info'</span>
+          logger.debug <span class="hljs-string">'dmsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">false</span>
+          expect( spy.args ).to.eql( [] )
+          done()
+
+        it <span class="hljs-string">'can call .debug'</span>, <span class="hljs-function"><span class="hljs-params">( done )</span>-&gt;</span>
+          logger.set_level <span class="hljs-string">'debug'</span>
+          logger.debug <span class="hljs-string">'dmsg'</span>
+          expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+          expect( spy.args ).to.eql( [[<span class="hljs-string">'debug'</span>,<span class="hljs-string">'dmsg'</span>,<span class="hljs-attribute">logger</span>: <span class="hljs-string">'test'</span>]] )
+          done()
+
+
+      describe <span class="hljs-string">'RequestLogger'</span>, <span class="hljs-function">-&gt;</span>
+
+        {EventLogger,RequestLogger} = <span class="hljs-built_in">require</span>(lib_dir)()
+
+        spy = sinon.spy()
+        spy_logger = <span class="hljs-keyword">new</span> winston.Logger
+          <span class="hljs-attribute">transports</span>: [
+            <span class="hljs-keyword">new</span> winston.transports.SpyLogger <span class="hljs-attribute">spy</span>: spy, <span class="hljs-attribute">level</span>: <span class="hljs-string">'debug'</span>
+          ]
+        logger = <span class="hljs-keyword">new</span> EventLogger spy_logger, <span class="hljs-string">'oa:testcase3'</span>
+
+        request_logger_fn = RequestLogger.combined logger
+
+        req =
+          <span class="hljs-attribute">ip</span>: <span class="hljs-number">1</span>
+          <span class="hljs-attribute">httpVersionMajor</span>: <span class="hljs-number">1</span>
+          <span class="hljs-attribute">httpVersionMinor</span>: <span class="hljs-number">1</span>
+          <span class="hljs-attribute">headers</span>:
+            <span class="hljs-attribute">referrer</span>: <span class="hljs-string">'back/there'</span>
+        res =
+          <span class="hljs-attribute">statusCode</span>: <span class="hljs-number">200</span>
+
+        it <span class="hljs-string">'has middleware method'</span>, <span class="hljs-function">-&gt;</span>
+          expect( request_logger_fn ).to.be.a <span class="hljs-string">'function'</span>
+
+        it <span class="hljs-string">'calls next from closure'</span>, <span class="hljs-function"><span class="hljs-params">( done )</span>-&gt;</span>
+          request_logger_fn req, res, done
+
+        it <span class="hljs-string">'has a socket logger'</span>, <span class="hljs-function">-&gt;</span>
+          expect( RequestLogger.log_socket_combined ).to.be.a <span class="hljs-string">'function'</span>
+      </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>These tests should remain last as they impact the default logger.
+They test functionality in the require function that only affects
+the default logger</p></div></div><div class="code"><div class="wrapper">      describe <span class="hljs-string">'ENV settings modify the default logger'</span>, <span class="hljs-function">-&gt;</span>
+
+        spy = <span class="hljs-literal">null</span>
+        spy_transports = <span class="hljs-literal">null</span>
+        spy_logger = <span class="hljs-literal">null</span>
+ 
+        beforeEach -&gt;
+          spy = sinon.spy()
+          spy_transports =
+            <span class="hljs-attribute">level</span>: <span class="hljs-string">'warn'</span>
+            <span class="hljs-attribute">transports</span>: [
+              <span class="hljs-keyword">new</span> winston.transports.SpyLogger <span class="hljs-attribute">spy</span>: spy, <span class="hljs-attribute">level</span>: <span class="hljs-string">'debug'</span>
+            ]
+          spy_logger = <span class="hljs-keyword">new</span> winston.Logger spy_transports
+        
+        describe <span class="hljs-string">'NODE_ENV=test'</span>, <span class="hljs-function">-&gt;</span>
+
+          old_env = process.env.NODE_ENV
+          process.env.NODE_ENV = <span class="hljs-string">"test"</span>
+          {logger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:test:logging:NODE_ENV'</span>,<span class="hljs-attribute">logger</span>:spy_logger)
+          logger.head.configure spy_transports
+
+          it <span class="hljs-string">'should not log info'</span>, <span class="hljs-function">-&gt;</span>
+            logger.info <span class="hljs-string">'whatever'</span>
+            expect( spy.calledOnce ).to.equal <span class="hljs-literal">false</span>
+
+          it <span class="hljs-string">'should log warn'</span>, <span class="hljs-function">-&gt;</span>
+            logger.warn <span class="hljs-string">'whatever'</span>
+            expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+
+
+        describe <span class="hljs-string">'NODE_TEST'</span>, <span class="hljs-function">-&gt;</span>
+
+          old = process.env.NODE_TEST
+          process.env.NODE_TEST = <span class="hljs-string">'1'</span>
+          {logger} = <span class="hljs-built_in">require</span>(lib_dir)(<span class="hljs-string">'oa:test:logging:NODE_TEST'</span>,<span class="hljs-attribute">logger</span>:spy_logger)
+          logger.head.configure spy_transports
+
+          it <span class="hljs-string">'should not log info'</span>, <span class="hljs-function">-&gt;</span>
+            logger.info <span class="hljs-string">'whatever'</span>
+            expect( spy.calledOnce ).to.equal <span class="hljs-literal">false</span>
+
+          it <span class="hljs-string">'should log warn'</span>, <span class="hljs-function">-&gt;</span>
+            logger.warn <span class="hljs-string">'whatever'</span>
+            expect( spy.calledOnce ).to.equal <span class="hljs-literal">true</span>
+   </div></div></div></div></body></html>

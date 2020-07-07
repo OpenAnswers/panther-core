@@ -1,0 +1,188 @@
+#%RAML 0.8
+ 
+title: Event API
+version: v1
+baseUri: http://{client_id}.panther.support/api/
+baseUriParameters:
+  client_id:
+    displayName: Client Domain
+    type: string
+securitySchemes:
+  - api-token:
+      description: Console generated API token that must be provided in the header
+      type: x-api-token
+      describedBy:
+        headers:
+          x-api-token:
+            description: Valid API token
+            type: string
+traits:
+  - secured:
+      description: This endpoint require authentication
+/event:
+  is: [ secured ]
+  securedBy: [ api-token ]
+  /queue:
+    displayName: Queue Event
+    description: Queue an event for creation
+    post:
+      body:
+        application/json:
+          schema: |
+            { 
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "description": "Create an Event",
+              "properties": {
+                "clientVersion": {
+                  "type": "string"
+                },
+                "event": { 
+                  "type": "object", 
+                  "properties": {
+                    "severity": { 
+                      "type": "integer" 
+                    },
+                    "node": { 
+                      "type": "string"
+                    },
+                    "summary": {
+                      "type": "string"
+                    },
+                    "tag": {
+                      "type": "string"
+                    },
+                    "identifier": { 
+                      "type": "string"
+                    },
+                    "owner": { 
+                      "type": "string"
+                    },
+                    "acknowledged": { 
+                      "type": "boolean"
+                    },
+                    "_id": { 
+                      "disallow": "any"
+                    },
+                    "id": { 
+                      "disallow": "any"
+                    },
+                    "agent": { 
+                      "disallow": "any"
+                    },
+                    "group": { 
+                      "disallow": "any"
+                    },
+                    "tally": { 
+                      "disallow": "any"
+                    },
+                    "state_change": { 
+                      "disallow": "any"
+                    },
+                    "last_occurrence": { 
+                      "disallow": "any"
+                    },
+                    "first_occurrence": { 
+                      "disallow": "any"
+                    }
+                  },
+                  "additionalProperties": true,
+                  "required": [ "node", "summary" ]
+                },
+                "required": [ "event" ]
+              }
+            }
+  /create:
+    displayName: Create Event
+    description: Create an event 
+    post:
+      body:
+        application/json:
+          schema: |
+            { 
+              "$schema": "http://json-schema.org/schema",
+              "type": "object",
+              "description": "Create an Event",
+              "properties": {
+                "clientVersion": {
+                  "type": "string"
+                },
+                "event": { 
+                  "type": "object", 
+                  "properties": {
+                    "severity": { 
+                      "type": "integer" 
+                    },
+                    "node": { 
+                      "type": "string"
+                    },
+                    "summary": {
+                      "type": "string"
+                    },
+                    "identifier": { 
+                      "type": "string"
+                    },
+                    "owner": { 
+                      "type": "string"
+                    },
+                    "acknowledged": { 
+                      "type": "boolean"
+                    },
+                    "tag": {
+                      "type": "string"
+                    },
+                    "_id": { 
+                      "disallow": "any"
+                    },
+                    "agent": { 
+                      "disallow": "any"
+                    },
+                    "group": { 
+                      "disallow": "any"
+                    },
+                    "tally": { 
+                      "disallow": "any"
+                    },
+                    "state_change": { 
+                      "disallow": "any"
+                    },
+                    "last_occurrence": { 
+                      "disallow": "any"
+                    },
+                    "first_occurrence": { 
+                      "disallow": "any"
+                    }
+                  },
+                  "additionalProperties": true,
+                  "required": [ "node", "summary" ]
+                },
+                "required": [ "event" ]
+              }
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                { "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "description": "Create an Event",
+                  "properties": {
+                    "message":  { "type": "string" },
+                    "status": { "type": "string" }
+                  },
+                  "required": [ "message", "status" ]
+                }
+        400:
+          body:
+            application/json:
+              schema: |
+                { "$schema": "http://json-schema.org/schema",
+                  "type": "object",
+                  "description": "Create an Event Bad Request",
+                  "properties": {
+                    "message":  { "type": "string" },
+                    "error": { "type": "string" }
+                  },
+                  "required": [ "message", "error" ]
+                }

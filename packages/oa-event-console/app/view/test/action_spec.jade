@@ -1,0 +1,34 @@
+mixin action_spec
+
+  include ../rules-management/action-initial-view.jade
+  include ../rules-management/action-initial-edit.jade
+
+  include ../rules-management/action-only-view.jade
+  include ../rules-management/action-only-edit.jade
+  include ../rules-management/action-field-view.jade
+  include ../rules-management/action-field-edit.jade
+  include ../rules-management/action-field-value-view.jade
+  include ../rules-management/action-field-value-edit.jade
+  include ../rules-management/action-replace-view.jade
+  include ../rules-management/action-replace-edit.jade
+
+  != js('bower/mustache')
+  != js('bower/lodash')
+  != js('bower/bootstrap3-typeahead')
+  
+  != js('js/helpers')  
+  != js('js/rendered')
+
+  != js('js/rules-management/rule_verb_base')
+  != js('js/rules-management/rule_verb_types')
+  != js('js/rules-management/rule_verb_set')
+  //-!= js('js/rules-management/action_handlers')
+  != js('js/rules-management/action')
+  != js('test/action_spec')
+  != js('test/actions_spec')
+
+  p action-render-test
+  #action-render-test
+
+  p actions-render-test
+  #actions-render-test

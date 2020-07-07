@@ -1,0 +1,104 @@
+#modal-error.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h2.modal-title Error Encountered
+      .modal-body
+        span#modal-error-subtext The following error was encountered:
+        br
+        span#modal-error-message
+      .modal-footer
+        button#new-rule-button(type="button" data-dismiss="modal").btn.btn-accent OK
+
+#modal-success.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h2.modal-title Success
+      .modal-body
+        p#modal-success-message Test
+      .modal-footer
+        button(type="button" data-dismiss="modal").btn.btn-success OK 
+
+
+
+#modal-delete-confirm.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close") &times;
+        h2.modal-title Delete Rule
+      .modal-body
+        p Are you sure you wish to delete this rule?
+        .card.card-global-rule(style="margin-left: 10px; margin-right: 10px;")
+          .title
+            .left
+              p.rule-name Rule Name
+              .metadata-container
+                .metadata.metadata-tags
+                  .tag
+                    .colour.colour-red
+                    .text Discard
+        p You will not be able to undo this action.
+      .modal-footer
+        button(type="button" data-dismiss="modal").btn.btn-default Cancel
+        button(type="button")#modal-delete-confirm-delete.btn.btn-danger Delete
+
+#modal-delete-rule.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close") &times;
+        h2.modal-title Delete Rule
+      .modal-body
+        p Are you sure you wish to delete the rule '#[span#rule-name]'?
+        input.form-control#rule-delete-reason(type="text" name="rule-delete-reason")
+      .modal-footer
+        button(type="button" data-dismiss="modal").btn.btn-default Cancel
+        button(type="button" value="Delete Rule Confirm")#rule-delete-confirm.btn.btn-danger Delete
+
+#modal-delete-group.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close") &times;
+        h2.modal-title Delete Group
+      .modal-body
+        p Are you sure you wish to delete the group '#[span#group-name]'?
+        p Doing so will also remove the #[span#group-rule-count] rules inside this group.
+        input.form-control#group-delete-reason(type="text" placeholder="Delete Reason" name="group-delete-reason")
+      .modal-footer
+        button(type="button" data-dismiss="modal").btn.btn-default Cancel
+        button(type="button" value="Delete Group Confirm")#group-delete-confirm.btn.btn-danger Delete
+
+#modal-move-to-group.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close") &times;
+        h2.modal-title Move Rule to Group
+      .modal-body
+        p Select Destination Group
+        .form-group
+          select.form-control#modal-move-to-group-select
+        //
+          .text-divider
+            hr.left
+            | OR
+            hr.right
+          p.margintop10 Create New Group
+          .form-group
+            input(id="newGroupName" type="text" placeholder="Group Name").form-control
+      .modal-footer
+        button(type="button" data-dismiss="modal").btn.btn-default Cancel
+        button(type="button").btn.btn-primary Move
+
+#modal-reload-rule.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h2.modal-title Rules Reloaded
+      .modal-body
+        p The rules have been reloaded so you must refresh this page to continue editing
+      .modal-footer
+        button(type="button" onclick="location.reload();" value="Refresh")#rule-delete-confirm.btn.btn-primary Refresh

@@ -1,0 +1,9 @@
+
+//- Container content
+.form-inline.input-group.col-xs-12
+  form#event-details-bulk-add-note(action="")
+    input(type='hidden' name='id' value="")
+    input#blockme1.form-control.notes-bulk(type='text' name='note' placeholder="Add note")
+    input.form-control.externalid-bulk(type='text' name='externalid' placeholder="Add external ID")
+    .holder(style="text-align: right")
+      input.btn.btn-primary.btn-acknowledge(style="text-align: right; display: inline-block" type='submit' value="Acknowledge")

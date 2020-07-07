@@ -1,0 +1,13 @@
+
+var m = function(){ emit( this.agent_group, { count: 1 } ); };
+var r = function( key, values ) {
+ var count = 0;
+
+ values.forEach(function(v) {
+   count += v['count'];
+ });
+
+ return {count: count};
+};
+
+db.alerts.mapReduce( m, r, { out: { inline: 1 } } );

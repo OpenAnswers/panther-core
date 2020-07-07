@@ -1,0 +1,13 @@
+#!/bin/sh
+# 
+# Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.  
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
+
+USER=$1
+VIEW=$2
+
+echo "db.viewlayouts.save( { name:'$VIEW', user: '$USER', system:false, columns:[] } ) " | mongo oa
+

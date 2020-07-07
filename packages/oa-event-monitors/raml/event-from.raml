@@ -1,0 +1,100 @@
+#%RAML 0.8
+ 
+title: Protocol Tunnel API
+baseUri: http://{client_id}.panther.support/api/{version}
+version: v1
+baseUriParameters:
+  client_id:
+    displayName: Client Domain
+    type: string
+securitySchemes:
+  - !include includes/security/api-token.yaml
+traits:
+  - secured:
+      description: This endpoint requires authentication
+/event-from:
+  is: [ secured ]
+  securedBy: [ api-token ]
+  /{protocol}:
+    /queue:
+      displayName: Queue a protocol event message
+      description: Queue a JSON encoded protocol message for event processing
+      post:
+        body:
+          'application/json':
+            schema: |
+              {
+                "$schema": "http://json-schema.org/draft-03/schema#",
+                "type" : "object",
+                "description": "Proxy an event via HTTP",
+                "properties": {
+                  "clientVersion": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "systemId": {
+                    "type": "string",
+                    "required": true          
+                  },
+                  "originHost": {
+                    "type": "string"
+                  },
+                  "originPort": {
+                    "type": "integer"
+                  },
+                  "timestamp": {
+                    "type": "integer",
+                    "required": true          
+                  },
+                  "messageType": {
+                    "type": "string",
+                    "enum": [ "syslog" ],
+                    "required": true          
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "base64 encoded syslog message",
+                    "required": true          
+                  }
+                }
+              }
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/v1/event.json
+          400:
+            body:
+              application/json:
+                schema: !include schemas/v1/error.json
+    /heartbeat:
+      displayName: Heartbeat
+      description: Proxy client heartbeat endpoint
+      post:
+        body:
+          application/json:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/draft-03/schema#",
+                "type" : "object",
+                "description": "Proxy heartbeat",
+                "properties": {
+                  "clientVersion": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "timestamp": {
+                    "type": "integer",
+                    "required": true
+                  }
+                }
+              }
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/v1/event.json
+          400:
+            body:
+              application/json:
+                schema: !include schemas/v1/error.json

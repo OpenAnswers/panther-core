@@ -1,0 +1,12 @@
+version: '2'
+services:
+  builder:
+    build:
+      context: ./
+      dockerfile: Dockerfile-assets
+    command: /app/node_modules/.bin/connect-assets -i app/assets -c js/* css/* bower/* vendor/* -o /bld -s /assets/bld
+    volumes:
+      - .:/app:ro
+      - ./build:/bld:rw
+
+

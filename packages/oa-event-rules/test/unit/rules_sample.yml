@@ -1,0 +1,162 @@
+agent:
+  type: syslog
+
+  severity_map:
+    7: -1 
+    6: -1
+    5: -1
+    4: 1
+    3: 2
+    2: 3
+    1: 4
+    0: 5
+
+
+globals:
+
+  dedupe:
+    -
+      - !!js/regexp /dedupe dedupea dedupe/
+      - !!js/regexp /dedupea/
+      - dd a dd
+    - 
+      - !!js/regexp /dedupe dedupeb dedupe/
+      - dd b dd
+
+  discard:
+    - !!js/regexp /some discarding text/
+    - name:
+      equals:
+        field: something
+
+  rules:
+
+    - name: oa event relay monitor
+      equals:
+        summary: "OAER OA Event Relay"
+      set: 
+        severity: 1
+      uuid: 1234
+
+    - name: simple2 test discard
+      equals:
+        node: simple2_node
+      set:
+        severity: 3
+      uuid: 1234-simple2-discard
+
+    - name: simple3 and
+      equals:
+        node: simple3_node
+        other: second_and
+      set:
+        severity: -1
+      uuid: 1234
+
+    - name: simple4 set and replace
+      equals:
+        node: simple4_node
+          #- second_or  NOT WORKING!
+      set:
+        severity: -1
+      replace:
+        field: simple5
+        this: /replace_testing/
+        with: 're_replace_done'
+      uuid: 1234
+
+    - name: simple5 stop
+      equals: 
+        field_name: stopping
+      stop: true
+      uuid: 1234
+
+    - name: simple6 set and stop
+      match: 
+        summary: /simple6/
+      set:
+        field_name: 17
+      stop: true
+      uuid: 1234
+
+    - name: simple7 match and set with field
+      match: 
+        summary: /the simple7/
+      set:
+        new_field: '>{simple7}<'
+      uuid: 1234
+
+    - name: simple8 match and set with capture group
+      match: 
+        summary: /si(mple)8/
+      set:
+        new_field: 'capture match >{match.1}<'
+      uuid: 1234
+
+    - name: simple9 match and set with multiple capture groups
+      match: 
+        summary: /si(mp)l(e9)/
+      set:
+        new_field: 'capture match >{match.1}< >{match.2}<'
+      uuid: 1234
+
+groups:
+
+  goruppo_a:
+    match:
+      node: 
+        - 10.51.0.1
+        - 192.168.50.1
+
+    rules:
+
+      - name: Remove date time from palm db messages
+        match: 
+          field: /spectac\wlar regex/
+        discard: true
+        uuid: 1234
+
+      - name: Interactive Data vs. Morningstar
+        equals: 
+          node: ctracker
+        set:
+          node: ctrack.qualified.dns
+        uuid: 1234
+
+    uuid: 2356
+
+  group_b:
+    match:
+      node: /^bnode\d+/
+
+    rules:
+      - name: 'none'
+        all: true
+        replace:
+          field: summary
+          this: /test/
+          with: '1other1'
+        uuid: 1234
+
+      - name: 'none'
+        match:
+          summary: '/testtesttest/'
+        replace:
+          field: summary
+          this: '/testtest/'
+          with: '2other2'
+        uuid: 1234
+    uuid: 2356
+
+
+  select_c:
+    select:
+      equals:
+        whatfield: thisvalue
+    rules:
+      - name: 'none'
+        all: true
+        stop: true
+        skip: true
+        uuid: 1234
+    uuid: 2356

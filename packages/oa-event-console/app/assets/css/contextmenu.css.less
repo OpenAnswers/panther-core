@@ -1,0 +1,73 @@
+@import "../oa_less/variables.less";
+
+// ### Warning
+// This css is closely linked to the code in console-grid.js to 
+// control positioning of the context menus so that they don't
+// Go off screen when opening them close to the top, bottom, left, right
+
+.ui-selected{
+    background-color:        #fdd;
+}
+
+
+.ui-selecting {
+    background:              #ddd;
+}
+
+
+.dropdown-submenu{
+    position:                relative;
+    min-width: 100%;
+}
+
+
+.dropdown-submenu-border{
+    -webkit-border-radius:   0 5px 5px 5px;
+    -moz-border-radius:      0 5px 5px 5px;
+    border-radius:           0 5px 5px 5px;
+}
+
+
+.dropdown-submenu > .dropdown-menu{
+    &:extend( .dropdown-submenu-border );
+    top:                     0;
+    left:                    100%;
+    margin-top:              -6px;
+    margin-left:             -1px;
+}
+
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display:   block;
+}
+
+
+.dropdown-submenu > a:after {
+    display:                 block;
+    content:                 " ";
+    float:                   right;
+    width:                   0;
+    height:                  0;
+    border-color:            transparent;
+    border-style:            solid;
+    border-width:            5px 0 5px 5px;
+    border-left-color:       #cccccc;
+    margin-top:              5px;
+    margin-right:            -10px;
+}
+
+.dropdown-submenu:hover > a:after{
+    border-left-color:       #ffffff;
+}
+
+
+.dropdown-submenu.pull-left{
+    float:                   none;
+}
+
+
+.dropdown-submenu.pull-left > .dropdown-menu{
+    &:extend( .dropdown-submenu-border );
+    left:                    -100%;
+    margin-left:             10px;
+}

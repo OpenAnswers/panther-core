@@ -1,0 +1,14 @@
+script(id="template-generic-value-edit" type="text/x-mustache-template")
+  .generic-value-edit(id="{{ data.euid }}-edit"
+  data-name="{{ data.name }}" class="{{ data.class }}")
+    .inner.form-group
+      .generic-value-field.edit-padding
+        .generic-value-fieldview.h4 {{ data.label }}
+      .generic-value-value.edit-padding
+        input.form-control(type="text" value="{{ data.value }}" placeholder="value"
+        class="generic-value-value-{{ data.name }}")
+      .generic-value-save-interface.hidden
+        .text-center
+          +button_word_save('group-save')
+          +button_word_cancel('group-cancel')
+        .margintop10

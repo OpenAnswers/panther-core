@@ -1,0 +1,46 @@
+//- Need better way to render css from the db!
+
+for severity in severities
+
+  //- The plain bg colour from the database
+  - var bg_colour = Colour(severity.background);
+
+  //- Create a lighter version for when an event is selected
+  - var bg_colour_select = Colour(severity.background).lighten(0.15);
+
+  //- Highlight selection with a darker colour
+  - var bg_colour_select_border = Colour(severity.background).darken(0.15);
+
+  //- Create some colours for the severity bar svg's
+  - var svg_colour_dark = Colour(severity.background).darken(0.30);
+  - var svg_text_colour = Colour(severity.background).darken(0.7);
+  
+  //- Create the css labels from data
+  - var sev_value = ".severity-"+severity.value
+  - var sev_label = ".severity-"+severity.label
+  
+  | #{sev_value},
+  | #{sev_label} {
+  |   background-color: #{bg_colour.rgbString()} !important;
+  |   border-top: 1px solid #{bg_colour.rgbString()} !important;
+  | }
+  | #{sev_value}.w2ui-selected,
+  | #{sev_label}.w2ui-selected {
+  |   background-color: #{bg_colour_select.rgbString()} !important;
+  |   border-top: 1px solid #{bg_colour_select_border.rgbString()} !important;
+  | }
+  | .label-severity-#{severity.value},
+  | .label-severity-#{severity.label} {
+  |   color: #{svg_text_colour.rgbString()};
+  |   background-color: #{bg_colour.rgbString()};  
+  | }
+  | .severity-svg-#{severity.value},
+  | .severity-svg-#{severity.label} {
+  |   fill: #{bg_colour.rgbString()};
+  |   stroke: #{bg_colour.rgbString()};
+  |   stroke-width: 1px;
+  | }
+  | .severity-svg-text-#{severity.value},
+  | .severity-svg-text-#{severity.label} {
+  |   fill: #{svg_text_colour.rgbString()};
+  | }

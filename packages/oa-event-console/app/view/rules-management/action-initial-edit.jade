@@ -1,0 +1,9 @@
+script(id="template-action-initial-edit" type="text/x-mustache-template")
+  .action-entry-edit.collapse(data-action-id="{{ data.verb }}" 
+  data-action-uvid="{{ data.uvid }}" class="action-{{ data.verb }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.action-delete-button
+      .left
+        .action-operator
+          input(type='text' name='action' value="" placeholder="Choose Action").form-control

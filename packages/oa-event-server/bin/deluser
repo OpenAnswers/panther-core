@@ -1,0 +1,18 @@
+#!/bin/sh
+# 
+# Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.  
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
+
+LOGIN=$1
+
+# delete user 
+echo "db.users.remove( { login:'$LOGIN' } ) " | mongo oa
+
+echo "db.filters.remove( { user:'$LOGIN' } )" | mongo oa
+echo "db.viewlayouts.remove( { user:'$LOGIN' } )" | mongo oa
+
+
+

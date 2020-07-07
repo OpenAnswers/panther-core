@@ -1,0 +1,6 @@
+{ 
+ "glob": [ "README.md", "app/**/*.coffee", "lib/**/*.coffee", "app/assets/css/**/*.less", "app/view/**/*.jade", "test/**/*.coffee"  ],
+ "strip": [],
+ "out": "dev/doc"
+}
+

@@ -1,0 +1,7 @@
+src
+pkg
+node_modules
+docs/public/fonts
+docs/public/images
+npm-debug.log
+

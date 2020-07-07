@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>AgentSyslog</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="action.html">
+                  action.coffee
+                </a>
+              
+                
+                <a class="source" href="agent.html">
+                  agent.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_generic.html">
+                  agent_generic.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_graylog.html">
+                  agent_graylog.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_http.html">
+                  agent_http.coffee
+                </a>
+              
+                
+                <a class="source" href="agent_syslogd.html">
+                  agent_syslogd.coffee
+                </a>
+              
+                
+                <a class="source" href="agents.html">
+                  agents.coffee
+                </a>
+              
+                
+                <a class="source" href="agentsyslog.html">
+                  agentsyslog.coffee
+                </a>
+              
+                
+                <a class="source" href="day_time.html">
+                  day_time.coffee
+                </a>
+              
+                
+                <a class="source" href="dedupe.html">
+                  dedupe.coffee
+                </a>
+              
+                
+                <a class="source" href="discard.html">
+                  discard.coffee
+                </a>
+              
+                
+                <a class="source" href="event.html">
+                  event.coffee
+                </a>
+              
+                
+                <a class="source" href="event_rules.html">
+                  event_rules.coffee
+                </a>
+              
+                
+                <a class="source" href="group.html">
+                  group.coffee
+                </a>
+              
+                
+                <a class="source" href="groups.html">
+                  groups.coffee
+                </a>
+              
+                
+                <a class="source" href="index.html">
+                  index.coffee
+                </a>
+              
+                
+                <a class="source" href="levels.html">
+                  levels.coffee
+                </a>
+              
+                
+                <a class="source" href="option.html">
+                  option.coffee
+                </a>
+              
+                
+                <a class="source" href="rule.html">
+                  rule.coffee
+                </a>
+              
+                
+                <a class="source" href="rule_set.html">
+                  rule_set.coffee
+                </a>
+              
+                
+                <a class="source" href="schedule.html">
+                  schedule.coffee
+                </a>
+              
+                
+                <a class="source" href="schedules.html">
+                  schedules.coffee
+                </a>
+              
+                
+                <a class="source" href="select.html">
+                  select.coffee
+                </a>
+              
+                
+                <a class="source" href="select_all.html">
+                  select_all.coffee
+                </a>
+              
+                
+                <a class="source" href="select_base.html">
+                  select_base.coffee
+                </a>
+              
+                
+                <a class="source" href="select_ends_with.html">
+                  select_ends_with.coffee
+                </a>
+              
+                
+                <a class="source" href="select_equals.html">
+                  select_equals.coffee
+                </a>
+              
+                
+                <a class="source" href="select_field_exists.html">
+                  select_field_exists.coffee
+                </a>
+              
+                
+                <a class="source" href="select_field_missing.html">
+                  select_field_missing.coffee
+                </a>
+              
+                
+                <a class="source" href="select_greater_than.html">
+                  select_greater_than.coffee
+                </a>
+              
+                
+                <a class="source" href="select_less_than.html">
+                  select_less_than.coffee
+                </a>
+              
+                
+                <a class="source" href="select_match.html">
+                  select_match.coffee
+                </a>
+              
+                
+                <a class="source" href="select_none.html">
+                  select_none.coffee
+                </a>
+              
+                
+                <a class="source" href="select_schedule.html">
+                  select_schedule.coffee
+                </a>
+              
+                
+                <a class="source" href="select_starts_with.html">
+                  select_starts_with.coffee
+                </a>
+              
+                
+                <a class="source" href="transforms.html">
+                  transforms.coffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="agentsyslog">AgentSyslog</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>(c) OpenAnswers Ltd 2015
+<a href="mailto:&#109;&#97;&#116;&#116;&#64;&#111;&#112;&#101;&#110;&#97;&#x6e;&#x73;&#119;&#x65;&#114;&#115;&#46;&#x63;&#111;&#x2e;&#x75;&#x6b;">&#109;&#97;&#116;&#116;&#64;&#111;&#112;&#101;&#110;&#97;&#x6e;&#x73;&#119;&#x65;&#114;&#115;&#46;&#x63;&#111;&#x2e;&#x75;&#x6b;</a></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>logging</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>{logger, debug} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;oa-logging&#x27;</span>)(<span class="hljs-string">&#x27;oa:event:rules:agent:syslogd&#x27;</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>oa modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Errors          = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;oa-errors&#x27;</span>
+{ Agent }       = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;./agent&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2 id="class-agentsyslog">class AgentSyslog</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>The Syslog class represents the syslog processing compenent of the rules.
+It houses all the logic to turn a syslog message into a event console event
+Syslog can contain a RuleSet for syslog specific processing.
+Like TAG/Darmon/PID processing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AgentSyslogd</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Agent</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The default identifier for the syslog agent</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  @identifier: <span class="hljs-string">&#x27;{node}:{severity}:{tag}:{summary}&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Generate a syslog object instance from a yaml definitions
+Loading fields if they exist</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  @generate: <span class="hljs-function"><span class="hljs-params">( yaml_def )</span> -&gt;</span>
+    syslogd = <span class="hljs-keyword">new</span> AgentSyslogd
+    <span class="hljs-built_in">super</span> yaml_def, syslogd
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Errors.ValidationError <span class="hljs-string">&#x27;No definition&#x27;</span> <span class="hljs-keyword">unless</span> yaml_def?
+
+    debug <span class="hljs-string">&#x27;generating syslog from&#x27;</span>, yaml_def
+
+    <span class="hljs-keyword">if</span> yaml_def.severity_map
+      syslogd.severity_map yaml_def.severity_map
+
+    syslogd
+
+
+  constructor: <span class="hljs-function"><span class="hljs-params">( options = {} )</span>-&gt;</span>
+    @_severity_map = <span class="hljs-literal">null</span>
+    @_type = <span class="hljs-string">&#x27;syslogd&#x27;</span>
+    @_name = <span class="hljs-string">&#x27;Syslog&#x27;</span>
+    <span class="hljs-built_in">super</span> options
+    <span class="hljs-keyword">if</span> @constructor.identifier
+      @_identifier = @constructor.identifier</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Load the syslog info from a file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  load: <span class="hljs-function"><span class="hljs-params">( path = @path )</span>-&gt;</span>
+    debug <span class="hljs-string">&#x27;Reading syslogd yaml file&#x27;</span>, @path
+    <span class="hljs-built_in">super</span> path
+
+    <span class="hljs-keyword">if</span> @doc.agent?.severity_map
+      @severity_map @doc.agent.severity_map</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h3 id="instance-properties">Instance properties</h3>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Store the severity mappings</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  severity_map: <span class="hljs-function"><span class="hljs-params">( _severity_map )</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> _severity_map <span class="hljs-keyword">then</span> @_severity_map = _severity_map
+    @_severity_map</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h6 id="run-event_object-">run( event_object )</h6>
+<p>Run the log event through all the syslog specific mappings</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  run: <span class="hljs-function"><span class="hljs-params">( event_obj )</span>-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Map syslog severities to event severities</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @run_severity_map( event_obj )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Deal with a RFC5424 structured data message</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    @run_structured_data_flatten( event_obj )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Run the rest of the Agent basics</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">super</span> event_obj
+
+    event_obj</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h6 id="run_severity_map-event_object-">run_severity_map( event_object )</h6>
+<p>Map the syslog severity to an event console severity
+Modifies event_obj</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  run_severity_map: <span class="hljs-function"><span class="hljs-params">( event_obj )</span>-&gt;</span>
+    sev = event_obj.get_input <span class="hljs-string">&#x27;severityID&#x27;</span>
+    sev_map = @_severity_map[sev]
+    debug <span class="hljs-string">&#x27;mapping sev of&#x27;</span>, sev, sev_map, @_severity_map
+    <span class="hljs-keyword">if</span> sev_map
+      event_obj.set <span class="hljs-string">&#x27;severity&#x27;</span>, sev_map
+    <span class="hljs-keyword">else</span>
+      logger.error <span class="hljs-string">&#x27;No severity mapping for sev [%s]&#x27;</span>, sev, event_obj, @_severity_map, <span class="hljs-string">&#x27;&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h6 id="run_field_map-event_object-">run_field_map( event_object )</h6>
+<p>OVERRIDE from Agent!
+Map the generic field to a different event console field
+Modifies event_obj</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  run_field_map: <span class="hljs-function"><span class="hljs-params">( event_obj )</span>-&gt;</span>
+    <span class="hljs-keyword">for</span> from_field, to_field <span class="hljs-keyword">of</span> @_field_map
+      debug <span class="hljs-string">&#x27;mapping&#x27;</span>, from_field, to_field, event_obj.get_input(from_field)
+      event_obj.set to_field, event_obj.get_input(from_field)
+    <span class="hljs-literal">true</span> <span class="hljs-comment">#so the for loop doesn&#x27;t return an array</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Flatten the syslog structuredData object
+Take the message ID out of the tree, and into a field
+Then all structured data is directly accessible
+This would fail if there were more than one message id’s
+but i don’t think that can happen(?)</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <pre><code>message: whatever
+structuredData:
+   <span class="hljs-string">&quot;a@message#id&quot;</span>:
+     any_field: value
+     other_fudle: something
+     message: whatever</code></pre>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>to</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <pre><code>message: whatever
+message_id: <span class="hljs-string">&quot;a@message#id&quot;</span>
+structuredData:
+  any_field: value
+  other_fudle: something
+  message: whatever</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  run_structured_data_flatten: <span class="hljs-function"><span class="hljs-params">( event_obj )</span>-&gt;</span>
+    debug <span class="hljs-string">&#x27;maybe flattening syslog struc&#x27;</span>, event_obj.has_structured_data()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> event_obj.has_structured_data()
+
+    structuredData = event_obj.get_input(<span class="hljs-string">&#x27;structuredData&#x27;</span>)
+    debug <span class="hljs-string">&#x27;flattening syslog struc&#x27;</span>, structuredData
+    <span class="hljs-keyword">for</span> id, data <span class="hljs-keyword">of</span> structuredData
+      event_obj.set_input <span class="hljs-string">&#x27;message_id&#x27;</span>, id
+      event_obj.set_input <span class="hljs-string">&#x27;structuredData&#x27;</span>, data
+
+    debug <span class="hljs-string">&#x27;flattened syslog struc&#x27;</span>, event_obj.syslog</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Convert syslog structure to yaml</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  to_yaml_obj: <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+    obj = <span class="hljs-built_in">super</span>
+    obj.severity_map = @_severity_map
+    obj
+
+
+<span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span> = 
+  AgentSyslogd: AgentSyslogd</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

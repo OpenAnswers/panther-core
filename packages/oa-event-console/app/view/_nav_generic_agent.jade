@@ -1,0 +1,6 @@
+- var agentLookups = {'syslogd': {label: 'Syslog', path:'/rules/agent/syslogd'}, 'http': {label: 'HTTP', path: '/rules/agent/http'}, 'graylog':{label: 'Graylog', path: '/rules/agent/graylog'}}
+each agent in config.rules.agents
+  li
+    - var agentPath = agentLookups[agent].path
+    - var agentLabel = agentLookups[agent].label
+    a(href=agentPath)= agentLabel

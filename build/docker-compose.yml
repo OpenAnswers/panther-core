@@ -1,0 +1,38 @@
+version: "3.1"
+services:
+  builder:
+    build:
+      context: ..
+      dockerfile: Dockerfiles/Dockerfile-builder
+    image: "panther-builder:12.18.2-alpine3.12"
+  runtime:
+    build:
+      context: ..
+      dockerfile: Dockerfiles/Dockerfile-runtime
+    image: "panther-runtime:12.18.2-alpine3.12"
+
+  server:
+    depends_on:
+      - builder
+      - runtime
+    build:
+      context: ..
+      dockerfile: Dockerfiles/Dockerfile-event-server
+    image: event-server
+
+  console:
+    depends_on:
+      - builder
+      - runtime
+    build:
+      context: ..
+      dockerfile: Dockerfiles/Dockerfile-event-console
+    image: event-console
+
+  monitors:
+    depends_on:
+      - builder
+    build:
+      context: ..
+      dockerfile: Dockerfiles/Dockerfile-event-monitors
+    image: event-monitors

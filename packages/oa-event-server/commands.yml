@@ -1,0 +1,34 @@
+
+functional_test:
+  command: |
+    sleep 1 && mocha-casperjs test/mocha-casperjs/*.coffee
+  watch:
+    file: ~/iz/apps/devRun/run/pid_file
+    dir: test/
+    dir: public/
+    exclude: '.git/'
+
+server:
+  pre_command: coffee -co lib/ src/
+  command: node ./lib/server.js
+  watch:
+    dir: .
+    exclude: '.git/|npm-debug.log|^test/|^public/'
+  daemon: true
+
+logs:
+  command: multitail 
+    -i ~/iz/apps/devRun/run/stdout 
+    -wh 10 
+    -i ~/iz/apps/devRun/run/stderr
+
+npm_eventserver:
+  command: |
+    rm -rf node_modules && npm install
+
+test_setup:
+  fail: |
+    env[:NODE_ENV] != 'test'
+  env:
+    OAMONHOME: .
+  command: containers/build_scripts/initial_db_setup.sh

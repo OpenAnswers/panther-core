@@ -1,9 +1,20 @@
 {
   "name": "panther-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core Panther products",
   "main": "index.js",
+  "private": true,
   "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "build:builder": "docker build -t panther-builder:12.18.2-alpine3.12 -f Dockerfiles/Dockerfile-builder .",
+    "build:runtime": "docker build -t panther-runtime:12.18.2-alpine3.12 -f Dockerfiles/Dockerfile-runtime .",
+    "build:console": "docker build -t event-console -f Dockerfiles/Dockerfile-event-console .",
+    "build:server": "docker build -t event-server -f Dockerfiles/Dockerfile-event-server .",
+    "build:monitors": "docker build -t event-monitors -f Dockerfiles/Dockerfile-event-monitors .",
+    "build:docker": "yarn run build:builder && yarn run build:runtime && yarn run build:console && yarn run build:server && yarn run build:monitors",
+    "everything": "lerna bootstrap && lerna run build && lerna run setup && NODE_ENV=production lerna run --parallel start",
+    "start/all": "NODE_ENV=production lerna run --parallel start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -13,7 +24,7 @@
   "keywords": [
     "Panther"
   ],
-  "author": "vince@openanswers.co.uk",
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
   "license": "ISC",
   "devDependencies": {
     "lerna": "^3.22.1"
@@ -23,7 +34,8 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/eslint*"
+      "**/eslint*",
+      "**/grunt-*"
     ]
   }
 }

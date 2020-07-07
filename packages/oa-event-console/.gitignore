@@ -1,0 +1,12 @@
+node_modules/
+public/assets/bld/
+bower_components/
+npm-debug.log*
+tags
+results.txt
+dev/
+*.swp
+.vagrant/
+rules/git
+dist/
+build/

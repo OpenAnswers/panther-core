@@ -1,0 +1,6 @@
+FROM node:12.18.2-alpine3.12
+
+RUN apk update && apk add git bash python3 gcc g++ make openssl openssh-client 
+
+WORKDIR /build
+ONBUILD ENV BUILD_DIR=/build

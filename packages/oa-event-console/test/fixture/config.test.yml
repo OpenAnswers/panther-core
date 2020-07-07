@@ -1,0 +1,57 @@
+
+# This is an event console config for the tests
+# See test2 for an instance you can boot on the same
+# db while tests are running
+
+app:
+  name:         'Test Console'
+  console:      'test'
+  email:        'support+test@openanswers.co.uk'
+  client_id:    'test0'
+  domain:       'localhost'
+  url:          'http://localhost:3099'
+  view_limit:   1000
+  admin_account: '_oa_admin'
+  assets_build_dir: builtAssets
+  key:
+    apikey:
+      "Hi40aZ3lSDF9139laecPmnqpf3hbb": event_monitor_http
+
+
+  archive_time:
+    clear: 72
+    delete: 8
+
+  integrations:
+    logs:
+      hours: 168  
+      #24 * 7
+
+  syslog_port:   5000
+
+mongodb:
+  uri:          'mongodb://127.0.0.1:27017/functest'
+  database:     functest
+  collection:   alerts
+  timer:        2000 
+  # 2 seconds
+
+event_monitors:
+  http:
+    port: 5901
+
+http:
+  port:         3901
+  secure_port:  3902
+
+smtp:
+  host:         burton.openans.co.uk
+  port:         25
+
+session:
+  secret:       this_is_the_test_secret
+  timeout:      172800000
+  # ms = 2 * 24 * 60 * 60 * 1000 = 2 days
+
+rules:
+  path:    './test/fixture/rules'

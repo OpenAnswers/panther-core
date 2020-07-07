@@ -1,0 +1,6 @@
+each view in filters
+  li
+    a.view-link(
+      href="#/view/#{view._id}"
+      data-viewid="#{view._id}"
+      data-viewname="#{view.name}") #{view.name}

@@ -1,0 +1,21 @@
+!= debug_jade( 'select-equals.jade: Select', select )
+
+
+//- Now if we have multiple or's
+if select.values.length && select.values.length > 0
+  tr
+    td.rule_text.col-md-1 #{select.field}
+    td.col-md-1 #[button.btn.btn-select(disabled="disabled") equals]
+    td.rule_text.col-md-10 #{select.values[0]}
+
+  for or_value in select.values.slice(1, select.values.length-1)
+    tr
+      td.rule_text.col-md-1
+      td.col-md-1 #[button.btn.btn-select(disabled="disabled") or]
+      td.rule_text.col-md-10 #{or_value}
+
+else
+  tr
+    td.rule_text.col-md-1 #{select.field}
+    td.col-md-1 #[button.btn.btn-select(disabled="disabled") equals]
+    td.rule_text.col-md-10 #{select.value}

@@ -1,0 +1,64 @@
+extends _template
+
+include ./mixin/buttons
+
+block css
+  != css('css/rules-management.css')
+
+block nav
+  - var nav_location = 'rules';
+  include ./_nav_generic.jade
+
+block template
+  include ./rules-management/template-includes.jade
+
+block script
+  include ./rules-management/script-includes.jade
+
+block content
+  include ./rules-management/modals.jade
+
+  script var gitEnabled = #{gitEnabled};
+
+  #context-rule
+    ul.dropdown-menu(role="menu")
+      li#context-rule-edit
+        a Edit
+      li.divider
+      li#context-rule-disable
+        a Disable
+      li#context-rule-delete
+        a Delete
+      li.divider
+      li#context-rule-group
+        a Move to Group
+
+  #rules.rules.container
+    .col-xs-12.col-sm-12.col-md-9.col-lg-10
+      .top-container
+        h1.container-title.col-xs-8 #{rules_name}
+        #total-counter-info.col-xs-4
+      .divider.marginbottom20
+      .hidden-md.hidden-lg
+        .topbar
+          include ./rules-management/topbar-common.jade
+      #mapping-container
+      #rules-container
+        #rules-loader
+          .spinner
+          .text Loading..
+        #search-warning.alert.alert-info
+          .left Filters have been applied - rules cannot be re-ordered in this mode.
+          .right
+            a#search-clear-button.btn.btn-accent Clear Filters
+        #rules-empty No rules were found.
+        #event-rules
+          #event-rules-generic-container
+          //-ul#rules-sortable
+
+    .hidden-xs.hidden-sm.col-md-3.col-lg-2
+      .affix
+        .sidebar
+          include ./rules-management/sidebar-common.jade
+      .nada &nbsp;
+        

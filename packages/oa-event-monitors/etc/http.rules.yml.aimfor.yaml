@@ -1,0 +1,29 @@
+rules_file:
+  version: 1.0.0
+  api: 1.0.0
+
+
+# ## Syslog specific settings
+
+http:
+
+  # Fields can be mapped to event console fields
+  field_map:
+    # nothing to see here
+
+  # Make some changes to event console fields
+  # Possible options are:
+  #  - `to_lower_case`
+  field_transform:
+    node: 'to_lower_case'
+
+  # Event console Identifier. 
+  # The identifier is the key used by the console to aggregate
+  # multiple log entries into one event. 
+  # This is the default that will be applied unlesss you set 
+  # a different `identifier` field in your rule set 
+  identifier: '{node}:{severity}:{summary}'
+
+  rules:
+
+    - name: 'Default http rule'

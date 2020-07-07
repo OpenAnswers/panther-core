@@ -1,0 +1,43 @@
+{
+  "name": "oa-logging",
+  "version": "4.0.3-integration.0",
+  "private": true,
+  "description": "OpenAnswers Logging setup",
+  "main": "lib/logging.js",
+  "files": [
+    "lib/*.js"
+  ],
+  "scripts": {
+    "test": "npm run compile && mocha test/*_spec.coffee",
+    "build": "rimraf lib && npm run compile",
+    "compile": "coffee -co lib/ src/",
+    "groc": "groc",
+    "docco": "groc",
+    "pack": "npm run build && cd pkg && npm pack ../",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ]"
+  },
+  "keywords": [
+    "logging",
+    "log",
+    "openanswers",
+    "oa",
+    "debug"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "debug": "~2.2.0",
+    "oa-helpers": "^4.0.3-integration.0",
+    "winston": "~2.2.0",
+    "winston-request-logger": "~1.0.7"
+  },
+  "devDependencies": {
+    "chai": "^3.1.0",
+    "coffee-script": "^1.10.0",
+    "groc": "^0.8.0",
+    "mocha": "^2.2.4",
+    "rimraf": "^3.0.2",
+    "sinon": "^1.14.1",
+    "winston-spy": "^0.2.0"
+  }
+}

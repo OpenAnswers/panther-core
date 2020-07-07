@@ -1,0 +1,53 @@
+extends _template
+
+block nav
+  - var nav_location = 'console'
+  include ./_nav_generic.jade
+
+
+block css
+  link(rel='stylesheet', href='/console/severities.css', type='text/css' )
+  != css('css/w2ui.css')
+  //- != css('css/w2ui-override')
+  != css('css/console')
+  != css('css/contextmenu')
+
+
+block content
+  //- Grid for alerts
+  #consoleContainer
+    .right
+      include ./sidebar
+    .left
+      #options_bar
+        include ./console/nav.jade
+      #event_grid.grid(style="width: 100%; height: 450px;")
+    
+  //- Context menu
+  //- code in contextmenu.js
+  include ./console/context
+  include ./console/settings
+  include ./event-details
+  include ./event-details-bulk-modify
+  include ./event-details-extid-modify
+  include ./console/help
+  include ./console/clipboard
+
+
+block script
+  script(type="text/javascript" charset="utf-8").
+    var w2grid_show_columns = !{JSON.stringify(w2_columns)};
+  script(type="text/javascript" charset="utf-8").
+    var w2grid_all_columns = !{JSON.stringify(w2_all_columns)};
+  script(type="text/javascript" charset="utf-8").
+    var severities = !{JSON.stringify(severities)};
+  script(type="text/javascript" charset="utf-8").
+    var filters = !{JSON.stringify(filters)};
+  script(type="text/javascript" charset="utf-8").
+    var groups = !{JSON.stringify(config.rules.set.groups)};
+
+
+  != js('js/w2ui.js')
+  != js('bower/clipboard.js')
+  != js('js/charts')
+  != js('js/console')

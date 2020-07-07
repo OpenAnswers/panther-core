@@ -1,0 +1,6 @@
+pkg
+node_modules
+npm-debug.log
+src
+yarn.lock
+yarn-error.log

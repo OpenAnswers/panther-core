@@ -1,0 +1,50 @@
+script(id="template-generic-labelenums-edit" type="text/x-mustache-template")
+  .generic-labelenums-edit(id="{{ data.ueid }}-edit"
+  data-name="{{ data.name }}" class="{{ data.class }}")
+    .inner
+
+      .generic-labelenums-name.h4 {{ data.label }}
+      
+      //- Optional heading
+      | {{ #data.heading }}
+      .row.generic-labelenums-heading
+        div(class="col-xs-{{ data.size_field }}")
+          .generic-labelenums-field-heading {{ field }}
+        div(class="col-xs-{{ data.size_value }}")
+          .generic-labelenums-value-heading {{ value }}
+      | {{ /data.heading }}
+      
+      //- Field/Enum columns
+      | {{ #data.field_values_array }}
+      .row.generic-labelenums-entry
+        div(class="col-xs-{{ data.size_field }}").form-group.has-feedback
+          .generic-labelenums-fieldview.h4.edit-padding {{ name }}
+
+        div(class="col-xs-{{ data.size_value }}").form-group.has-feedback
+          .generic-labelenums-value
+            select.form-control(placeholder="value"
+            class="generic-enum-value-{{ data.name }}")
+              | {{ #options_list }}
+              | {{ #selected }}
+              option(value="{{ value }}" selected="true") {{ label }}
+              | {{ /selected }}
+              | {{ ^selected }}
+              option(value="{{ value }}") {{ label }}
+              | {{ /selected }}
+              | {{ /options_list }}
+
+        //-div(class="col-xs-{{ data.size_delete }}")
+          span.glyphicon.glyphicon-remove.generic-labelenums-delete-button.generic-glyph-padding
+      | {{ /data.field_values_array }}
+
+      //- Default message when nothing
+      | {{ ^data.field_values_array }}
+      .generic-labelenums-value No values
+      | {{ /data.field_values_array }}
+
+      //- Save interface
+      .generic-value-save-interface.hidden
+        .text-center
+          +button_word_save('group-save')
+          +button_word_cancel('group-cancel')
+        .margintop10

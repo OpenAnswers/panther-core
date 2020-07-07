@@ -1,0 +1,6 @@
+script(id="template-option-boolean-view" type="text/x-mustache-template")
+  .option-entry.option-entry-view(data-option-uvid="{{option.uvid}}"
+  class="option-{{option.verb}}")
+    .inner
+      span.option-view-gem(class="option-view-gem-{{option.gemClass}}")
+      span.option-view-operator {{option.verb}}

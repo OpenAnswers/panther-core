@@ -1,0 +1,16 @@
+mixin rules-sidebar-buttons(type, sub_type)
+
+  if type == "server" && sub_type == "globals" || type == "agent"
+    a.btn-rules-global-create-rule.btn.btn-success(style="margin-bottom: 5px" value='Create Rule') Create Rule
+    br
+
+  if type == "server" && sub_type == "groups"
+    a.btn-rules-group-create-group.btn.btn-success(style="margin-bottom: 5px" value='Create Group') Create Group
+    br
+
+  if type == "agent"
+    a.rules-agent-create-mapping.btn.btn-primary(style="margin-bottom: 5px" value='Create Mapping') Create Mapping
+    br
+    a.rules-agent-create-transform.btn.btn-light-warning(style="margin-bottom: 5px" value='Create Transform') Create Transform
+    br
+    a.rules-agent-collapse-all.hidden(style="margin-bottom: 5px" value='Collapse All') Collapse All

@@ -1,0 +1,24 @@
+extends _template
+
+doctype html
+
+block body
+  //- Load any custom content
+  block content
+  
+  #mocha
+
+  script.
+    expect = chai.expect
+    mocha.setup('bdd')
+
+  //- Any Jade Mustache templates to render
+  block mocha_test
+
+  script.
+    mocha.checkLeaks()
+    mocha.globals(['jQuery','fxdriver_id'])
+    mocha.run()
+
+  //- And anything else last
+  block footer

@@ -1,0 +1,101 @@
+globals:
+
+  rules:
+
+    - name: '1 Testing Rule'
+      match:
+          summary: '/(.*)/'
+      set:
+          node: 'fake_node'
+          summary: 'fake_summary'
+      replace:
+          field: 'summary'
+          this: 'a'
+          with: 'b'
+      stop: true
+      stop_rule_set: true
+      skip: true
+      discard: true
+
+
+    - name: '2 local stuff oa'
+      starts_with:
+        node: matt-laptop1-wifi
+      set:
+        whatever: 'mattoa!'
+
+
+    - name: '3 local stuff home'
+      starts_with:
+        node: mhmbpror
+      set:
+        whatever: 'matthome!'
+
+
+    - name: 4 If statement on node again to set customer field
+      match:
+        node: /cmapp|cmdb|cmproxy|_bridge/i
+      set:
+        customer: 'RoyalC'
+
+
+    - name: we set the owner so that any monitoring scripts that check the db for an owner don't select alerts that are being automatically cleared
+      equals:
+        severity: '0'
+      set:
+        owner: 'system'
+
+
+# ## Groups
+
+# One an event has gone through the global rule set, it will optionally
+# be matched into one group.
+# The `group` field will be set to the groups name and then the event
+# will be processed through that groups rule set. 
+
+groups:
+ 
+  _order:
+    - Matt
+    - Security
+    - TestGroup
+    - TestUpdateSelect
+
+  Matt:
+    match:
+      node:
+        - mhmbpror.local
+        - /^matt-laptop1-wifi/
+    rules:
+      - name: First Matt
+        match: 
+          summary: /whatever whatever whatever/
+        set:
+          summary: 'whatever*3'
+
+  TestGroup:
+    match:
+      node:
+        - /cmapp/
+        - /cmdb/
+        - /cmproxy/
+        - /_bridge/
+
+    rules:
+      - name: 'Setting CQC aliases'
+        equals:
+          node:  'imsuexpesb918.ims.gov.uk'
+        set:
+          node_alias: 'imsuexpesb918.ims.gov.uk'
+          node: 'alcqcapptv02'
+
+  TestUpdateSelect:
+    select:
+      match:
+        facility: '/auth/i'
+    rules: []
+
+  Security:
+    match:
+      facility: '/auth/i'
+    rules: []

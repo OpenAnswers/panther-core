@@ -1,0 +1,28 @@
+extends _template_body
+
+include message_spec
+include timer_spec
+include errors_spec
+include generic_input_spec
+include ruleverb_spec
+include action_spec
+include option_spec
+include select_spec
+include rule_spec
+include rule_set_spec
+include groups_spec
+include webdriver_mocha_is_finished_spec
+
+block mocha_test
+  +message_spec
+  +timer_spec
+  +errors_spec
+  +generic_input_spec
+  +ruleverb_spec
+  +action_spec
+  +option_spec
+  +select_spec
+  +rule_spec
+  +rule_set_spec
+  +groups_spec
+  +webdriver_mocha_is_finished_spec

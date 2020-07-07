@@ -1,0 +1,23 @@
+script(id="template-action-replace-edit" type="text/x-mustache-template")
+  .action-replace.action-entry-edit.collapse(data-action-id="{{data.verb}}" 
+  data-action-uvid="{{data.uvid}}" class="action-{{data.verb}}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.action-delete-button
+      .left
+        .action-replace-fixed-width
+          .action-operator
+            input.input-verb-action-replace-operator(type='text' name='operator' value="{{data.verb}}").form-control
+          .action-replace-this.input-group
+            span.input-group-addon this
+            input.input-verb-action-replace-this(type='text' name='search' value="{{data.this}}" 
+            placeholder="search").form-control.action-replace-this
+        .action-flexible-width
+          .action-replace-with.input-group(style="margin-right: 5px")
+            span.input-group-addon with
+            input.input-verb-action-replace-with(type='text' name='replacement' value="{{data.with}}"
+            placeholder="replacement").form-control
+          .action-field.action-replace-field.input-group
+            span.input-group-addon in
+            input.input-verb-action-replace-field(type='text' name='replace-field' value="{{data.field}}"
+            placeholder="field").form-control

@@ -1,0 +1,8 @@
+automations = 1
+rules_tracking=true
+rules_file=/app/rules/server.rules.yml
+
+
+[db]
+hostname = mongodb
+collection = panther

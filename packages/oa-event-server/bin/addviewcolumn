@@ -1,0 +1,14 @@
+#!/bin/sh
+# 
+# Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.  
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
+
+USER=$1
+VIEW=$2
+COLUMN=$3
+
+echo "db.viewlayouts.update( { name:'$VIEW', user: '$USER', system:false }, { \$push: { columns: { field:'$COLUMN', width:'100px' } } }, true, true ) " | mongo oa
+

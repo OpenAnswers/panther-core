@@ -1,0 +1,20 @@
+FROM node:8.4.0-alpine
+
+# add an application user
+RUN adduser -D -s /bin/false -h /app app app 
+ENV HOME=/app
+
+
+# some NPM packages are installed with git
+# openssl - for key generation
+RUN apk update && apk add git python gcc make g++ openssl openssh-client
+
+WORKDIR $HOME
+RUN npm install connect-assets
+
+VOLUME /app/public/assets
+VOLUME /app/assets
+
+# cleanup 
+USER app
+

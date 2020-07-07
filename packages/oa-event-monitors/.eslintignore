@@ -1,0 +1,6 @@
+.idea/
+.git/
+.vscode/
+views/
+node_modules/
+test/

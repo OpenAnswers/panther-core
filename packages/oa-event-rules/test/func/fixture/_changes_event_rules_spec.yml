@@ -1,0 +1,28 @@
+agent: 
+  type: graylog
+  severity_map:
+    '0': 5
+    '1': 5
+    '2': 5
+    '3': 5
+    '4': 5
+    '5': 5
+    '6': 5
+    '7': 5
+globals:
+  rules:
+    - name: global test rule
+      equals:
+        node: global_node
+      set:
+        severity: 3
+groups:
+  group_a:
+    equals:
+      node: group_node
+    rules:
+      - name: group_a test rule
+        match:
+          summary: blarg new changes summary
+        set:
+          severity: 3

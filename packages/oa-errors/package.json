@@ -1,0 +1,40 @@
+{
+  "name": "oa-errors",
+  "version": "4.0.3-integration.0",
+  "private": true,
+  "description": "Generic OA Error classes",
+  "main": "lib/index.js",
+  "files": [
+    "lib/*.js"
+  ],
+  "scripts": {
+    "test": "npm run compile && mocha test/**/*_spec.coffee",
+    "unit": "npm run compile && mocha test/unit/**/*_spec.coffee",
+    "func": "npm run compile && mocha test/func/**/*_spec.coffee",
+    "pack": "npm run build && cd pkg && npm pack ../",
+    "docco": "docco --output ./docs --css ./src/docco.css ./src/*.coffee",
+    "compilen": "coffee --compile --output lib/ src/",
+    "compile": "coffee --map --compile --output lib/ src/",
+    "build": "rimraf lib/ && yarn run compile",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ] || ( echo \"git[$git]\"; exit 1)",
+    "devrun": "devRun.pl -c \"$DRCMD\" -dir . -dwe '^.git/|^node_modules/|^lib/'"
+  },
+  "keywords": [
+    "oa",
+    "openanswers",
+    "error",
+    "errors"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "coffee-script": "~1.10.0",
+    "debug": "^2.2.0",
+    "docco": "^0.7.0",
+    "mocha": "^2.2.5",
+    "rimraf": "^3.0.2",
+    "sinon": "^1.14.1",
+    "source-map-support": "~0.4.0"
+  }
+}

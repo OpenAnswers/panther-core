@@ -1,0 +1,9 @@
+script(id="template-select-only-edit" type="text/x-mustache-template")
+  .select-entry-edit.collapse(data-select-id="{{data.verb}}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.select-delete-button
+      .left
+        .selects-fixed-width
+          .select-operator.edit-padding
+            input.form-control(type="text" value="{{data.verb}}" placeholder="operator" name='operator')

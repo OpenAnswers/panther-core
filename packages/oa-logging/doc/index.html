@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">README.md</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="oa-logging">OA Logging</h1>
+<p>Provides a <a href="https://github.com/visionmedia/debug">debug</a> and 
+<a href="https://github.com/winstonjs/winston">winston</a> logger tagged with a class name</p>
+<p>Try and use the naming conventions of <code>oa:module:class</code> or <code>oa:app:class</code> and 
+keep class names the same as file name so they can be tracked down easily</p>
+<p>E.G <code>oa:event:console:app:whatever</code> maps to <code>node-oa-event_console/app/whatever</code></p>
+<h2 id="api">API</h2>
+<p>   { logger, debug } = require(&#39;oa-logging&#39;)(&#39;oa:event:class&#39;)</p>
+<p>   debug &#39;something&#39;</p>
+<p>   logger.info &#39;something&#39;
+   logger.silly &#39;whatever;</p>
+<h3 id="loggers-during-tests">Loggers during tests</h3>
+<p>If you set the ENV variable NODE_ENV to &quot;test&quot; all logger will be put to <code>warn</code></p>
+<p>This is normally done in test/mocha_helpers.coffee</p>
+<pre><code>process.env.NODE_ENV = &#39;test&#39;</code></pre>
+<h3 id="setting-the-log-level">Setting the log level</h3>
+<pre><code>logger.log_level &#39;whatever&#39;</code></pre>
+<p>Note that if you set an unknown level logging will disappear, without warning.  </p>
+<h4 id="node-log-levels">Node log levels</h4>
+<p>By default winstons uses npm&#39;s log levels. Which means <code>silly</code> instead of <code>trace</code></p>
+<h3 id="winston-default-logger">Winston default logger</h3>
+<p>Access the winston default log object via</p>
+<pre><code>logger.default_logger</code></pre>
+<h3 id="caveats">Caveats</h3>
+<p>Winston treats and object as the last element to a log file as metadata
+for tags. Logging an object as the last item may not come out as expected</p>
+<p>This tries to attach the error object as metadata</p>
+<p>   logger.error &#39;error&#39;, error</p>
+<p>Whereas this is probably what you want</p>
+<p>   logger.error &#39;error&#39;, error.message, error.stack</p></div></div></div></div></body></html>

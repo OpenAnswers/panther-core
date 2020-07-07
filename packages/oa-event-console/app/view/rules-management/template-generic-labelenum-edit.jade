@@ -1,0 +1,28 @@
+script(id="template-generic-labelenum-edit" type="text/x-mustache-template")
+  .generic-labelenum-edit(id="{{ data.euid }}-edit"
+  data-name="{{ data.name }}" class="{{ data.class }}")
+    .form-group
+
+      //- Name/Label
+      .generic-labelenum-field.edit-padding
+        .generic-labelenum-fieldview.h4 {{ data.label }}
+
+      //- Value
+      .generic-labelenum-value.edit-padding
+        select.form-control(placeholder="value"
+        class="generic-labelenum-value-{{ data.name }}")
+          | {{ #data.options_list }}
+          | {{ #selected }}
+          option(value="{{ value }}" selected="true") {{ label }}
+          | {{ /selected }}
+          | {{ ^selected }}
+          option(value="{{ value }}") {{ label }}
+          | {{ /selected }}
+          | {{ /data.options_list }}
+
+      //- For single items this should probably render inline?
+      .generic-labelenum-save-interface.hidden
+        .text-center
+          +button_word_save('group-save')
+          +button_word_cancel('group-cancel')
+        .margintop10

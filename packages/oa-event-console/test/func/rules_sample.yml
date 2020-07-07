@@ -1,0 +1,114 @@
+syslog_severity_map:
+  7: -1 
+  6: -1
+  5: -1
+  4: 1
+  3: 2
+  2: 3
+  1: 4
+  0: 5
+
+
+globals:
+
+  dedupe:
+    -
+      - !!js/regexp /dedupe dedupea dedupe/
+      - !!js/regexp /dedupea/
+      - dd a dd
+    - 
+      - !!js/regexp /dedupe dedupeb dedupe/
+      - dd b dd
+
+  discard:
+    - !!js/regexp /some discarding text/
+    - name:
+      equals:
+        field: something
+
+  rules:
+
+    - name: oa event relay monitor
+      equals:
+        summary: "OAER OA Event Relay"
+      set: 
+        severity: 1
+
+    - name: simple2 test discard
+      equals:
+        node: simple2_node
+      set:
+        severity: 3
+
+    - name: simple3 and
+      equals:
+        node: simple3_node
+        other: second_and
+      set:
+        severity: -1
+
+    - name: simple4 set and replace
+      equals:
+        node: 
+          - simple4_node
+          - second_or
+      set:
+        severity: -1
+      replace:
+        field: simple5
+        this: /replace_testing/
+        with: 're_replace_done'
+
+    - name: simple5 stop
+      equals: 
+        field_name: stopping
+      stop: true
+
+    - name: simple6 set and stop
+      match: 
+        summary: !!js/regexp /simple6/
+      set:
+        field_name: 17
+      stop: true
+
+
+groups:
+
+  goruppo_a:
+    match:
+      node: 
+        - 10.51.0.1
+        - 192.168.50.1
+
+    rules:
+
+      - name: Remove date time from palm db messages
+        match: 
+          field: !!js/regexp /spectac\wlar regex/
+        discard: true
+
+      - name: Interactive Data vs. Morningstar
+        equals: 
+          node: ctracker
+        set:
+          node: ctrack.qualified.dns
+
+  group_b:
+    match:
+      node: !!js/regexp /^bnode\d+/
+
+    rules:
+      - name: 'none'
+        all: true
+        replace:
+          field: summary
+          this: !!js/regexp /test/
+          with: '1other1'
+
+      - name: 'none'
+        match:
+          summary: !!js/regexp /testtesttest/
+        replace:
+          field: summary
+          this: !!js/regexp /testtest/
+          with: '2other2'

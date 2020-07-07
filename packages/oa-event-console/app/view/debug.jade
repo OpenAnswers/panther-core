@@ -1,0 +1,23 @@
+extends _template
+
+block script
+  != js('js/debug-raw-stream')
+
+block nav
+  - var nav_location = 'debug'
+  include ./_nav_generic.jade
+  
+block content
+  .header
+  .container
+
+    h2 Debug
+    .divider.marginbottom20
+    
+    .info.marginbottom15
+      .card.card-generic
+        .inner
+          a(name="raw_stream")
+          .title Raw Event Stream
+          .help Streaming data from the capped rsyslog event collection. Max 1000 events
+          #debug_raw_stream.content

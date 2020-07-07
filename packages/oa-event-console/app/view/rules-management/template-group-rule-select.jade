@@ -1,0 +1,29 @@
+script(id="template-group-rule-select" type="text/x-mustache-template")
+  .card.card-global-rule.card-group-rule(data-id="{{data.index}}")
+    .cover
+    .cover-text
+      .spinner
+      p Loading data...
+    form(data-toggle="validator" role="form")
+      .title.collapse
+        //.right
+          .buttons
+            span.button-edit.button-edit-normal.glyphicon.glyphicon-pencil(title="Edit Rule") &nbsp;
+            span.button-collapse.glyphicon.glyphicon-triangle-top.collapse-toggle(title="Collapse/Expand Rule") &nbsp;
+            //-span.button-grab.glyphicon.glyphicon-menu-hamburger(title="Drag to Re-order Rule") &nbsp; 
+        .left.collapse
+          //p.rule-name {{data.name}}
+          p.rule-name-edit.collapse
+            | {{data.name}}
+            input(type="text" value="{{data.name}}" name='rule-name' placeholder="Rule Name" required).form-control.hidden
+          //.metadata-container
+            .metadata.metadata-tags
+
+      .inner
+        .content 
+          .subtitle.margintop5 Select events where
+          .selects
+          .clear(style="clear: both;")
+          a.selector-select-add.select-add.hidden Add Selector
+      
+    

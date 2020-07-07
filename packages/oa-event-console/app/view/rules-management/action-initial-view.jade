@@ -1,0 +1,7 @@
+script(id="template-action-initial-view" type="text/x-mustache-template")
+  .action-entry-view(data-action-id="{{ data.verb }}" 
+  data-action-uvid="{{ data.uvid }}" class="action-{{ data.verb }}")
+    .inner
+      span.action-view-gem(class="action-view-gem-{{ data.verb }}")
+      span.action-view-operator {{ data.verb }}
+      span.action-view-text {{ data.friendly_after }}

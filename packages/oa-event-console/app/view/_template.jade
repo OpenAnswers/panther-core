@@ -1,0 +1,44 @@
+//- # Main Template
+
+doctype html
+
+html(lang="en")
+
+  head
+    title #{title}
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="google" content="notranslate")
+    meta(http-equiv="Content-Language" content="en")
+    meta(charset="UTF-8")
+
+    include _scripts.jade
+    include _css.jade
+    include _favicon.jade
+
+    //- # Allow pages extending this template to include css
+    block css
+
+    //- # Place for Client side template to be rendered (in script tags)
+    block template
+
+  body
+    .status-container
+      .status-connection
+      .status-request
+        .request-spinner
+
+    .container
+      block nav
+
+    //- # Main page content is rendered here
+    block content
+      
+    //- # Any js a page specifically requires is added here
+    block script
+
+    //- # refresh on change outside of production
+    - if( node_env === 'development' && !no_refresh_env ) refresh = js('js/refresh.js');
+    != refresh
+
+    //- # Pages can add a footer here
+    block footer

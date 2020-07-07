@@ -1,0 +1,54 @@
+globals:
+  rules:
+    - name: match 33
+      set:
+        identifier: '{node}:{tag}:{severity}:{summary}'
+      all: true
+      uuid: e7e22d80-45e0-11e7-a735-93ec7ef3d68b
+      match:
+        summary: 33
+
+groups:
+  _order:
+    - test
+    - Groupzoostorm
+  test:
+    select:
+      match:
+        node: test
+    rules:
+      - name: test1
+        set:
+          severity: '5'
+        match:
+          summary: tes
+        uuid: 67b89ce0-f782-11e6-b1cb-fd856de6871d
+      - name: bigor
+        set:
+          summary: 'BOR {match.1}{match.2} END'
+        match:
+          summary:
+            - '/(one|two|three)/'
+            - '/(four|five|six)/'
+        uuid: 4bb070c0-f8f1-11e6-a18f-df657c67f56a
+    uuid: 65477170-f764-11e6-9dad-57aae6b3a654
+  Groupzoostorm:
+    select:
+      match:
+        node: zoostorm
+    rules:
+      - name: alive
+        set:
+          agent: ALIVE
+        match:
+          summary: alive
+        uuid: 1e107460-ba59-11e7-86a9-9909be60018f
+      - name: demo
+        set:
+          tag: 'DEMO {match.1}'
+        match:
+          summary: "/demo (\\d+)/"
+        uuid: 5ba8c6a0-ba5a-11e7-86a9-9909be60018f
+    uuid: ec6dd9c0-ba58-11e7-86a9-9909be60018f
+metadata:
+  save_date: 1509029234913

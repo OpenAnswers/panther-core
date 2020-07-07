@@ -1,0 +1,78 @@
+//- acknowledge
+
+script(id="template-sidebar-acknowledge-event" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  acknowledged 
+  a.event(href="#/event/{{ ids }}") an event.
+
+script(id="template-sidebar-acknowledge-events" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  acknowledged {{ count }} events.
+
+
+//- unacknowledge
+
+script(id="template-sidebar-unacknowledge-event" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  unacknowledged 
+  a.event(href="#/event/{{ ids }}") an event.
+
+script(id="template-sidebar-unacknowledge-events" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  unacknowledged {{ count }} events.
+
+
+//- assign
+
+script(id="template-sidebar-assign-event" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  assigned 
+  a.event(href="#/event/{{ ids }}") an event
+  |  to 
+  span.owner {{ metadata.new_owner }}.
+
+script(id="template-sidebar-assign-events" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  assigned {{ count }} events to 
+  span.owner &nbsp;{{ metadata.new_owner }}.
+
+
+//- clear
+
+script(id="template-sidebar-clear-event" type="text/x-mustache-template")
+  a.name {{ username }} 
+  | cleared 
+  span.event an event.
+
+script(id="template-sidebar-clear-events" type="text/x-mustache-template")
+  a.name {{ username }} 
+  | cleared 
+  span.event {{ metadata.ids.length }} 
+  | events.
+
+
+//- delete
+
+script(id="template-sidebar-delete-event" type="text/x-mustache-template")
+  a.name {{ username }} 
+  |  deleted 
+  span.event an event.
+
+script(id="template-sidebar-delete-events" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  deleted 
+  span.event {{ metadata.ids.length }} 
+  |  events.
+
+
+//- severity
+
+script(id="template-sidebar-severity-event" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  changed 
+  a.event(href="#/event/{{ ids }}") an event's
+  |  severity to {{ metadata.new_severity }}.
+
+script(id="template-sidebar-severity-events" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  changed {{ count }} events' severities to {{ metadata.new_severity }}.

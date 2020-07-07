@@ -1,0 +1,32 @@
+agent:
+  type: syslog
+  severity_map:
+    '0': 5
+    '1': 4
+    '2': 3
+    '3': 2
+    '4': 1
+    '5': -1
+    '6': -1
+    '7': -1
+  identifier: !<tag:yaml.org,2002:js/undefined> ''
+  field_map: !<tag:yaml.org,2002:js/undefined> ''
+globals:
+  rules:
+    - name: global test rule
+      equals:
+        node: global_node
+      set:
+        severity: 3
+groups:
+  _order:
+    - group_a 
+  group_a:
+    equals:
+      node: group_node
+    rules:
+      - name: group_a test rule
+        match:
+          summary: blarg summary
+        set:
+          severity: 3

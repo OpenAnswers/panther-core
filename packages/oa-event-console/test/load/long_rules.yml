@@ -1,0 +1,495 @@
+syslog_severity_map:
+  7: -1 
+  6: -1
+  5: -1
+  4: 1
+  3: 2
+  2: 3
+  1: 4
+  0: 5
+
+
+globals:
+
+  rules:
+
+    - name: oa event relay monitor
+      equals:
+        summary: "OAER OA Event Relay"
+      set: 
+        severity: 1
+
+    - name: importance
+      match: 
+        summary: "I'm not that important"
+      set:
+        severity: 2
+
+    - name: simple2 test discard
+      equals:
+        node: simple2_node
+      discard: true
+
+    - name: simple3 and
+      equals:
+        node: simple3_node
+        other: second_and
+      set:
+        severity: -1
+
+    - name: simple4 set and replace
+      equals:
+        node: 
+          - simple4_node
+          - second_or
+      set:
+        severity: -1
+      replace:
+        field: simple5
+        this: /replace_testing/
+        with: 're_replace_done'
+
+    - name: simple5 stop
+      equals: 
+        field_name: stopping
+      stop: true
+
+    - name: simple6 set and stop1
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop2
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop3
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop4
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop5
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop6
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+    - name: simple6 set and stop
+      set:
+        field_name: 17
+      stop: true
+
+groups:
+
+  goruppo_a:
+    match:
+      node: 
+        - 10.51.0.1
+        - 192.168.50.1
+
+    rules:
+
+      - name: Remove date time from palm db messages
+        match: 
+          field: '/spectacular regex/'
+        discard: true
+
+      - name: Interactive Data vs. Morningstar
+        equals: 
+          node: ctracker
+        set:
+          node: ctrack.qualified.dns
+
+  group_b:
+    match:
+      node: 
+        - /^gm\d+/
+
+    rules:
+      - name: 'none'
+        replace:
+          field: summary
+          this: /test/
+          with: 'other'
+
+      - name: 'none'
+        summary: /testtesttest/
+        replace:
+          field: summary
+          this: /testtest/
+          with: 'other'

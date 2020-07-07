@@ -1,0 +1,7 @@
+FROM node:12.18.2-alpine3.12
+ARG APP_UID=1001
+LABEL product="oa/node-app"
+RUN adduser -u ${APP_UID} -D -s /bin/false -h /app app app
+ONBUILD ENV DEBUG=""
+ONBUILD ENV APPDIR=/app
+ONBUILD ARG APPDIR=/app

@@ -1,0 +1,13 @@
+
+//- This is the event details modal
+    Each tab has it's own jade file and templates
+
+#event-detail-bulk-modify-modal.modal.fade
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        h5.modal-title(style="float: left;") Bulk Update
+        button.close(style="float: right;" data-dismiss='modal' aria-label='Close')
+          span(aria-hidden='true') &times;
+      .modal-body
+        include event-details-bulk/notes

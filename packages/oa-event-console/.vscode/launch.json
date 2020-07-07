@@ -1,0 +1,60 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/app.js",
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "type": "node2",
+      //"protocol": "inspector",
+      "request": "launch",
+      "name": "console debug",
+      "program": "${workspaceRoot}/dist.js",
+      "env": {
+        "DEBUG": "oa:event:*",
+        "NODE_ENV": "development",
+        "NO_REFRESH": "1"
+      },
+      "cwd": "${workspaceRoot}",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceRoot}/dist/**/*.js"],
+      "console": "integratedTerminal",
+      "runtimeExecutable": "${workspaceRoot}/utils/node.sh",
+      "preLaunchTask": "coffeecompile"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Port",
+      "port": 9229
+    },
+    {
+      "name": "run it",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/dist.js",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch Chrome against localhost",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceRoot}"
+    },
+    {
+      "name": "Attach to Chrome",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "webRoot": "${workspaceRoot}/app"
+    }
+  ]
+}

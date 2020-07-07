@@ -1,0 +1,33 @@
+script(id="template-tag-rvb" type="text/x-plain-template")
+  .tag.tag-discard
+    .colour.colour-red
+    .text TheTag
+
+script(id="template-rvb-atest-view" type="text/x-mustache-template")
+  .wakka-entry.wakka-entry-view(data-wakka-id="{{ data.verb }}" 
+  data-wakka-uvid="{{ data.uvid }}" class="wakka-{{ data.verb }}")
+    .inner
+      span.wakka-view-gem(class="wakka-view-gem-{{ data.verb }}")
+      span.wakka-view-operator {{ data.verb }}&nbsp;
+      span.wakka-view-text the value of&nbsp;
+      span.wakka-view-field {{ data.field }}&nbsp;
+      span.wakka-view-text to&nbsp;
+      span.wakka-view-value "{{ data.value }}"
+
+script(id="template-rvb-atest-edit" type="text/x-mustache-template")
+  .wakka-entry.wakka-entry-edit(data-wakka-id="{{ data.verb }}" 
+  data-wakka-uvid="{{ data.uvid }}" class="wakka-{{ data.verb }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.wakka-delete-button
+      .left
+        .wakka-set-fixed-width
+          .wakka-operator
+            input(type='text' value='{{ data.verb }}').form-control
+          .wakka-field.input-group
+            span.input-group-addon field
+            input(type='text' value='{{ data.field }}').form-control
+        .wakka-flexible-width
+          .wakka-value.input-group
+            span.input-group-addon to
+            input(type='text' value='{{ data.value }}').form-control

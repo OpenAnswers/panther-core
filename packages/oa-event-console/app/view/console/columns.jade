@@ -1,0 +1,11 @@
+each column in columns
+  - var checked = !!( _.find(w2_columns, {"field":column.name}) )
+  //- console.log( 'columnfind', _.find(w2_columns, {"field":column.name}) )
+  li
+    .checkbox
+      label.console-column-checkbox
+        if checked
+          input(type="checkbox" value="#{column.name}" checked)
+        else
+          input(type="checkbox" value="#{column.name}")
+        | #{column.label}

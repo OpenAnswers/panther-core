@@ -1,0 +1,10 @@
+#= require ./console/console-event-details
+#= require ./console/console-event-details-bulk
+#= require ./console/console-event-details-extid
+#= require ./console/console-helpers
+#= require ./console/console-grid
+#= require ./console/console-socketio
+#= require ./console/console-clipboard
+#= require ./console/console-toolbar
+#= require ./console/sidebar
+#= require ./console/console-settings

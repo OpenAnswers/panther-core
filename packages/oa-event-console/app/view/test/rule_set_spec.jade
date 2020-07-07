@@ -1,0 +1,14 @@
+mixin rule_set_spec
+  
+  include ../rules-management/template-rule
+  include ../rules-management/template-tags
+
+  != js('js/rendered')
+  
+  != js('js/rules-management/rule')
+  != js('js/rules-management/rule_set')
+
+  != js('test/rule_set_spec')
+
+  p rule-set-render-test
+  #rule-set-render-test

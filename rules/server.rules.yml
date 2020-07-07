@@ -1,0 +1,33 @@
+globals:
+  rules:
+    - name: 'Example Rule'
+      match:
+          summary: '/Example (.*)/'
+      set:
+          tag: 'example'
+      uuid: 22889210-b974-11e7-9889-c70bd1bece5e
+
+# ## Groups
+
+# One an event has gone through the global rule set, it will optionally
+# be matched into one group.
+# The `group` field will be set to the groups name and then the event
+# will be processed through that groups rule set. 
+
+groups:
+  Demo:
+   match:
+      node: some.node.name
+   rules:
+     - name: Demo Group Rule 1
+       match: 
+         summary: /critical message/
+       set:
+         severity: 5
+       uuid: 8bb03cd1-b973-11e7-9889-c70bd1bece5e
+     - name: Discard any discard messages
+       match: 
+         summary: /discard this message/
+       discard: true
+       uuid: 8bb03cd2-b973-11e7-9889-c70bd1bece5e
+   uuid: 8bb03cd0-b973-11e7-9889-c70bd1bece5e

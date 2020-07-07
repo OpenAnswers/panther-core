@@ -1,0 +1,5 @@
+node_modules/
+pkg/
+npm-debug.log
+docs/public/fonts/
+docs/public/images/

@@ -1,0 +1,54 @@
+extends _template
+
+include mixin/cards
+
+block nav
+  - var nav_location = 'login'
+  include ./_nav_generic.jade
+
+block script
+  != js('js/login')
+
+block css
+  != css('css/index')
+
+block content
+  .bg-container
+  .header
+  .container
+    +unauth_card( 'Login' )
+      p#login-error-failed.alert.alert-danger.hidden Invalid login, please try again
+      p#login-error-locked.alert.alert-danger.hidden Too many failed logins, please wait and try again
+
+      form#form-public-login(role='form' action='/login' method='post')
+        input(type='hidden' value=redirectUrl name='redirectUrl')
+        .form-group.margintop15
+          input.form-control(type='text' name='username' placeholder='User name')
+        .form-group
+          input.form-control(type='password' name='password' placeholder='Password')
+        .form-group.text-center
+          button.btn.btn-primary.marginright5(type='submit' value='Log in') Log in
+          a.btn.btn-link(href='/password') Forgotten password?
+
+    +unauth_card('Web Browser Support')#login-notchrome.hidden
+      p We recommend using a recent version of Chrome to access your Panther console.
+      p #[a(href="https://www.google.com/chrome/browser") Install Google Chrome]
+
+    +unauth_card('Your browser is out of date!')#login-outdated.hidden
+      p Update your browser to get the best experience from your Panther console.
+      p #[a(href="http://outdatedbrowser.com/") Update my browser now]
+
+    +unauth_card('Your browser is not tested!')#login-untested.hidden
+      p Please use a recent Chrome or Firefox to get the best experience from your Panther console.
+      p #[a(href="http://outdatedbrowser.com/") Update my browser now]
+
+    +unauth_card("Internet Explorer")#login-ie.hidden
+      p Please use a recent Chrome or Firefox to get the best experience from your Panther console.
+      p #[a(href="http://outdatedbrowser.com/") Update my browser now]
+
+    +unauth_card("You're using an old version of Internet Explorer!")#login-ie-old.hidden
+      p Please use a recent Chrome or Firefox to view your Panther console, even IE11 would be better!
+      p #[a(href="http://outdatedbrowser.com/") Update my browser now]
+
+    +unauth_card('Mobile or Touch Screen Device')#login-mobiley.hidden
+      p It looks like you are using a mobile or touch screen device. Some of the components in the Panther console don't currently work well via touch or on a small screen. We recommend using a desktop.

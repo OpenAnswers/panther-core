@@ -1,0 +1,17 @@
+#!/bin/sh
+# 
+# Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.  
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
+
+
+# ./addfilter vince all ""
+
+USERNAME=$1
+LABEL=$2
+F=$3
+
+echo "db.filters.save( { user:'$USERNAME', name:'$LABEL', system:false, f:{ $F } } ) " | mongo oa
+

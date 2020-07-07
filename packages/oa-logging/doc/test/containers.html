@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><title>test/containers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="test/containers"><meta name="groc-project-path" content="test/containers.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">test/containers.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">winston = <span class="hljs-built_in">require</span> <span class="hljs-string">'winston'</span>
+MongoDB = <span class="hljs-built_in">require</span>(<span class="hljs-string">'winston-mongodb'</span>).MongoDB
+
+winston.loggers.options.transports = []
+
+container = <span class="hljs-keyword">new</span> winston.Container <span class="hljs-attribute">transports</span>: [
+  <span class="hljs-keyword">new</span> (winston.transports.Console)(),
+  <span class="hljs-keyword">new</span> (winston.transports.File)({ <span class="hljs-attribute">filename</span>: <span class="hljs-string">'somefile.log'</span> })
+  <span class="hljs-keyword">new</span> (winston.transports.MongoDB({
+    <span class="hljs-attribute">db</span>:<span class="hljs-string">'mongodb://localhost:27017/oa'</span>
+    <span class="hljs-attribute">collection</span>: <span class="hljs-string">'logs'</span>
+    <span class="hljs-attribute">capped</span>: <span class="hljs-literal">true</span>
+    <span class="hljs-attribute">cappedSize</span>: <span class="hljs-number">10000000</span>
+    <span class="hljs-attribute">name</span>: <span class="hljs-string">'default'</span>
+  })
+]
+
+winston.loggers.add <span class="hljs-string">'oa:event:whatever'</span>, <span class="hljs-attribute">transports</span>: []
+winston.loggers.add <span class="hljs-string">'oa:event:next'</span>, <span class="hljs-attribute">transports</span>: []
+winston.loggers.add <span class="hljs-string">'oa:event:indubitably'</span>, <span class="hljs-attribute">transports</span>: []
+
+
+l1 = winston.get <span class="hljs-string">'oa:event:whatever'</span>
+l2 = winston.get <span class="hljs-string">'oa:event:next'</span>
+l3 = winston.get <span class="hljs-string">'oa:event:indubitably'</span>
+
+
+l1.info <span class="hljs-string">'whatever test'</span>
+
+l2.info <span class="hljs-string">'next test'</span>
+
+l3.info <span class="hljs-string">'indubitably test'</span></div></div></div></div></body></html>

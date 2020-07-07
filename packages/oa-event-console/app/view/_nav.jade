@@ -1,0 +1,53 @@
+
+include support
+
+#nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+  .navbar-header
+    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+      span.sr-only Toggle navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    
+    div.nav
+      a(href='/')
+        img.img-responsive.navbar-logo(src="/img/panther_logo_thin.png" )
+      
+
+  .navbar-collapse.collapse
+    
+    ul.nav.navbar-nav
+
+      block pagenav
+
+    ul.nav.navbar-nav.navbar-right
+      li
+        .nav-quick-deploy.hidden
+          span(data-toggle="tooltip" title="Changes have been made to your local rule set, but will not be persisted or take effect until they are deployed. " placement="bottom") Commit Changes
+          .buttons
+            a.btn.btn-success Deploy
+            a.btn.btn-danger Discard
+      li.dropdown(class=(nav_location == 'support') ? 'active' : '' )
+        a(href='#{config.app.support_url}') Documentation
+      li
+        .nav-connectionstatus-label
+          .nav-connectionstatus-text
+      if (user) 
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown') #{user.username} 
+            span.caret
+          ul.dropdown-menu(role='menu')
+            li.dropdown-header Panther v#{version}
+            li 
+              a(href='#{config.app.signup_url}') Signup
+            li 
+              a#console-support(href='#support') Support
+            each link in nav_user
+              li
+                a(href=link[1]) #{link[0]}
+
+    //
+      ul.nav.navbar-nav.navbar-right.navbar-report-issue
+        li
+          a Report Issue
+

@@ -1,0 +1,16 @@
+//- Render Template
+script(id="event-details-history-template" type="text/x-handlebars-template")
+  thead
+    tr
+      th.col-xs-3 Time
+      th.col-xs-2 User
+      th.col-xs-7 Message
+  |{{#history}}
+  tr
+    td.col-xs-3 {{timestamp}}
+    td.col-xs-2 {{user}}
+    td.col-xs-7 {{message}}
+  |{{/history}}
+
+//- Conteiner
+table#event-details-modal-history-table.table.table_nested.table-hover

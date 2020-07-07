@@ -1,0 +1,96 @@
+FROM panther-builder:12.18.2-alpine3.12 as builder
+ARG BUILDTIME_ENV
+
+#RUN npm install -g yarn
+
+WORKDIR $BUILD_DIR
+
+COPY package.json $BUILD_DIR/package.json
+COPY yarn.lock $BUILD_DIR/yarn.lock
+
+COPY packages/oa-errors/package.json $BUILD_DIR/packages/oa-errors/package.json
+COPY packages/oa-helpers/package.json $BUILD_DIR/packages/oa-helpers/package.json
+COPY packages/oa-logging/package.json $BUILD_DIR/packages/oa-logging/package.json
+COPY packages/oa-tinycache/package.json $BUILD_DIR/packages/oa-tinycache/package.json
+
+COPY packages/oa-event-rules/package.json $BUILD_DIR/packages/oa-event-rules/package.json
+COPY packages/oa-event-monitors/package.json $BUILD_DIR/packages/oa-event-monitors/package.json
+
+COPY lerna.json $BUILD_DIR/lerna.json
+
+ENV CXXFLAGS="-march=nocona -mno-aes -mno-f16c -mno-avx -mno-avx2 -mno-bmi2"
+
+RUN ["/bin/bash", "-c", "yarn install"]
+
+COPY packages/oa-errors $BUILD_DIR/packages/oa-errors
+COPY packages/oa-helpers $BUILD_DIR/packages/oa-helpers
+COPY packages/oa-logging $BUILD_DIR/packages/oa-logging
+COPY packages/oa-tinycache $BUILD_DIR/packages/oa-tinycache
+
+COPY packages/oa-event-rules $BUILD_DIR/packages/oa-event-rules
+COPY packages/oa-event-monitors $BUILD_DIR/packages/oa-event-monitors
+
+ENV NODE_ENV=$BUILDTIME_ENV
+RUN yarn run lerna run build
+
+# remove the devDeps
+RUN yarn install --production=true
+
+FROM panther-runtime:12.18.2-alpine3.12
+LABEL component="panther/monitors"
+
+COPY --from=builder /build/node_modules /app/node_modules
+
+COPY --from=builder /build/packages/oa-errors/lib /app/packages/oa-errors/lib
+COPY --from=builder /build/packages/oa-errors/package.json /app/packages/oa-errors/package.json
+COPY --from=builder /build/packages/oa-errors/node_modules /app/packages/oa-errors/node_modules
+
+COPY --from=builder /build/packages/oa-helpers/lib /app/packages/oa-helpers/lib
+COPY --from=builder /build/packages/oa-helpers/package.json /app/packages/oa-helpers/package.json
+COPY --from=builder /build/packages/oa-helpers/node_modules /app/packages/oa-helpers/node_modules
+
+COPY --from=builder /build/packages/oa-logging/lib /app/packages/oa-logging/lib
+COPY --from=builder /build/packages/oa-logging/node_modules /app/packages/oa-logging/node_modules
+COPY --from=builder /build/packages/oa-logging/package.json /app/packages/oa-logging/package.json
+
+COPY --from=builder /build/packages/oa-tinycache/lib /app/packages/oa-tinycache/lib
+COPY --from=builder /build/packages/oa-tinycache/node_modules /app/packages/oa-tinycache/node_modules
+COPY --from=builder /build/packages/oa-tinycache/package.json /app/packages/oa-tinycache/package.json
+
+COPY --from=builder /build/packages/oa-event-rules/lib /app/packages/oa-event-rules/lib
+COPY --from=builder /build/packages/oa-event-rules/node_modules /app/packages/oa-event-rules/node_modules
+COPY --from=builder /build/packages/oa-event-rules/package.json /app/packages/oa-event-rules/package.json
+
+# Install application
+
+COPY --from=builder /build/packages/oa-event-monitors/package.json /app
+COPY --from=builder /build/packages/oa-event-monitors/bin /app/bin
+COPY --from=builder /build/packages/oa-event-monitors/lib /app/lib
+COPY --from=builder /build/packages/oa-event-monitors/common /app/common
+
+COPY --from=builder /build/packages/oa-event-monitors/docker.files/entrypoint.sh /app/entrypoint.sh
+COPY --from=builder /build/packages/oa-event-monitors/docker.files/*.ini /app/etc/
+COPY --from=builder /build/packages/oa-event-monitors/node_modules/ /app/node_modules/
+
+WORKDIR /app
+RUN chmod ugo+rx /app/entrypoint.sh && \
+  find /app/ -type f -exec chmod ugo+r '{}' \; && \
+  find /app/ -type d -exec chmod ugo+rx '{}' \; && \
+  chmod ugo+x /app/bin/* && \
+  find -L /app/bin -type f -exec chmod +x '{}' \;
+
+ARG BUILD_PANTHER_VERSION=unknown
+ENV PANTHER_VERSION=$BUILD_PANTHER_VERSION
+
+ARG RUNTIME_ENV
+ENV NODE_ENV=$RUNTIME_ENV
+
+ARG BUILD_AGENT_NAME
+ENV BUILD_AGENT_NAME=$BUILD_AGENT_NAME
+
+VOLUME /app/rules
+# cleanup
+USER app
+
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
+

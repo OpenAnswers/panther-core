@@ -1,0 +1,13 @@
+//- Third party libraries via Bower
+!= js('bower/bootstrap3-typeahead')
+!= js('bower/highlightRegex')
+!= js('bower/bootstrap-validator')
+!= js('bower/bootstrap-contextmenu')
+
+//- Our JavaScript
+!= js('js/_rules-management.js')
+
+//- Pass some simple express data in
+script(type="text/javascript" charset="utf-8").
+  var type = "#{type}";
+  var sub_type = "#{sub_type}";

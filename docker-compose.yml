@@ -1,0 +1,64 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo:3.2.16
+    container_name: mongodb
+    hostname: mongodb
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+    expose:
+      - "27017"
+
+  event-console:
+    image: event-console
+    container_name: event-console
+    hostname: console
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - mongodb
+    expose:
+      - 3001
+    ports:
+      - 3001:3001
+    links:
+      - mongodb
+    volumes:
+      - rules-vol:/app/rules:rw
+
+  event-server:
+    image: event-server
+    container_name: event-server
+    hostname: server
+    restart: unless-stopped
+    expose:
+      - 4002
+    env_file: .env
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    volumes:
+      - rules-vol:/app/rules:ro
+    entrypoint:
+      - node
+      - lib/server.js
+
+  event-monitors-http:
+    image: event-monitors
+    container_name: event-monitors-http
+    hostname: event-monitors-http
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    env_file: .env
+    command: http
+    depends_on:
+      - event-console
+      - event-server
+    volumes:
+      - rules-vol:/app/rules:ro
+
+volumes:
+  rules-vol:

@@ -1,0 +1,30 @@
+extends _template
+
+include ./mixin/buttons
+
+block nav
+  - var nav_location = 'rules';
+  include ./_nav_generic.jade
+
+
+
+block script
+  != js('js/schedules.js')
+
+block content
+  .container
+    h2 Schedules
+    .marginbottom20
+
+    .info.marginbottom15
+      .card.card-generic
+        .inner
+          a(name="schedules")
+          .title Schedules
+          .content
+            .help 
+              p Create new Schedules to be used in Rules
+              p A Schedule can be used as a selector within a Group or a Rule.
+              | This could be used to discard Events outside of office hours, or to increase the Severity during certain timeframes
+            #rules-schedules-content
+              include schedule/content

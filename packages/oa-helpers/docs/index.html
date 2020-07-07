@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>index.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="index.html">
+                  index.coffee
+                </a>
+              
+                
+                <a class="source" href="objhash.html">
+                  objhash.coffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>index.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>node modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>util  = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>npm modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'lodash'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>oa modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>objhash = <span class="hljs-built_in">require</span> <span class="hljs-string">'./objhash'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2 id="helpers">Helpers</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Helpers are a bunch of generic javascript helpers that are missing from
+core js and might be useful for other projects</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The Helpers class is just a namespace to be easily exported at the end
+You can call all the functions directly when you require oa-helpers</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <pre><code>Helpers = <span class="hljs-built_in">require</span> <span class="hljs-string">'oa-helpers'</span>
+Helpers.ends_with <span class="hljs-string">"last"</span>, <span class="hljs-string">"st"</span>
+</code></pre>
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Or with coffeescripts object derefence shortcut</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <pre><code>{ ends_with } = <span class="hljs-built_in">require</span> <span class="hljs-string">'oa-helpers'</span>
+ends_with <span class="hljs-string">"last"</span>, <span class="hljs-string">"st"</span>
+</code></pre>
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>JS</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <pre><code>ends_with = <span class="hljs-built_in">require</span>(<span class="hljs-string">'oa-helpers'</span>).ends_with
+ends_with(<span class="hljs-string">"last"</span>, <span class="hljs-string">"st"</span>)
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Helpers</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Give everyone access to our lodash</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@_</span>: _</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>objhash
+Create a consitant sha hash of an unordered JS object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@objhash</span>: objhash</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h6 id="-timer-timeout-fn-">.timer( timeout, fn )</h6>
+<p>Switch setTimeout arguments around for coffee niceness</p>
+<pre><code>timer <span class="hljs-number">5000</span>, <span class="hljs-function">-&gt;</span>
+  do_something_delayed()
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@timer</span>: <span class="hljs-function"><span class="hljs-params">( timeout, cb )</span> -&gt;</span>
+    setTimeout cb, timeout</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h6 id="-map_object-obj-mapping-">.map_object( obj , mapping )</h6>
+<p>To map properties of an object to new properties.
+Returns <code>undefined</code>, as it modifies original object</p>
+<pre><code>obj = { <span class="hljs-attribute">one</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">two</span>: <span class="hljs-number">2</span>}
+map_object(obj, { <span class="hljs-attribute">one</span>: <span class="hljs-string">'new'</span> });
+<span class="hljs-comment"># =&gt; undefined</span>
+obj
+<span class="hljs-comment"># =&gt; { new: 1, two: 2 }</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@map_object</span>: <span class="hljs-function"><span class="hljs-params">( obj , mapping )</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> from, to <span class="hljs-keyword">of</span> mapping
+      <span class="hljs-keyword">if</span> obj[from]?
+        obj[to] = obj[from]
+        <span class="hljs-keyword">delete</span> obj[from]
+      <span class="hljs-keyword">else</span>
+        obj[to] = <span class="hljs-literal">undefined</span>
+    <span class="hljs-literal">undefined</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h6 id="-map_objects-array-mapping-">.map_objects( array, mapping )</h6>
+<p>Run object mapping across an array of objects
+See <code>map_object</code> for mapping setup</p>
+<pre><code>map_objects( obj_array, { <span class="hljs-attribute">one</span>: <span class="hljs-string">'new'</span> });
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@map_objects</span>: <span class="hljs-function"><span class="hljs-params">( array, mapping )</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> obj <span class="hljs-keyword">in</span> array
+      Helpers.map_object obj, mapping
+    <span class="hljs-literal">undefined</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h6 id="-mapped_object-array-mapping-">.mapped_object( array, mapping )</h6>
+<p>see <code>map_object</code>, returns new object
+could be quicker but meh
+Note this is not a deep clone</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@map_clone_object</span>: <span class="hljs-function"><span class="hljs-params">( obj, mapping )</span> -&gt;</span>
+    obj = _.clone obj
+    Helpers.map_object obj, mapping
+    obj</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h6 id="-mapped_objects-array-mapping-">.mapped_objects( array, mapping )</h6>
+<p>see <code>map_objects</code>, returns new objects</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@map_clone_objects</span>: <span class="hljs-function"><span class="hljs-params">( obj, mapping )</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> obj <span class="hljs-keyword">in</span> array
+      Helpers.map_clone_object obj, mapping</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <h6 id="ends_with-str-ending-">ends_with( str, ending )</h6>
+<p>Check if a string ends with a certain string
+Returns true/false</p>
+<pre><code>ends_with(<span class="hljs-string">'abc'</span>, <span class="hljs-string">'c'</span>);
+<span class="hljs-regexp">//</span> =&gt; <span class="hljs-literal">true</span>
+
+ends_with(<span class="hljs-string">'abc'</span>, <span class="hljs-string">'d'</span>);
+<span class="hljs-regexp">//</span> =&gt; <span class="hljs-literal">false</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@ends_with</span>: <span class="hljs-function"><span class="hljs-params">(str, end)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> _.isString str
+    len = str.length - end.length
+    str.indexOf( end, len ) != -<span class="hljs-number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h6 id="starts_with-str-start-">starts_with( str, start )</h6>
+<p>Check if a string starts with a certain string
+Returns true/false</p>
+<pre><code>starts_with(<span class="hljs-string">'abc'</span>, <span class="hljs-string">'a'</span>);
+<span class="hljs-regexp">//</span> =&gt; <span class="hljs-literal">true</span>
+
+starts_with(<span class="hljs-string">'abc'</span>, <span class="hljs-string">'z'</span>);
+<span class="hljs-regexp">//</span> =&gt; <span class="hljs-literal">false</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@starts_with</span>: <span class="hljs-function"><span class="hljs-params">(str, start)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> _.isString str
+    str.lastIndexOf( start, <span class="hljs-number">0</span> ) == <span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h6 id="format_string-string-variables-">format_string( string, variables )</h6>
+<p>Take a string like {whatever} and replace with the
+variable { whatever: ‘value’ }</p>
+<p>Implementation of stacks string formatter
+<a href="http://stackoverflow.com/a/23087471/1318694">http://stackoverflow.com/a/23087471/1318694</a></p>
+<pre><code>format_string( <span class="hljs-string">'wha{wha}wha'</span>, { <span class="hljs-attribute">wha</span>: <span class="hljs-number">2</span> } );
+<span class="hljs-regexp">//</span> =&gt; wha2wha
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@format_string</span>: <span class="hljs-function"><span class="hljs-params">( str, args... )</span>-&gt;</span>
+    <span class="hljs-keyword">return</span> str <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> str <span class="hljs-keyword">isnt</span> <span class="hljs-string">'string'</span>
+    <span class="hljs-keyword">return</span> str <span class="hljs-keyword">unless</span> args
+    <span class="hljs-keyword">return</span> str <span class="hljs-keyword">unless</span> str.indexOf(<span class="hljs-string">'{'</span>) &gt; -<span class="hljs-number">1</span> <span class="hljs-keyword">and</span> str.indexOf(<span class="hljs-string">'}'</span>) &gt; -<span class="hljs-number">1</span>
+    args = args[<span class="hljs-number">0</span>] <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> args[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">'object'</span>
+    <span class="hljs-keyword">for</span> arg <span class="hljs-keyword">of</span> args
+      re  = RegExp <span class="hljs-string">"\\{<span class="hljs-subst">#{arg}</span>\\}"</span>, <span class="hljs-string">"gi"</span>
+      str = str.replace re, args[arg]
+    <span class="hljs-keyword">return</span> str</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h6 id="ensure_array-value-">ensure_array( value )</h6>
+<p>Turn a variable into an array element if it isnt an Array
+Useful for fields that can be either singular or arrays</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@ensure_array</span>: <span class="hljs-function"><span class="hljs-params">( some_var )</span> -&gt;</span>
+    some_var = Array some_var <span class="hljs-keyword">unless</span> some_var <span class="hljs-keyword">instanceof</span> Array
+    some_var</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h6 id="throw_error-message-vars-">throw_error( message, vars… )</h6>
+<p>Simple error thrower that can include formatted
+variables in the message</p>
+<p>Create a [] enclosed string from each variable argument</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@throw_error</span>: <span class="hljs-function"><span class="hljs-params">( message, vars... )</span> -&gt;</span>
+    var_str = <span class="hljs-string">''</span>
+    <span class="hljs-keyword">if</span> vars.length &gt; <span class="hljs-number">0</span>
+      var_join = ( util.inspect(vari) <span class="hljs-keyword">for</span> vari <span class="hljs-keyword">in</span> vars ).join <span class="hljs-string">'] ['</span>
+      var_str = <span class="hljs-string">" [<span class="hljs-subst">#{var_join}</span>]"</span>
+
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"<span class="hljs-subst">#{message}</span><span class="hljs-subst">#{var_str}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h6 id="-regex_escape-string-">.regex_escape( string )</h6>
+<p>Function to create a string with all special regex
+characters escaped</p>
+<p>Returns a new string with escaped regex characters</p>
+<pre><code>regex_escape(<span class="hljs-string">'a\d+5]'</span>);
+<span class="hljs-regexp">//</span> =&gt; <span class="hljs-string">'a\\d+5\]'</span>
+</code></pre><p><a href="http://stackoverflow.com/a/494122">http://stackoverflow.com/a/494122</a>
+<a href="http://stackoverflow.com/users/48077/gracenotes">http://stackoverflow.com/users/48077/gracenotes</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@re_quote_special</span>: <span class="hljs-regexp">///
+      (           <span class="hljs-comment"># group</span>
+        [.?*+^$[\]\\(){}|-] <span class="hljs-comment"># and match any of the re special chars</span>
+      )
+    ///</span>g          <span class="hljs-comment">#globally</span>
+
+  <span class="hljs-property">@regex_escape</span>: <span class="hljs-function"><span class="hljs-params">( string )</span> -&gt;</span>
+    string.replace Helpers.re_quote_special, <span class="hljs-string">'\\$1'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h6 id="regex_from_array-values-">regex_from_array: ( values )</h6>
+<p>Return an <code>or</code> regex from an array of values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@regex_from_array</span>: <span class="hljs-function"><span class="hljs-params">( values )</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Build strings for <code>new RegExp</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    regex_values = <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> values
+      <span class="hljs-keyword">if</span> item <span class="hljs-keyword">instanceof</span> RegExp
+        item.source
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> Helpers.is_regexy item
+        Helpers.regexy_to_string item
+      <span class="hljs-keyword">else</span>
+        Helpers.regex_escape <span class="hljs-string">"<span class="hljs-subst">#{item}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Return a new regexp</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">new</span> RegExp regex_values.join(<span class="hljs-string">'|'</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h6 id="under_to_class-string-">under_to_class( string )</h6>
+<p>Take an underscored_word and turns it into
+a ClassWord</p>
+<pre><code>under_to_class(<span class="hljs-string">'test_this_thing'</span>)
+<span class="hljs-comment"># =&gt; TestThisThing</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@under_to_class</span>: <span class="hljs-function"><span class="hljs-params">( underscored )</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>First word</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    semi_class = underscored.replace <span class="hljs-regexp">/^[a-z]/</span>, <span class="hljs-function"><span class="hljs-params">(g)</span>-&gt;</span>
+      g.toUpperCase()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Any other word starting with _</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    semi_class.replace <span class="hljs-regexp">/_[a-z]/g</span>, <span class="hljs-function"><span class="hljs-params">(g)</span>-&gt;</span>
+      g[<span class="hljs-number">1</span>].toUpperCase()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <h6 id="class_to_under-string-">class_to_under( string )</h6>
+<p>Take a ClassWord and return a underscored version</p>
+<pre><code>class_to_under(<span class="hljs-string">'TestThisThing'</span>)
+<span class="hljs-comment"># =&gt; test_this_thing</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@class_to_under</span>: <span class="hljs-function"><span class="hljs-params">( classed )</span>-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>First word</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    semi_under = classed.replace <span class="hljs-regexp">/^[A-Z]/</span>, <span class="hljs-function"><span class="hljs-params">(g)</span>-&gt;</span>
+      g.toLowerCase()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Any other word with a capital
+It will get tripped up on something like AcePAC</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    semi_under.replace <span class="hljs-regexp">/[A-Z]/g</span>, <span class="hljs-function"><span class="hljs-params">(g)</span>-&gt;</span>
+      <span class="hljs-string">'_'</span> + g.toLowerCase()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Test if a var is numeric
+For some reason js thinks ‘’ is numeric</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@is_numeric</span>: <span class="hljs-function"><span class="hljs-params">( val )</span>-&gt;</span>
+    !isNaN(val) <span class="hljs-keyword">and</span> val <span class="hljs-keyword">isnt</span> <span class="hljs-string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Test if a string is regex delimited</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@is_regexy</span>: <span class="hljs-function"><span class="hljs-params">( val )</span>-&gt;</span>
+    !!( _.isString(val) <span class="hljs-keyword">and</span>
+      Helpers.starts_with(val, <span class="hljs-string">'/'</span>) <span class="hljs-keyword">and</span>
+      val.match(<span class="hljs-regexp">/\/[img]*$/</span>) )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <h6 id="is_stringy-quoted_string-">is_stringy( quoted_string )</h6>
+<p>Tests if a string is quoted, forcing stringyness</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@is_stringy</span>: <span class="hljs-function"><span class="hljs-params">( val )</span>-&gt;</span>
+    _.isString(val) <span class="hljs-keyword">and</span>
+    ( Helpers.starts_with( val, <span class="hljs-string">"'"</span> ) <span class="hljs-keyword">and</span> Helpers.ends_with( val, <span class="hljs-string">"'"</span> )) <span class="hljs-keyword">or</span>
+    ( Helpers.starts_with( val, <span class="hljs-string">'"'</span> ) <span class="hljs-keyword">and</span> Helpers.ends_with( val, <span class="hljs-string">'"'</span> ))</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <h6 id="regexy_to_string-stregex-">regexy_to_string( stregex )</h6>
+<p>Test if a string is regex delimited, if it is turn is into a regexp
+If there is a modifier as well, return an array or strings</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>   regexy_to_string( /test/ )
+   =&gt; ‘test’</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>   regexy_to_string( /test/m )
+   =&gt; [ ‘test’, ‘m’ ]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@regexy_to_string</span>: <span class="hljs-function"><span class="hljs-params">( val )</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> _.isString(val)
+      match = val.match <span class="hljs-regexp">/^\/(.*)\/([img]*)$/</span>
+    <span class="hljs-keyword">if</span> match
+      <span class="hljs-keyword">if</span> match[<span class="hljs-number">2</span>]
+        <span class="hljs-keyword">return</span> [ match[<span class="hljs-number">1</span>], match[<span class="hljs-number">2</span>] ]
+      <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> match[<span class="hljs-number">1</span>]
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">'Regexy match failed for ['</span>+val+<span class="hljs-string">'] ['</span>+match+<span class="hljs-string">']'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <h6 id="regexy_to_regex-stregex-">regexy_to_regex( stregex )</h6>
+<p>Test if a string is regex delimited, if it is turn is into a regexp</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@regexy_to_regex</span>: <span class="hljs-function"><span class="hljs-params">( val )</span>-&gt;</span>
+    regex_components = Helpers.ensure_array Helpers.regexy_to_string(val)
+    <span class="hljs-keyword">new</span> RegExp regex_components...</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Remove a single value from an array and add new value
+Useful for css class arrays</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@array_replace</span>: <span class="hljs-function"><span class="hljs-params">( array, new_val, old_val )</span>-&gt;</span>
+    idx = array.indexOf old_val
+    array.splice idx, <span class="hljs-number">1</span>, new_val</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <h3 id="random_value_base64-length-char_set-">random_value_base64( length, char_set )</h3>
+<p>Generate a random base64 string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-property">@rand_numbers</span>: <span class="hljs-string">'0123456789'</span>
+  <span class="hljs-property">@rand_lower</span>:  <span class="hljs-string">'abcdefghijklmnopqrstuvwxyz'</span>
+  <span class="hljs-property">@rand_upper</span>:  <span class="hljs-property">@rand_lower</span>.toUpperCase()
+  <span class="hljs-property">@rand_chars</span>:  <span class="hljs-property">@rand_numbers</span> + <span class="hljs-property">@rand_lower</span> + <span class="hljs-property">@rand_upper</span>
+
+  <span class="hljs-property">@random_string</span>: <span class="hljs-function"><span class="hljs-params">( length, chars = Helpers.rand_chars )</span>-&gt;</span>
+    string = <span class="hljs-keyword">for</span> [<span class="hljs-number">1.</span>.length]
+      n = Math.floor( Math.random() * chars.length )
+      chars.substring( n, n+<span class="hljs-number">1</span> )
+    string.join <span class="hljs-string">''</span>
+
+
+
+<span class="hljs-built_in">module</span>.exports = Helpers</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

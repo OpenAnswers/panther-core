@@ -1,0 +1,62 @@
+{
+  "name": "oa-event-rules",
+  "version": "4.0.3-integration.0",
+  "private": true,
+  "description": "OA Event Rules model",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm run unit && npm run func",
+    "unit": "npm run compile && mocha $NPM_MOCHA_OPTS test/unit/**/*_spec.coffee",
+    "func": "npm run compile && mocha $NPM_MOCHA_OPTS test/func/**/*_spec.coffee",
+    "build": "rimraf lib && yarn run compile",
+    "pack": "npm run build && cd ./pkg && npm pack ../",
+    "docco": "rm -rf docs/* && docco -o ./docs -c ./src/docco.css ./src/*.coffee",
+    "compile": "coffee --compile --map --output lib/ src/",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ] || ( echo \"git[$git]\"; exit 1 )"
+  },
+  "bin": {
+    "verify-rules": "./bin/verify-rules"
+  },
+  "files": [
+    "bin/",
+    "lib/*.js"
+  ],
+  "keywords": [
+    "oa",
+    "openanswers",
+    "panther",
+    "events",
+    "DSL",
+    "console",
+    "rules",
+    "yaml"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "chai": "~3.4.1",
+    "coffee-script": "~1.10.0",
+    "docco": "~0.7.0",
+    "mocha": "~2.3.4",
+    "rimraf": "^3.0.2",
+    "sinon": "~1.17.2",
+    "source-map-support": "^0.4.0"
+  },
+  "dependencies": {
+    "bluebird": "~3.1.1",
+    "debug": "~2.2.0",
+    "farmhash": "^2.1.0",
+    "gift": "https://github.com/deployable/gift#master",
+    "joi": "^13.7.0",
+    "js-yaml": "~3.13.1",
+    "lodash": "^4.17.12",
+    "minimist": "^1.2.5",
+    "moment": "~2.10.6",
+    "mv": "~2.1.1",
+    "oa-errors": "^4.0.3-integration.0",
+    "oa-helpers": "^4.0.3-integration.0",
+    "oa-logging": "^4.0.3-integration.0",
+    "tmp": "0.0.28",
+    "uuid": "^3.1.0"
+  }
+}

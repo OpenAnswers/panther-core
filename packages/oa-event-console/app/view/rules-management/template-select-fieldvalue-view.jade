@@ -1,0 +1,11 @@
+script(id="template-select-fieldvalue-view" type="text/x-mustache-template")
+  .select-entry-view(data-select-id="{{ data.verb }}" class="action-{{ data.verb }}")
+    .inner
+      span.select-view-text The field&nbsp;
+      span.select-view-text.select-field-view #[code {{ data.field }}]
+      span.select-view-text &nbsp;{{ data.friendly_before }}
+      span.select-view-text.select-operator-view {{ data.verb_english }}
+      span.select-view-text &nbsp;{{ data.friendly_after }}
+      //-span.select-view-text "
+      span.select-view-value.select-value-view #[code {{ data.value }}]
+      //-span.select-view-text "

@@ -1,0 +1,33 @@
+script(id="template-generic-values-edit" type="text/x-mustache-template")
+  .h4 {{ data.label }}
+  table.table.table-nested.table-hover.generic-values-edit(id="{{ data.euid }}-edit"
+  data-name="{{ data.name }}" class="{{ data.class }}")
+      | {{ #data.heading }}
+      thead
+        tr
+          td
+            .generic-fieldvalues-field-heading {{ field }}
+          td
+            .generic-fieldvalues-value-heading {{ value }}
+      | {{ /data.heading }}
+      tbody
+        | {{ #data.field_values_array }}
+        tr
+          td
+            .generic-values-field
+              .generic-values-fieldview {{ name }}
+          td
+            .generic-values-value
+              input.form-control(type="text" value="{{ value }}" placeholder="value" name="severity-mapping"
+              class="generic-value-value-{{ name }}" data-field="{{ name }}" style="width: 100px;")
+        | {{ /data.field_values_array }}
+        | {{ ^data.field_values_array }}
+        tr.generic-novalue
+          td No entries
+        | {{ /data.field_values_array }}
+    
+  .generic-value-save-interface.hidden
+    .text-center
+      +button_word_save('group-save')(value='Save Severity')
+      +button_word_cancel('group-cancel')(value='Cancel Severity')
+    .margintop10

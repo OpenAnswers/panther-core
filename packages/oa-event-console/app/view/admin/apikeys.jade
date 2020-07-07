@@ -1,0 +1,47 @@
+script(id="admin-apikeys-context-template" type="text/x-mustache-template")
+  p.admin-apikeys-context {{amount}} of {{limit}} keys used
+
+//- Render user table template
+script(id="admin-apikeys-template" type="text/x-mustache-template")
+  
+  //- Header
+  thead
+    tr
+      th.col-xs-5 ApiKey
+      th.col-xs-2 User
+      th.hidden-xs.col-sm-5 Created
+      //-th.col-xs-1 Password
+  
+  //- Content
+  //- Loop over `apikeys` supplied by the render function
+  |{{#apikeys}}
+  
+  //- Display apikey
+  tr.admin-apikey-row(id="apikey-{{_id}}" data-apikey="{{apikey}}")
+    td.col-xs-5 {{apikey}}
+    td.col-xs-2 {{username}}
+    td.hidden-xs.col-sm-5 {{created}}
+
+  //- Hidden update form
+  tr.admin-apikey-row-edit.hide(id="apikey-edit-{{_id}}" data-apikey="{{apikey}}")
+    form.admin-apikey-row-edit-form(data-apikey="{{apikey}}")
+      td.col-xs-5 {{apikey}}
+      td.col-xs-2 {{username}}
+      td.col-xs-5
+        button.btn.btn-primary.admin-apikey-row-cancel.marginright5(type="button" value='Cancel') Cancel
+        button.btn.btn-danger.admin-apikey-row-delete.marginright5(type="button" data-loading-text="Delete..." value='Delete Key') Delete
+  |{{/apikeys}}
+
+
+//- Container content
+table#admin-apikeys-table.table.table-nested.table-hover
+  //- This is where the apikeys and username data ends up from the above template
+
+
+//- Form to add apikeys
+.form-inline.form-group
+  form#admin-apikey-create
+    .row.form-row
+      .col-xs-1
+        button#admin-apikey-create-submit.btn.btn-success.admin-apikeys-create.marginright5(type='submit' value='Generate' data-loading-text="Generate...") Generate
+      .col-xs-11.context-block(style="padding-top: 10px; padding-left: 10px;")
