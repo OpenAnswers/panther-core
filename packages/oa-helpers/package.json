@@ -1,6 +1,6 @@
 {
   "name": "oa-helpers",
-  "version": "4.0.3-integration.0",
+  "version": "4.0.3",
   "private": true,
   "description": "OA Helper methods",
   "main": "lib/helpers.js",

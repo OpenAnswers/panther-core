@@ -1,6 +1,6 @@
 {
   "name": "oa-logging",
-  "version": "4.0.3-integration.0",
+  "version": "4.0.3",
   "private": true,
   "description": "OpenAnswers Logging setup",
   "main": "lib/logging.js",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "debug": "~2.2.0",
-    "oa-helpers": "^4.0.3-integration.0",
+    "oa-helpers": "^4.0.3",
     "winston": "~2.2.0",
     "winston-request-logger": "~1.0.7"
   },

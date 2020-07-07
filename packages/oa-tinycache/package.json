@@ -1,6 +1,6 @@
 {
   "name": "oa-tinycache",
-  "version": "4.0.3-integration.0",
+  "version": "4.0.3",
   "private": true,
   "description": "A tiny cache",
   "main": "lib/tiny_cache.js",

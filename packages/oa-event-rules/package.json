@@ -1,6 +1,6 @@
 {
   "name": "oa-event-rules",
-  "version": "4.0.3-integration.0",
+  "version": "4.0.3",
   "private": true,
   "description": "OA Event Rules model",
   "main": "lib/index.js",
@@ -53,9 +53,9 @@
     "minimist": "^1.2.5",
     "moment": "~2.10.6",
     "mv": "~2.1.1",
-    "oa-errors": "^4.0.3-integration.0",
-    "oa-helpers": "^4.0.3-integration.0",
-    "oa-logging": "^4.0.3-integration.0",
+    "oa-errors": "^4.0.3",
+    "oa-helpers": "^4.0.3",
+    "oa-logging": "^4.0.3",
     "tmp": "0.0.28",
     "uuid": "^3.1.0"
   }
