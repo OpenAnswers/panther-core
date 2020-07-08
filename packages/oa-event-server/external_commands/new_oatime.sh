@@ -1,8 +1,8 @@
 #!/bin/sh
 
 
-OATIME_BIN="/vol04/oatimeprd/bin/oatime"
-OATIME_REMOTE_HOST="burton"
+OATIME_BIN="/usr/local/bin/oatime"
+OATIME_REMOTE_HOST="service.example.com"
 OATIME_ARGS="open -x -A Raised" #command line injection, we'll append the rest of the args below
 
 DEFAULT_USER=vince #catch all
@@ -38,7 +38,7 @@ then
 fi
 
 TITLE=$summary
-NOTE="oaec generated message for host: $node"
+NOTE="Panther generated message for host: $node"
 PROJECT="Support"
 
 USER=$DEFAULT_USER

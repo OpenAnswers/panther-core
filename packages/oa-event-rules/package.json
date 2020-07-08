@@ -1,6 +1,6 @@
 {
   "name": "oa-event-rules",
-  "version": "4.0.3",
+  "version": "4.0.10",
   "private": true,
   "description": "OA Event Rules model",
   "main": "lib/index.js",
@@ -32,7 +32,7 @@
     "yaml"
   ],
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
-  "license": "UNLICENSED",
+  "license": "CPAL-1.0",
   "devDependencies": {
     "chai": "~3.4.1",
     "coffee-script": "~1.10.0",
@@ -49,13 +49,13 @@
     "gift": "https://github.com/deployable/gift#master",
     "joi": "^13.7.0",
     "js-yaml": "~3.13.1",
-    "lodash": "^4.17.12",
+    "lodash": "4.17.20",
     "minimist": "^1.2.5",
     "moment": "~2.10.6",
     "mv": "~2.1.1",
-    "oa-errors": "^4.0.3",
-    "oa-helpers": "^4.0.3",
-    "oa-logging": "^4.0.3",
+    "oa-errors": "^4.0.10",
+    "oa-helpers": "^4.0.10",
+    "oa-logging": "^4.0.10",
     "tmp": "0.0.28",
     "uuid": "^3.1.0"
   }

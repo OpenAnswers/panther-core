@@ -1,6 +1,6 @@
 {
   "name": "oa-logging",
-  "version": "4.0.3",
+  "version": "4.0.10",
   "private": true,
   "description": "OpenAnswers Logging setup",
   "main": "lib/logging.js",
@@ -24,10 +24,10 @@
     "debug"
   ],
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
-  "license": "MIT",
+  "license": "CPAL-1.0",
   "dependencies": {
     "debug": "~2.2.0",
-    "oa-helpers": "^4.0.3",
+    "oa-helpers": "^4.0.10",
     "winston": "~2.2.0",
     "winston-request-logger": "~1.0.7"
   },

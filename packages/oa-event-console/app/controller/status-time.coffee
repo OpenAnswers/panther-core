@@ -1,4 +1,10 @@
 
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 # # Routes - rules
 
 # logging modules
@@ -66,7 +72,7 @@ module.exports = (app) ->
     watch_dirs = watch_dirs.concat walk(dir)
 
   #dirs = for dir in fs.readdirSync(Path.views) when
-  logger.info 'watching dirs for changes', watch_dirs
+  logger.debug 'watching dirs for changes', watch_dirs
 
 
   for dir in watch_dirs

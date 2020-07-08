@@ -15,12 +15,18 @@
       "request": "launch",
       "name": "monitor-http",
       "program": "${workspaceFolder}/bin/oamon.js",
-      "args": [
-        "--name",
-        "http",
-        "--loglevel",
-        "debug"
-      ],
+      "args": ["--name", "http", "--loglevel", "debug"],
+      "env": {
+        "DEBUG": "*"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "monitor-syslogd",
+      "program": "${workspaceFolder}/bin/oamon.js",
+      "args": ["--name", "syslogd", "--loglevel", "debug"],
       "env": {
         "DEBUG": "*"
       },

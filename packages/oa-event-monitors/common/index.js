@@ -378,14 +378,13 @@ OaMon.prototype.loadAgent = function( callback )
     if( agent_include.Agent == undefined )
       throw new Error( "Missing Agent export in : [" + agent_file_path + "]" );
     self.Agent = agent_include.Agent;
-    logger.info( "Agents supported props[]", self.Agent.getProperties(), '')
-  }
-  catch( err ){
-    logger.error( "Agent load failed", err, err.stack )
-    callback( err )
+    logger.debug('Agents supported props[]', self.Agent.getProperties(), '');
+  } catch (err) {
+    logger.error('Agent load failed', err, err.stack);
+    callback(err);
   }
 
-  callback( null );
+  callback(null);
 };
 
 
@@ -549,7 +548,7 @@ OaMon.prototype.startAgent = function( callback )
     props[prop] = nconf.get( 'props:' + prop );
   });
 
-  logger.info( "Properties",props,'');
+  logger.debug('Properties', props, '');
 
   /*
    * startup the actual agent and give it the function to execute when it gets 

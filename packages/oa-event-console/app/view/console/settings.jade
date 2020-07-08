@@ -1,3 +1,9 @@
+//- 
+//- Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
 //- Container content for templates to be rendered into
 #console-settings-modal.modal.fade
   .modal-dialog.modal-lg
@@ -22,9 +28,9 @@
                   | Tracking
                 td
                   .btn-group(role="group")
-                    button#console-settings-button-tracking-on(type='button').btn-default(data-action="tracking-on" value="On")
+                    button#console-settings-button-tracking-on(type='button', data-action="tracking-on", value="On").btn-default
                       | On
-                    button#console-settings-button-tracking-off(type='button').btn-default(data-action="tracking-off" value="Off")
+                    button#console-settings-button-tracking-off(type='button', data-action="tracking-off", value="Off").btn-default
                       | Off
 
           #console-settings-modal-user.tab-pane

@@ -43,6 +43,9 @@ class SelectBase extends RuleVerbBase
 
     Typeaheads.add_typeahead_to_select @.$container
 
+  # any additional frontend checks to be performed on input 
+  sanity_check: (values) ->
+    @logger "looks sane"
 
 # -------------------------------------------------------------------
 # ## Select Type implementations
@@ -256,6 +259,7 @@ class SelectFieldValueOr extends SelectBase
     @value = @get_dom_inputs('values') # Note the s's
     @value = [ @value ] unless _.isArray(@value)
     @field = @get_dom_input('field')
+    @sanity_check @value
     @build_values_string()
 
   to_yaml_obj: () ->
@@ -387,6 +391,14 @@ class SelectMatch extends SelectFieldValueOr
   @help = 'Field matches a string search. Can be a Javascript // regex '+
           'definition or plain string'
   @logger = debug 'oa:event:rules:select_match'
+
+  # additional checks for `match` should warn against double pipe usage
+  sanity_check: (values)->
+    for value in values
+      if value.match /\|\|/
+        Message.warn "Double pipe '||' detected - will match everything"
+    true
+
 
   test_event: ( ev ) ->
     unless ev[@field]?

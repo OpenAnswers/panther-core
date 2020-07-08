@@ -80,6 +80,9 @@ class @ActivityStream
         when "delete-all"
           data.message = "#{user} deleted all events"
 
+        when "external_id"
+          data.message = "#{user} added an external_id"
+
     else
       #message_fmt = doc.message
       data.message = if doc.message

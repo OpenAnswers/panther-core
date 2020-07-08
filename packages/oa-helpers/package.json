@@ -1,6 +1,6 @@
 {
   "name": "oa-helpers",
-  "version": "4.0.3",
+  "version": "4.0.10",
   "private": true,
   "description": "OA Helper methods",
   "main": "lib/helpers.js",
@@ -21,7 +21,7 @@
     "helpers"
   ],
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
-  "license": "MIT",
+  "license": "CPAL-1.0",
   "devDependencies": {
     "benchmark": "^2.1.0",
     "chai": "^3.5.0",
@@ -34,7 +34,7 @@
   "dependencies": {
     "bluebird": "~3.3.5",
     "debug": "~2.2.0",
-    "lodash": "~4.17.0",
+    "lodash": "4.17.20",
     "node-uuid": "1.4.7"
   }
 }

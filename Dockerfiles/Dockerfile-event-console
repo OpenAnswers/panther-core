@@ -1,5 +1,5 @@
-FROM panther-builder:12.18.2-alpine3.12 as builder
-ARG BUILDTIME_ENV
+FROM panther-builder:12.21.0-alpine3.12 as builder
+ARG BUILDTIME_ENV=production
 
 #RUN npm install -g yarn
 
@@ -32,16 +32,20 @@ COPY packages/oa-event-console $BUILD_DIR/packages/oa-event-console
 COPY packages/oa-event-rules $BUILD_DIR/packages/oa-event-rules
 
 ENV NODE_ENV=$BUILDTIME_ENV
+RUN yarn run lerna run install-deps
 RUN yarn run lerna run build
 
 # remove the devDeps
 RUN yarn install --production=true
 
-FROM panther-runtime:12.18.2-alpine3.12
+RUN find $BUILD_DIR/packages -type f -exec chmod ugo+r '{}' \; && \
+    find $BUILD_DIR/packages -type d -exec chmod ugo+rx '{}' \;
+
+FROM panther-runtime:12.21.0-alpine3.12
 LABEL component="panther/console"
 
 # required for using git to version control rules
-RUN apk add git openssh-client
+RUN apk --no-cache add git openssh-client
 
 COPY --from=builder /build/node_modules /app/node_modules
 
@@ -70,19 +74,26 @@ COPY --from=builder /build/packages/oa-event-console/dist/ /app/
 COPY --from=builder /build/packages/oa-event-console/node_modules/ /app/node_modules/
 
 # install rules files
-COPY rules/server.rules.yml rules/http.rules.yml rules/syslogd.rules.yml /app/rules/
+COPY --chown=app:app rules/server.rules.yml rules/http.rules.yml rules/syslogd.rules.yml /app/rules/
+
+# install the example Event Source config archives
+COPY --from=builder --chown=app:app /build/packages/oa-event-console/docker.files/private/ /app/private/
+
+# install config.yml
+COPY --from=builder /build/packages/oa-event-console/docker.files/config.yml /app/config.yml
+# install swagger definition
+COPY --from=builder /build/packages/oa-event-console/docker.files/swagger.json /app/swagger.json
 
 WORKDIR /app
-RUN chown -R app:app /app/rules
-RUN find /app -type f -exec chmod ugo+r '{}' \; && \
-    find /app -type d -exec chmod ugo+rx '{}' \; && \
+RUN find /app/rules -type f -exec chmod ugo+r '{}' \; && \
+    find /app/rules -type d -exec chmod ugo+rx '{}' \; && \
     chmod ugo+rx /app/entrypoint.sh
 
+ARG BUILD_PANTHER_VERSION=unknown
+ENV PANTHER_VERSION=$BUILD_PANTHER_VERSION
 
-ARG RUNTIME_VERSION=unknown
-ENV PANTHER_VERSION=$RUNTIME_VERSION
 
-ARG RUNTIME_ENV
+ARG RUNTIME_ENV=production
 ENV NODE_ENV=$RUNTIME_ENV
 
 EXPOSE 3001/tcp

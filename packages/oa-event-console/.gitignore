@@ -1,5 +1,9 @@
+app/assets/bower/
+app/assets/vendor/
 node_modules/
 public/assets/bld/
+public/font/*
+!public/font/roboto-regular-webfont.*
 bower_components/
 npm-debug.log*
 tags

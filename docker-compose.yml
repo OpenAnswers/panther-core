@@ -1,21 +1,24 @@
-version: "3"
+version: '3'
 services:
   mongodb:
     image: mongo:3.2.16
-    container_name: mongodb
+    container_name: mongo
     hostname: mongodb
     restart: unless-stopped
     environment:
       - TZ=Europe/London
     expose:
-      - "27017"
+      - '27017'
 
   event-console:
-    image: event-console
+    image: openanswers/panther-console:4
     container_name: event-console
     hostname: console
     restart: unless-stopped
-    env_file: .env
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+      - ADMIN_EMAIL=you@example.com
     depends_on:
       - mongodb
     expose:
@@ -28,32 +31,41 @@ services:
       - rules-vol:/app/rules:rw
 
   event-server:
-    image: event-server
+    image: openanswers/panther-server:4
     container_name: event-server
     hostname: server
     restart: unless-stopped
     expose:
       - 4002
-    env_file: .env
     depends_on:
       - mongodb
     links:
       - mongodb
     volumes:
       - rules-vol:/app/rules:ro
-    entrypoint:
-      - node
-      - lib/server.js
 
   event-monitors-http:
-    image: event-monitors
+    image: openanswers/panther-monitors:4
     container_name: event-monitors-http
     hostname: event-monitors-http
     restart: unless-stopped
     ports:
-      - "5001:5001"
-    env_file: .env
+      - '5001:5001'
     command: http
+    depends_on:
+      - event-console
+      - event-server
+    volumes:
+      - rules-vol:/app/rules:ro
+
+  event-monitors-syslogd:
+    image: openanswers/panther-monitors:4
+    container_name: event-monitors-syslogd
+    hostname: event-monitors-syslogd
+    restart: unless-stopped
+    ports:
+      - '1514:1514'
+    command: syslogd
     depends_on:
       - event-console
       - event-server

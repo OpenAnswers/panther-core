@@ -1,26 +1,31 @@
 #!/usr/bin/env node
+//
+// Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+// All rights reserved.
+// This file is subject to the terms and conditions defined in the Software License Agreement.
+//
 
-let argv = require('minimist')(process.argv.slice(2));
-let EventRules = require('../lib').EventRules;
+let argv = require("minimist")(process.argv.slice(2));
+let EventRules = require("../lib").EventRules;
 
-ruleArgs = { reload_rules: false};
-if( argv.s ){
+ruleArgs = { reload_rules: false };
+if (argv.s) {
   ruleArgs.path = argv.s;
   ruleArgs.server = true;
-} else if( argv.a ){
+} else if (argv.a) {
   ruleArgs.path = argv.a;
   ruleArgs.agent = true;
 } else {
-  console.log( "USAGE: verify -a|-s <agent|server>.rules.yml")
-  process.exit( 0 );
+  console.log("USAGE: verify -a|-s <agent|server>.rules.yml");
+  process.exit(0);
 }
 
 try {
   let serverRules = new EventRules(ruleArgs);
   //console.log( serverRules );
-} catch( e ){
-  console.log( e );
-  process.exit( 1 );
-} finally{
-  process.exit( 0 );
+} catch (e) {
+  console.log(e);
+  process.exit(1);
+} finally {
+  process.exit(0);
 }

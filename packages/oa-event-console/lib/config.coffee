@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
 # # Config
 
 # Simple module to load and store express app config
@@ -17,7 +23,7 @@ _    = require 'lodash'
 
 # OA modules
 Errors = require 'oa-errors'
-{ format_string } = require 'oa-helpers'
+{ format_string, random_string } = require 'oa-helpers'
 { EventRules
   Agents }        = require 'oa-event-rules'
 { Path } = require './path'
@@ -79,8 +85,8 @@ class Config
       signup_url:   'https://signup.panther.support'
       view_limit:   2000
       uuid_enabled:  false
-      admin_account: '_oa_admin'
       assets_build_dir: 'builtAssets'
+      private_path: 'private'
       apikey_limit: 7
       swagger_docs: false
       swagger_json: 'swagger.json'
@@ -126,7 +132,6 @@ class Config
     # ### Http
     http_defaults =
       port:         3001
-      secure_port:  3002
 
     @http = _.merge http_defaults, opts.http
 
@@ -160,7 +165,7 @@ class Config
 
     # ### Session
     session_defaults =
-      secret:       '4&lope1$23z=.14kj343po4[ld[aE;f]fdlka'
+      secret:       random_string(64)
       timeout:      2 * 24 * 60 * 60 * 1000 # 2 days
 
     @session = _.merge session_defaults, opts.session

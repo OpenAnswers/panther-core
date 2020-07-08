@@ -1,8 +1,10 @@
 /*
-  * Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2012, 2020 Open Answers Ltd http://www.openanswers.co.uk/
+ * All rights reserved.
   * All rights reserved.  
-  * This file is subject to the terms and conditions defined in the Software License Agreement.
-  */
+ * All rights reserved.
+ * This file is subject to the terms and conditions defined in the Software License Agreement.
+ */
 
 // Logging
 var logging = require("oa-logging")("oa:event:server");

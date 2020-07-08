@@ -1,7 +1,7 @@
 {
   "name": "oa-event-server",
   "description": "OpenAnswers Event Server",
-  "version": "4.0.3",
+  "version": "4.0.10",
   "private": true,
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
   "homepage": "http://openanswers.co.uk/",
@@ -9,6 +9,8 @@
     "oamon_server": "./server.sh"
   },
   "scripts": {
+    "migrate:up": "npx migrate-mongo up",
+    "migrate:down": "npx migrate-mongo down",
     "auditx": "npm audit --registry=https://registry.npmjs.org",
     "start": "node lib/server.js",
     "test": "npm run unit",
@@ -34,16 +36,17 @@
     "express-session": "^1.17.1",
     "hooks": "^0.3.2",
     "joose": "^3.50.0",
-    "lodash": "~4.17.15",
+    "lodash": "4.17.20",
+    "migrate-mongo": "^8.1.1",
     "minimist": "^1.2.5",
     "mongodb": "2.2.36",
-    "mongoose": "4.13.19",
+    "mongoose": "=4.13.21",
     "multiparty": "^4.1.1",
     "nconf": "^0.7.1",
     "needle": "^1.6.0",
-    "oa-errors": "^4.0.3",
-    "oa-event-rules": "^4.0.3",
-    "oa-logging": "^4.0.3",
+    "oa-errors": "^4.0.10",
+    "oa-event-rules": "^4.0.10",
+    "oa-logging": "^4.0.10",
     "opts": "^1.2.2",
     "session-mongoose": "^0.5.2",
     "socket.io": "1.7.4",
@@ -62,7 +65,7 @@
   "engines": {
     "node": ">= 4.0.0"
   },
-  "license": "UNLICENSED",
+  "license": "CPAL-1.0",
   "devDependencies": {
     "@types/bluebird": "^3.5.4",
     "@types/body-parser": "^1.16.3",

@@ -1,5 +1,11 @@
+//
+// Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+// All rights reserved.
+// This file is subject to the terms and conditions defined in the Software License Agreement.
+//
+
 /*
- * defined a function to compute a relative time, 
+ * defined a function to compute a relative time,
  * this can then be used from within the actual query below
  */
 var one_minute_ago = function() {

@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
 # # Activities
 
 # As this is a web system we need a place to log system activity that users
@@ -46,6 +52,9 @@ class Activities
 
       'delete':
         message: '{username} deleted {metadata.ids}'
+
+      'external_id':
+        message: '{username} added an external_id {metadata.external_id}'
 
       severity:
         message: '{username} changed {metadata.ids} severity to {metadata.severity}'

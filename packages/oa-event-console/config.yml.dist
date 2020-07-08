@@ -8,10 +8,11 @@ app:
   url:          'http://localhost:3001'
   support_url:  'https://openanswers.github.io/panther-docs'
   view_limit:   2000
-  admin_account: '_oa_admin'
   assets_build_dir: builtAssets
   domain:       'localhost'
   client_id:    'panther'
+  swagger_docs: true
+  swagger_json: 'dist/swagger.json'
   key:
     apikey:
       "uuid-blag-uuid": event_monitor_http
@@ -49,14 +50,12 @@ mongodb:
 
 http:
   port:         3001
-  secure_port:  3002
 
 smtp:
   host:         'mta'
   port:         25
 
 session:
-  secret:       '4&lopaa2sdfe1$23z=.14kj343po4[ld[aE;f]fdlka'
   timeout:      172800000
   # ms = 2 * 24 * 60 * 60 * 1000 = 2 days
 

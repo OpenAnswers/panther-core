@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2015, 2020 Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.  
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+# 
+
 winston = require 'winston'
 MongoDB = require('winston-mongodb').MongoDB
 
@@ -12,7 +18,7 @@ container = new winston.Container transports: [
     capped: true
     cappedSize: 10000000
     name: 'default'
-  })
+  }))
 ]
 
 winston.loggers.add 'oa:event:whatever', transports: []

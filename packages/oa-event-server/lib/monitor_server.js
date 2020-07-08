@@ -259,8 +259,20 @@ exports.MonitorServer = Class("MonitorServer", {
 
       // track rules usage when enabled
       if (tracking) {
-        allPromises.tracking = self.promisedRuleMatches(processed_event);
-        allPromises.matches = self.promisedAlertMatches(processed_event);
+        allPromises.tracking = self.promisedRuleMatches(processed_event).catch((e) => {
+          if (e && e.message) {
+            logger.error("Failed to update rule matches ", e.message);
+          } else {
+            logger.error("Failed to update rule matches ", e);
+          }
+        });
+        allPromises.matches = self.promisedAlertMatches(processed_event).catch((e) => {
+          if (e && e.message) {
+            logger.error("Failed to update alert matches ", e.message);
+          } else {
+            logger.error("Failed to update alert matches ", e);
+          }
+        });
       }
 
       // discard event if rules marked it such
@@ -300,7 +312,11 @@ exports.MonitorServer = Class("MonitorServer", {
           }
         })
         .catch((e) => {
-          logger.error("UpsertAlert ", e);
+          if (e && e.message) {
+            logger.error("UpsertAlert Failed with " + e.message);
+          } else {
+            logger.error("UpsertAlert ", e);
+          }
           return cb(e);
         });
     },

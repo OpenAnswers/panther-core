@@ -1,4 +1,10 @@
 #!/usr/bin/env coffee
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 
 # Populate the severities collection with some default data when nothing exists
 # To be use on initial setup of systems

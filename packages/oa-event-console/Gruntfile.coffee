@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
 
 module.exports = (grunt) ->
   
@@ -16,6 +22,9 @@ module.exports = (grunt) ->
       config_dist: 
         src: 'config.yml.dist'
         dest: 'dist/config.yml'
+      swagger_dist:
+        src: 'swagger.production.json'
+        dest: 'dist/swagger.json'
       assets:
         files: [
           expand: true
@@ -89,7 +98,7 @@ module.exports = (grunt) ->
 
 
     exec:
-      bower_install: 'bower install'
+      bower_install: 'bower install --allow-root'
       remove_extra_fonts: 'rm public/font/'
       pull_git_modules: 'git submodule init && git submodule update --remote'
       w2ui_less: 'mkdir -p app/assets/w2ui_less && cp -R w2ui/src/less/ app/assets/w2ui_less/'
@@ -138,32 +147,42 @@ module.exports = (grunt) ->
         options:
           destPrefix: 'app/assets/bower'
         files:
-          'debug.js':       'visionmedia-debug/dist/debug.js'
-          'lodash.js':      'lodash/lodash.js'
-          'jquery.js':      'jquery/dist/jquery.js'
-          'bootstrap.js':   'bootstrap/dist/js/bootstrap.js'
-          'bootstrap3-typeahead.js': 'bootstrap3-typeahead/bootstrap3-typeahead.js'
-          'URI.min.js':     'uri.js/src/URI.min.js'
-          'bootstrap-validator.js' : 'bootstrap-validator/js/validator.js'
-          'highlightRegex.js' : 'jquery-highlightRegex/highlightRegex.js'
           'bluebird.js' : 'bluebird/js/browser/bluebird.js'
-          'jquery-ui.js' : 'jquery-ui/jquery-ui.js'
-          'metrics-graphics.js': 'metrics-graphics/dist/metricsgraphics.js'
-          'd3.js': 'd3/d3.js'
+          'bootstrap.js':   'bootstrap/dist/js/bootstrap.js'
           'bootstrap-contextmenu.js': 'bootstrap-contextmenu/bootstrap-contextmenu.js'
+          'bootstrap-validator.js' : 'bootstrap-validator/js/validator.js'
+          'bootstrap3-typeahead.js': 'bootstrap3-typeahead/bootstrap3-typeahead.js'
+          'chai.js': 'chai/chai.js'
+          'clipboard.js': 'clipboard/dist/clipboard.min.js'
+          'd3.js': 'd3/d3.js'
+          'debug.js':       'visionmedia-debug/dist/debug.js'
           'FileSaver.js': 'FileSaver/FileSaver.js'
+          'highlightRegex.js' : 'jquery-highlightRegex/highlightRegex.js'
+          'jquery.js':      'jquery/dist/jquery.js'
+          'jquery-ui.js' : 'jquery-ui/jquery-ui.js'
+          'jquery-timeago.js': 'jquery-timeago/jquery.timeago.js'
+          'lodash.js':      'lodash/lodash.js'
+          'metrics-graphics.js': 'metrics-graphics/dist/metricsgraphics.js'
           'mocha.js': 'mocha/mocha.js'
           'mocha.css': 'mocha/mocha.css'
-          'chai.js': 'chai/chai.js'
-          'sinon.js': 'sinon/lib/sinon.js'
+          'mustache.js': 'mustache/mustache.js'
           'outdatedbrowser.js': 'outdated-browser/outdatedbrowser/outdatedbrowser.js'
           'outdatedbrowser.css': 'outdated-browser/outdatedbrowser/outdatedbrowser.css'
-          'clipboard.js': 'clipboard/dist/clipboard.min.js'
+          'sinon.js': 'sinon/lib/sinon.js'
+          'URI.min.js':     'uri.js/src/URI.min.js'
+      vendor:
+        options:
+          destPrefix: 'app/assets/vendor'
+        files:
+          'socket.io-client.js': 'socket.io-client/dist/socket.io.js'
+
+      fonts:
+        files:
+          'public/font/': 'bootstrap/dist/fonts/'
 
       bootstrap_bits:
         files:
           'app/assets/bootstrap_less': 'bootstrap/less'
-          'public/font/': 'bootstrap/dist/fonts/'
 
     # Download a file via curl to a local dir
     curl:
@@ -175,7 +194,7 @@ module.exports = (grunt) ->
         src: 'https://material-design.storage.googleapis.com/publish/material_v_4/material_ext_publish/0B0J8hsRkk91LRjU4U1NSeXdjd1U/RobotoTTF.zip'
       font_lato:
         dest: '/tmp/lato2.zip'
-        src: 'https://dl.dropboxusercontent.com/u/15505940/latofonts.com/Lato2OFLWeb.zip'
+        src: 'http://www.latofonts.com/download/Lato2OFLWeb.zip'
 
     # Unzip a file form a localdir
     unzip:
@@ -230,8 +249,8 @@ module.exports = (grunt) ->
     'bowercopy:assets'
     'bowercopy:bootstrap_bits'
   ]
-  #grunt.registerTask 'font',    [ 'curl:font_roboto', 'unzip:font_roboto', 'curl:font_source_sans', 'unzip:font_source_sans', 'curl:font_lato', 'unzip:font_lato' ]
-  grunt.registerTask 'font',    [ 'curl:font_lato', 'unzip:font_lato' ]
+  grunt.registerTask 'font',    [ 'curl:font_roboto', 'unzip:font_roboto', 'curl:font_source_sans', 'unzip:font_source_sans', 'curl:font_lato', 'unzip:font_lato' ]
+  #grunt.registerTask 'font',    [ 'curl:font_lato', 'unzip:font_lato' ]
   grunt.registerTask 'w2ui',    [ 'exec:pull_git_modules', 'exec:w2ui_less', 'exec:w2ui_build', 'exec:w2ui_copy_js' ]
   grunt.registerTask 'w2ui-dev',    [ 'exec:w2ui_less', 'exec:w2ui_build', 'exec:w2ui_copy_js' ]
   # Pull in all the dependencies
@@ -243,5 +262,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-dev', [ 'coffee', 'copy']
   grunt.registerTask 'build-assets', [ 'copy:assets']
 
-  grunt.registerTask 'build-dist', [ 'coffee', 'copy:dev', 'copy:config_dist', 'copy:assets', 'copy:bins', 'copy:docker', 'exec:build_assets']
+  grunt.registerTask 'install-deps', [ 'exec:bower_install', 'font']
+  grunt.registerTask 'build-dist', [ 'coffee', 'bowercopy:fonts', 'bowercopy:assets', 'bowercopy:vendor', 'copy:dev', 'copy:config_dist', 'copy:swagger_dist', 'copy:assets', 'copy:bins', 'copy:docker', 'exec:build_assets']
   

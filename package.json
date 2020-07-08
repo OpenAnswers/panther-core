@@ -1,14 +1,14 @@
 {
   "name": "panther-core",
-  "version": "1.0.1",
+  "version": "4.0.10",
   "description": "Core Panther products",
   "main": "index.js",
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
-    "build:builder": "docker build -t panther-builder:12.18.2-alpine3.12 -f Dockerfiles/Dockerfile-builder .",
-    "build:runtime": "docker build -t panther-runtime:12.18.2-alpine3.12 -f Dockerfiles/Dockerfile-runtime .",
+    "build:builder": "docker build -t panther-builder:12.21.0-alpine3.12 -f Dockerfiles/Dockerfile-builder .",
+    "build:runtime": "docker build -t panther-runtime:12.21.0-alpine3.12 -f Dockerfiles/Dockerfile-runtime .",
     "build:console": "docker build -t event-console -f Dockerfiles/Dockerfile-event-console .",
     "build:server": "docker build -t event-server -f Dockerfiles/Dockerfile-event-server .",
     "build:monitors": "docker build -t event-monitors -f Dockerfiles/Dockerfile-event-monitors .",
@@ -19,13 +19,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.openans.co.uk:Panther/panther-core.git"
+    "url": "https://github.com/OpenAnswers/panther.git"
   },
   "keywords": [
     "Panther"
   ],
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
-  "license": "ISC",
+  "license": "CPAL-1.0",
   "devDependencies": {
     "lerna": "^3.22.1"
   },
@@ -35,7 +35,8 @@
     ],
     "nohoist": [
       "**/eslint*",
-      "**/grunt-*"
+      "**/grunt-*",
+      "**/migrate-mongo"
     ]
   }
 }

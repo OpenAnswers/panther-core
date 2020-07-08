@@ -1,4 +1,4 @@
-FROM node:12.18.2-alpine3.12
+FROM node:12.21.0-alpine3.12
 ARG APP_UID=1001
 LABEL product="oa/node-app"
 RUN adduser -u ${APP_UID} -D -s /bin/false -h /app app app

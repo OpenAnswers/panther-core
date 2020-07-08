@@ -1,7 +1,5 @@
 #!/bin/sh
 
-env
-
 AGENT_NAME=${BUILD_AGENT_NAME:-$1}
 
 

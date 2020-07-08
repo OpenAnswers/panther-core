@@ -1,7 +1,13 @@
-let Ajv = require('ajv');
+//
+// Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+// All rights reserved.
+// This file is subject to the terms and conditions defined in the Software License Agreement.
+//
+
+let Ajv = require("ajv");
 let ajv = new Ajv({ allErrors: true, jsonPointers: true, useDefaults: true });
 
-require('ajv-errors')(ajv);
+require("ajv-errors")(ajv);
 
 let schema = {
     "$id": "https://panther.support/schemas/http-event.json",

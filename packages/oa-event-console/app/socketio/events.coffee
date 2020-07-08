@@ -1,3 +1,9 @@
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 
 # Logging module
 {logger, debug}   = require('oa-logging')('oa:event:socketio:events')
@@ -138,7 +144,7 @@ copy_events_async = ( tag, expire_hours, ids )->
         logger.info "Copying event [%s] - identifier: [%s]", tag, doc.identifier
 
       return resolve docs.length if docs.length is 0
-      batch_copy.executeAsync()
+      batch_copy.execute()
 
     .then ( results )->
       resolve results
@@ -288,7 +294,7 @@ SocketIO.route 'events::severity', ( socket, data, client_cb )->
     return socket.ev.exception "SocketMsgError",
       "The event ids were not an array [#{ids}]"
 
-  unless data.severity
+  unless data.severity?
     throw new Errors.ValidateError "No severity on message payload"
 
   # check the severity specified is valid

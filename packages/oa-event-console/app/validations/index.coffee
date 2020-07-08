@@ -1,3 +1,9 @@
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 
 # Warning: the Promises returned by Joi.validateAsync() seem to cause issues with one or both of node 8, bluebird
 # opt instead to use *_schema.validate() 

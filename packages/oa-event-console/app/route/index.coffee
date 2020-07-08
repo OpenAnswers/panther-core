@@ -1,3 +1,9 @@
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 # # Routing Index
 
 # This is the main entry point for express http routes.
@@ -7,6 +13,7 @@
 { debug, logger } = require('oa-logging')('oa:event:route:index')
 
 # NPM modules
+fs              = require 'fs'
 router          = require('express').Router()
 passport        = require 'passport'
 mongoose        = require 'mongoose'
@@ -128,7 +135,7 @@ route = (app) ->
     swaggerUi = require 'swagger-ui-express'
     try
       logger.info "Loading swagger document from " + config.app.swagger_json
-      swaggerDocument = require config.app.swagger_json
+      swaggerDocument = JSON.parse fs.readFileSync( config.app.swagger_json )
       app.use '/api-docs', ( req, res, next) ->
         if req.user
           next()

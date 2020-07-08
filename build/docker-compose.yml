@@ -1,15 +1,15 @@
-version: "3.1"
+version: '3.1'
 services:
   builder:
     build:
       context: ..
       dockerfile: Dockerfiles/Dockerfile-builder
-    image: "panther-builder:12.18.2-alpine3.12"
+    image: 'panther-builder:12.21.0-alpine3.12'
   runtime:
     build:
       context: ..
       dockerfile: Dockerfiles/Dockerfile-runtime
-    image: "panther-runtime:12.18.2-alpine3.12"
+    image: 'panther-runtime:12.21.0-alpine3.12'
 
   server:
     depends_on:

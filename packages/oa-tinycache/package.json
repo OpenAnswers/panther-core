@@ -1,6 +1,6 @@
 {
   "name": "oa-tinycache",
-  "version": "4.0.3",
+  "version": "4.0.10",
   "private": true,
   "description": "A tiny cache",
   "main": "lib/tiny_cache.js",
@@ -26,7 +26,7 @@
     "openanswers"
   ],
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
-  "license": "MIT",
+  "license": "CPAL-1.0",
   "devDependencies": {
     "blanket": "^1.2.1",
     "chai": "^3.4.1",

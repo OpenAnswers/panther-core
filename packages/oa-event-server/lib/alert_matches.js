@@ -12,7 +12,7 @@ var server_config = new ServerConfig.ServerConfig();
 let expireTime = server_config.ExpireMatches();
 
 var AlertMatchSchema = new Schema({
-  identifier: { type: String, index: true },
+  identifier: { type: String, index: true, unique: true },
   rule_uuids: [String],
   updated_at: { type: Date, expires: expireTime, default: Date.now }
 });

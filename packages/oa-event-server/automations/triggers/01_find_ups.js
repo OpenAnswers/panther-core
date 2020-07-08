@@ -1,7 +1,13 @@
+//
+// Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+// All rights reserved.
+// This file is subject to the terms and conditions defined in the Software License Agreement.
+//
+
 /*
- * find any cleared alerts 
- * AND have an owner 
- * AND have been acknowledged 
+ * find any cleared alerts
+ * AND have an owner
+ * AND have been acknowledged
  * then run the default delete action against them to purge them from the database
  */
 

@@ -1,3 +1,9 @@
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 
 # logging
 { logger, debug } = require('oa-logging')('oa:event:model:user')
@@ -113,7 +119,6 @@ UserSchema.statics.getUserList = (cb)->
   @find   login: { $exists: false }
   .select username: 1
   .sort   username: 1
-  .where('username').ne config.app.admin_account
   .exec   cb
 
 
@@ -153,7 +158,6 @@ UserSchema.statics.read_all = ( cb )->
 UserSchema.statics.read_all_minus_admin = ( cb )->
   @find   username: { $exists: true, $ne: '' }
   .select username: 1, group: 1, email: 1, created: 1
-  .where('username').ne config.app.admin_account
   .sort   username: 1
   .exec   cb
 

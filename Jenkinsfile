@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+ * All rights reserved.  
+ * This file is subject to the terms and conditions defined in the Software License Agreement.
+ */
+
 pipeline {
   environment {
     DOCKER_IMG_BASE = 'oa-panther-event-'
@@ -86,14 +92,14 @@ pipeline {
         stage('panther-builder'){
           steps {
             script {
-              docker.build("panther-builder:12.18.2-alpine3.12", " -f Dockerfiles/Dockerfile-builder .")
+              docker.build("panther-builder:12.21.0-alpine3.12", " -f Dockerfiles/Dockerfile-builder .")
             }
           }
         }
         stage('panther-runtime'){
           steps {
             script {
-              docker.build("panther-runtime:12.18.2-alpine3.12", " -f Dockerfiles/Dockerfile-runtime .")
+              docker.build("panther-runtime:12.21.0-alpine3.12", " -f Dockerfiles/Dockerfile-runtime .")
             }
           }
         }

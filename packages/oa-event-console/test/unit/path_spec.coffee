@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#
+
 debug   = require( 'debug' )( 'oa:test:unit:path' )
 helpers = require '../mocha_helpers'
 expect  = helpers.expect

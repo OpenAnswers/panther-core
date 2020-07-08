@@ -1,4 +1,10 @@
 #!/usr/bin/env coffee
+# 
+# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# All rights reserved.
+# This file is subject to the terms and conditions defined in the Software License Agreement.
+#  
+
 
 # This script sets up a user, password and email via passport
 # It's used by the ansible signup playbook to initilize admin users

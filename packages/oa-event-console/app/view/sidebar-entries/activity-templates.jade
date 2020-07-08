@@ -1,3 +1,9 @@
+//- 
+//- Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
 //- acknowledge
 
 script(id="template-sidebar-acknowledge-event" type="text/x-mustache-template")
@@ -76,3 +82,7 @@ script(id="template-sidebar-severity-event" type="text/x-mustache-template")
 script(id="template-sidebar-severity-events" type="text/x-mustache-template")
   a.name {{ username }}
   |  changed {{ count }} events' severities to {{ metadata.new_severity }}.
+
+script(id="template-sidebar-external_id-event" type="text/x-mustache-template")
+  a.name {{ username }}
+  |  added an external id 
