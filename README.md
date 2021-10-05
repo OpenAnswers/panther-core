@@ -69,7 +69,7 @@ The Docker images will require approximately 1GB of space.  The MongoDB size wil
 
 Panther is comprised of several container images that can be started using the [`docker-compose.yml`](/docker-compose.yml) file below. 
 
-To change the initial username/password credentials modify the following environment varibables:
+To change the initial username/password credentials modify the following environment variables:
  - `ADMIN_USERNAME=admin`
  - `ADMIN_PASSWORD=admin`
  - `ADMIN_EMAIL=you@example.com`
