@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -110,6 +110,7 @@ class Config
         maxsize: 1024*1024 # 1MB
 
       login:
+        interval: 50
         max_attempts: 10
         max_interval: 60 * 5 * 1000
 
@@ -139,7 +140,7 @@ class Config
     # Event server config
     event_server_defaults =
       host: 'localhost'
-      port: 4003
+      port: 4002
     @event_server = _.merge event_server_defaults, opts.event_server
 
 
@@ -159,6 +160,8 @@ class Config
     smtp_defaults =
       host:         'mta.example.com'
       port:         25
+      secure:       false
+      ignoreTLS:    true
 
     @smtp = _.merge smtp_defaults, opts.smtp
     

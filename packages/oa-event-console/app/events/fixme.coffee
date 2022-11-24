@@ -1,6 +1,6 @@
 
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -53,7 +53,7 @@ server_event.on 'oa::events::populate', ( msg )->
     Mongoose.alerts.find( query, fields )
     .sort( state_change: -1 )
     .limit( limit )
-    .toArrayAsync()
+    .toArray()
 
   .then ( docs )->
     if docs.length > 0
@@ -99,7 +99,7 @@ find_socket_filter_db = ( socket )->
 
     debug 'find_socket_filter running query for default filter'
 
-    Filters.findOneAsync( user: evs.user(), default: true )
+    Filters.findOne( user: evs.user(), default: true )
     .then ( doc )->
       unless doc?
         logger.error "No default filter found for user [%s] using {}", evs.user()
@@ -125,7 +125,7 @@ server_event.on 'oa::events::set_filter', ( msg )->
     msg.socket.ev.warn 'Filter id not valid', id
     return false
 
-  Filters.findOneAsync( user: evs.user(), _id: id )
+  Filters.findOne( user: evs.user(), _id: id )
   .then ( doc )->
     unless doc?
       evs.warn "No default filter found, using all"
@@ -189,7 +189,7 @@ server_event.on 'oa::events::deletes', ( msg )->
   # This should move the document into a "deleted" collection
   # Then this can be monitored for deletes and cleared up on a 
   # custom TTL 
-  Mongoose.alerts.removeAsync( remove_query )
+  Mongoose.alerts.remove( remove_query )
   .then ( remove )->
     logger.info msg.socket.id, 'deleted ids', remove.result.n
     
@@ -274,7 +274,7 @@ apply_updates_db = ( type, ids, set_fields, user = 'system' )->
           user:      user
           message:   type_to_history_text( type, set_fields )
 
-    Mongoose.alerts.updateAsync( query, updates, multi: true )
+    Mongoose.alerts.update( query, updates, multi: true )
     .then ( update )->
       debug type, ids, update.result, type
 
@@ -344,7 +344,7 @@ server_event.on 'oa::events::severity', ( msg )->
     state_change: Date.now()
 
   # Now promise through it
-  Severity.findOneAsync( value: msg.data.severity )
+  Severity.findOne( value: msg.data.severity )
   .then ( doc )->
     unless doc?
       return msg.socket.ev.exception "QueryError",
@@ -401,7 +401,7 @@ server_event.on 'oa::event::add_note', ( msg )->
         user:      evs.user()
         message:   msg.data.message
 
-  Mongoose.alerts.updateAsync( query, updates )
+  Mongoose.alerts.update( query, updates )
   .then ( update )->
     if update.result.n? and update.result.n == 1
       debug 'oa::event::add_note ', update.result, id

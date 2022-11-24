@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -19,8 +19,6 @@ fs                = Promise.promisifyAll require('fs')
 moment            = require 'moment'
 mongoose          = require 'mongoose'
 _                 = require 'lodash'
-#openssl           = Promise.promisifyAll require('openssl-wrapper')
-pem               = Promise.promisifyAll require('pem')
 
 
 # Errors from Mongoose

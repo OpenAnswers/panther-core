@@ -1,0 +1,20 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-total-global-info" type="text/x-mustache-template")
+    .total-info.plain
+        span.total-rule-text Total rules: 
+        span.badge.total-global-rules {{totalRulesCounter}}
+        span.total-group-text Rule hits: 
+        span.badge.total-hits {{totalHitsCounter}}
+
+    .total-info.matched.hidden
+        span.total-matched-rule-text Matched rules:
+        span.badge.total-group-rules-matched {{totalRulesMatched}} 
+        span.total-matched-rule-hits Rule hits: 
+        span.badge.matched-rule-hits {{matchedHitsCounter}}
+
+//- template for total counter at the top of global page

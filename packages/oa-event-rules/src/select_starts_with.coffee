@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -31,6 +31,10 @@ class @SelectStartsWith  extends SelectBaseFieldValue
   }
 
   run: (event_obj)->
-    debug "run starts_with [%s] [%s] [%j]", @field, @value, event_obj
+    debug "run starts_with field:[%o], value:[%o]", @field, @value
+    field_value = event_obj.get_any @field
+    return false unless field_value?
     
-    starts_with event_obj.get(@field), @value
+    matched_value = starts_with field_value, @value
+    debug "starts_with ", if matched_value then "✔️" else "❌"
+    matched_value

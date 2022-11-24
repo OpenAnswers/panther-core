@@ -1,0 +1,21 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-agent-grouping" type="text/x-mustache-template")
+  .generic-grouping(data-group="{{ data.name }}")
+    .inner
+      .agent-grouping-title
+        .right
+          //-.agent-grouping-icon
+              span.glyphicon.glyphicon-menu-hamburger.grabber
+          .agent-grouping-icon
+            span.glyphicon.glyphicon-triangle-top.collapse-toggle
+
+        .left
+          .agent-grouping-name {{ data.name }} 
+          .agent-grouping-subtitle {{ data.name_detail }} 
+      .agent-grouping-content
+        div.agent-grouping-area(class="agent-grouping-area-{{ data.class_name }} ")

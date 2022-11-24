@@ -1,0 +1,67 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+.row
+  #topbar-quick-actions.col-xs-3(style="margin-bottom: 10px")
+    .section.section-search
+      .topbar-button-container
+        +rules-sidebar-buttons(type, sub_type)
+  .col-xs-9
+    .section.section-search
+      //- .title Filter
+      //- .divider
+      .has-feedback
+        input(type="text").form-control#search-box
+        span.glyphicon.glyphicon-search.form-control-feedback
+      .divider
+.row
+  .section.section-tags
+    .tags
+      .col-xs-2
+        .entry(data-action="set")
+          .left
+            .colour.colour-blue
+            .text Set
+      .col-xs-2
+        .entry(data-action="replace")
+          .left
+            .colour.colour-green
+            .text Replace
+      .col-xs-2
+        .entry(data-action="stop")
+          .left
+            .colour.colour-yellow
+            .text Stop
+      .col-xs-2
+        .entry(data-action="stop-rule-set")
+          .left
+            .colour.colour-orange
+            .text Stop Rule Set
+      .col-xs-2
+        .entry(data-action="discard")
+          .left
+            .colour.colour-red
+            .text Discard
+      .col-xs-2
+        .entry(data-action="disabled")
+          .left
+            .colour.colour-purple
+            .text Disabled
+  
+.row
+  .col-md-12
+    .section.section-topbar-reload   
+      .card.card-generic.hidden.card-rules-reload.hidden
+        .inner
+          .title
+            p Reload Rules 
+          .content
+            | The rule set has been modified on the server and needs to be reloaded. 
+            | Any local changes you have made will be lost.
+          .buttons
+            a.btn.btn-danger(href="#") Reload
+            | &nbsp;&nbsp;
+            a.btn.btn-primary(href="#") Cancel

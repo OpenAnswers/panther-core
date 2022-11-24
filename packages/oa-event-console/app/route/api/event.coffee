@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -40,7 +40,7 @@ router.param 'mongo_id', ( req, res, next, mongo_id )->
 # Read an event from the db
 router.get '/read/:mongo_id', ( req, res, next ) ->
 
-  Mongoose.alerts.findOneAsync _id: req.object_id
+  Mongoose.alerts.findOne _id: req.object_id
   .then ( doc )->
     unless doc
       next new Errors.HttpError404
@@ -56,16 +56,16 @@ router.get '/read/:mongo_id', ( req, res, next ) ->
 # Delete an event from the db
 router.delete '/delete/:mongo_id', ( req, res, next ) ->
   debug 'removing id', req.object_id
-  Mongoose.alerts.removeAsync _id: req.object_id
+  Mongoose.alerts.deleteOne _id: req.object_id
   .then ( doc )->
     debug 'remove doc result', doc?.result
     unless doc
       throw new Errors.HttpError404
     
-    if doc.result.ok isnt 1 or doc.result.n isnt 1
+    if doc.ok isnt 1 or doc.n isnt 1
       throw new Errors.QueryError doc
 
-    res.json result: doc.result
+    res.json result: doc
       
 
   .catch ( err )->

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
  * All rights reserved.  
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
@@ -58,7 +58,7 @@ pipeline {
       defaultValue: 'production',
       visibleItemCount: 5
     )
-    string(defaultValue: 'latest', description: '', name: 'VERSION', trim: true)
+    string(defaultValue: '', description: '', name: 'VERSION', trim: true)
     extendedChoice(
       name: 'AGENT',
       description: 'Agent to perform build on',
@@ -80,7 +80,7 @@ pipeline {
         script {
           sh 'env'
           PKG_VERSION = sh(
-            script: '''node -p -e "require('./package.json').version"''',
+            script: '''node -p -e "require('./lerna.json').version"''',
             returnStdout: true
           ).trim()
           println "NODE PKG VERSION = ${PKG_VERSION}"
@@ -92,14 +92,14 @@ pipeline {
         stage('panther-builder'){
           steps {
             script {
-              docker.build("panther-builder:12.21.0-alpine3.12", " -f Dockerfiles/Dockerfile-builder .")
+              docker.build("panther-builder:gallium-alpine3.15", " -f Dockerfiles/Dockerfile-builder .")
             }
           }
         }
         stage('panther-runtime'){
           steps {
             script {
-              docker.build("panther-runtime:12.21.0-alpine3.12", " -f Dockerfiles/Dockerfile-runtime .")
+              docker.build("panther-runtime:gallium-alpine3.15", " -f Dockerfiles/Dockerfile-runtime .")
             }
           }
         }
@@ -152,7 +152,8 @@ pipeline {
                     script {
                         if(params.BUILD_PANTHER_CONSOLE){
                             docker.withRegistry(params.REGISTRY_URL, params.REGISTRY_CREDS) {
-                                dockerImageConsole = docker.build(params.DOCKER_IMG_EVENT_CONSOLE, " --build-arg RUNTIME_VERSION=${params.VERSION} --build-arg BUILDTIME_ENV=${params.BUILDTIME_ENV} --build-arg RUNTIME_ENV=${params.RUNTIME_ENV} --label git.hash=${GIT_COMMIT} --label git.branch=${params.GIT_BRANCH} -f Dockerfiles/Dockerfile-event-console .")
+                                dockerImageConsole = docker.build(params.DOCKER_IMG_EVENT_CONSOLE, 
+                                  " --build-arg BUILD_PANTHER_VERSION=${params.VERSION} --build-arg RUNTIME_VERSION=${params.VERSION} --build-arg BUILDTIME_ENV=${params.BUILDTIME_ENV} --build-arg RUNTIME_ENV=${params.RUNTIME_ENV} --label git.hash=${GIT_COMMIT} --label git.branch=${params.GIT_BRANCH} -f Dockerfiles/Dockerfile-event-console .")
 
                                 if(params.PUBLISH_TO_NEXUS) {
                                     dockerImageConsole.push("latest");

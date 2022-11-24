@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+// Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 // All rights reserved.
 // This file is subject to the terms and conditions defined in the Software License Agreement.
 //
@@ -12,17 +12,17 @@
  */
 
 module.exports = {
-  query: { type: "up" },
+  query: { type: 'up' },
 
   action: {
-    execute: "clear_older_downs_for_this_node"
+    execute: 'clear_older_downs_for_this_node',
     //columns: [ '_id', 'node', 'location', 'severity', 'last_occurrence', 'agent', 'upsert_timestamps' ]
   },
   /*
    * action: {
    *  update: { severity: 2 }
    *  update: function() { return { severity: 3 }; }
-   * action: { 
+   * action: {
    *  each: true,
    *  execute: [ 'clear_downs' ],
    *  columns: [ '_id', 'node', 'location', 'severity', 'last_occurrence', 'agent', 'upsert_timestamps' ]
@@ -31,11 +31,11 @@ module.exports = {
 
   on_success: {
     pre_wait: 5,
-    raise: "trigger completed ok"
+    raise: 'trigger completed ok',
   },
 
   on_failure: {
-    raise: "trigger failed"
+    raise: 'trigger failed',
   },
 
   when: { periodic: 25 },
@@ -44,5 +44,5 @@ module.exports = {
    * when: { at: '17:45' },
    */
 
-  activated: false
+  activated: false,
 };

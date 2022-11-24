@@ -1,0 +1,60 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+.row#sidebar-quick-actions
+  .col-md-12(style="margin-bottom: 10px")
+    .card.card-generic
+      .inner
+        .title Quick Actions
+        .content(style="margin-top: 10px")
+          .sidebar-button-container
+            +rules-sidebar-buttons(type, sub_type)
+.row
+  .col-md-12(style="margin-bottom: 10px")
+    .card.card-generic
+      .inner
+        .title Search Rules
+        .content(style="margin-top: 10px")
+          .has-feedback
+            input(type="text" name='sidebar-search').form-control#sidebar-search-box
+            span.glyphicon.glyphicon-search.form-control-feedback
+.row
+  .col-md-12(style="margin-bottom: 10px")
+    .card.card-generic
+      .inner
+        .title Filter Rules by Action
+        .content(style="margin-top: 10px")
+          .tags
+            .entry(data-action="set" value='Set')
+              span.colour.colour-blue
+              span.text Set
+            .entry(data-action="replace" value='Replace')
+              span.colour.colour-green
+              span.text Replace
+            .entry(data-action="stop" value='Stop')
+              span.colour.colour-yellow
+              span.text Stop
+            .entry(data-action="stop-rule-set" value='Stop Rule Set')
+              span.colour.colour-orange
+              span.text Stop Rule Set
+            .entry(data-action="discard" value='Discard')
+              span.colour.colour-red
+              span.text Discard
+            .entry(data-action="disabled" value='Disabled')
+              span.colour.colour-purple
+              span.text Disabled
+.row
+  .col-md-12(style="margin-bottom: 10px")      
+    .card.card-rules-warning.card-rules-reload.hidden
+      .inner
+        .title
+          p Reload Rules 
+        .content
+          | The rule set has been modified on the server and needs to be reloaded. 
+          | Any local changes you have made will be lost.
+        .buttons
+          a.btn.btn-danger(href="#") Reload

@@ -1,0 +1,23 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-action-field-value-edit" type="text/x-mustache-template")
+  .action-entry-edit.collapse(data-action-id="{{ data.verb }}" 
+  data-action-uvid="{{ data.uvid }}" class="action-{{ data.verb }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.action-delete-button
+      .left
+        .action-set-fixed-width
+          .action-operator
+            input(type='text' name='operator' value='{{ data.verb }}').form-control
+          .action-field.input-group
+            span.input-group-addon field
+            input(type='text' name='field' value='{{ data.field }}').form-control
+        .action-flexible-width
+          .action-value.input-group
+            span.input-group-addon to
+            input(type='text' name='value' value='{{ data.value }}').form-control

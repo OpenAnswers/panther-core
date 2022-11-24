@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -108,7 +108,7 @@ SocketIO.route 'views::read', ( socket, data, socket_cb ) ->
 # Read
 SocketIO.route 'view::read', ( socket, data, socket_cb )->
   debug 'got view::read', data
-  Filters.read_oneAsync data.view
+  Filters.read_one data.view
   .then ( response )->
     debug 'sending view::read response', response
     socket_cb response
@@ -122,7 +122,10 @@ SocketIO.route 'view::create', ( socket, data, socket_cb ) ->
   .then ( view )->
     logger.info 'New view for [%s] name [%s] [%s] [%s] [%j]',
       view.user, view.name, view.field, view.value, view.f, ''
-    Filters.collection.insertAsync view
+
+    # FIXME uses native mongodb collection
+    # FIXME remember to disable PromisifyAll for mongodb
+    Filters.collection.insert view
 
   .then ( response )->
     socket_cb response
@@ -162,14 +165,15 @@ SocketIO.route 'view::update', ( socket, data, socket_cb )->
 SocketIO.route 'view::delete', ( socket, data, socket_cb )->
   logger.info 'Deleting view', socket.id, data
   
-  Filters.find ( _id: data._id )
+  Filters.find _id: data._id
   .then ( response ) ->
     if response.length > 0 and response[0].default
       throw "Cannot delete default view"
 
-    return Filters.removeAsync data._id
-    .then ( response )->
-      socket.ev.info "Deleted view #{data._id}"
+    return Filters.deleteOne _id: data._id
+    .then ( deletion_response )->
+      deleted_label = response?[0]?.name or data._id
+      socket.ev.info "Deleted view #{deleted_label}"
       socket_cb response
       SocketIO.io.emit 'views::updated'
     .catch Errors.ValidationError, ValidationError, ( err )->
@@ -181,7 +185,7 @@ SocketIO.route 'view::delete', ( socket, data, socket_cb )->
 SocketIO.route 'view::set_default', ( socket, id, socket_cb )->
   logger.info 'Setting default view', socket.id, socket.ev.user(), id
 
-  Filters.set_defaultAsync socket.ev.user(), id
+  Filters.set_default socket.ev.user(), id
   .then ( response )->
     socket.ev.info "Default view set"
     socket_cb "Default view set"

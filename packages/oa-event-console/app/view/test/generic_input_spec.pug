@@ -1,0 +1,30 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+mixin generic_input_spec
+
+  include ../mixin/buttons
+  include ../rules-management/template-generic-value-edit
+  include ../rules-management/template-generic-values-edit
+  include ../rules-management/template-generic-fieldvalue-edit
+  include ../rules-management/template-generic-fieldvalues-edit
+  include ../rules-management/template-generic-labelenum-edit
+  include ../rules-management/template-generic-labelenums-edit
+  include ../rules-management/template-generic-fieldenum-edit
+  include ../rules-management/template-generic-fieldenums-edit
+  include ../rules-management/template-generic-group
+
+  != js('bower/mustache')
+  != js('bower/lodash')
+  
+  != js('js/helpers')
+  != js('js/rendered')
+
+  != js('js/rules-management/generic_input')
+  != js('test/generic_input_spec')
+
+  p generic-input-render-test
+  #generic-input-render-test

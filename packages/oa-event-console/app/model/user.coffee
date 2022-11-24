@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -38,6 +38,8 @@ UserSchema = new mongoose.Schema
 
   email:
     type: String
+    lowercase: true
+    trim: true
 
   name:
     type: String
@@ -110,16 +112,17 @@ UserSchema = new mongoose.Schema
 
 UserSchema.pre 'save', ( next )->
   @updated = moment().toDate()
+  @email = @email.toLowerCase()
   next()
 
 
 
 # ### getUserList
-UserSchema.statics.getUserList = (cb)->
+UserSchema.statics.getUserList = ()->
   @find   login: { $exists: false }
   .select username: 1
   .sort   username: 1
-  .exec   cb
+  .exec()   
 
 
 # ### Check if a user is admin
@@ -142,29 +145,30 @@ UserSchema.plugin PassportLocalMongoose, {
   attemptsField: 'failure_count', 
   limitAttempts: true, 
   maxAttempts: config.app.login.max_attempts,
-  interval: 500
+  interval: config.app.login.interval
 }
 
 
 # ### Read all
-UserSchema.statics.read_all = ( cb )->
+UserSchema.statics.read_all = ( )->
   @find   username: { $exists: true, $ne: '' }
   .select username: 1, group: 1, email: 1, created: 1
   .sort   username: 1
-  .exec   cb
+  .exec() 
 
 
 # ### Read all without admin
-UserSchema.statics.read_all_minus_admin = ( cb )->
+UserSchema.statics.read_all_minus_admin = (  )->
   @find   username: { $exists: true, $ne: '' }
   .select username: 1, group: 1, email: 1, created: 1
   .sort   username: 1
-  .exec   cb
+  .exec()
 
 # ### Read one
-UserSchema.statics.read_one = ( user, cb )->
-  cb new Errors.ValidationError('No user for read') unless user?
-  @findOne username: user, cb
+UserSchema.statics.read_one = ( user )->
+  unless user?
+    return Promise.reject( new Errors.ValidationError('No user for read') )
+  @findOne( username: user )
 
 
 # ### Create
@@ -173,7 +177,7 @@ UserSchema.statics.create_admin = ( data, cb )->
 
   user =   new @ data
   debug 'create_admin', data
-  @registerAsync user, data.email_token
+  @register user, data.email_token
   .then ( res )->
     debug 'create_admin', err, res
     return cb err if err
@@ -181,7 +185,7 @@ UserSchema.statics.create_admin = ( data, cb )->
 
 
 # ### Update
-UserSchema.statics.update_data_Async = ( data, cb )->
+UserSchema.statics.update_data = ( data )->
   self=@
   new Promise ( resolve, reject )->
     debug 'findByIdAndUpdate data', data
@@ -196,7 +200,7 @@ UserSchema.statics.update_data_Async = ( data, cb )->
     unless data._id?
       reject( new Errors.ValidationError 'No _id field in update data' )
 
-    self.findByIdAndUpdateAsync data._id, data
+    self.findByIdAndUpdate data._id, data
     .then ( ret )->
       resolve( ret )
     .catch code: 11000, ( error )->
@@ -210,12 +214,19 @@ UserSchema.statics.delete = ( user, cb )->
   cb new Errors.ValidationError('No user for delete') unless user?
   @findOneAndRemove username: user, cb
 
+# #### delete_user
+UserSchema.statics.delete_user = ( user )->
+  unless user?
+    throw new Errors.ValidationError('No user for delete')
+  @deleteOne username: user
+
+
 
 # ### tokenExpired( token )
 # Check if a reset token exists, and is expired
 UserSchema.statics.tokenExpired = ( token, cb )->
   now = moment()
-  @findOneAsync "reset.token": token
+  @findOne "reset.token": token
   .then ( user )->
     unless doc
       logger.warn "token doesn't exist [%s]", token
@@ -233,10 +244,10 @@ UserSchema.statics.tokenExpired = ( token, cb )->
 
 
 
+
+
 # Export the promosified model
 User   = mongoose.model 'User', UserSchema
-Promise.promisifyAll User
-Promise.promisifyAll User.prototype
 module.exports =
   User: User
   RESET_TOKEN_LENGTH: RESET_TOKEN_LENGTH

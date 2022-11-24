@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -10,7 +10,7 @@
 { logger, debug } = require('oa-logging')('oa:event:routes:rules')
 
 # npm modules
-jade   = require 'jade'
+pug   = require 'pug'
 router = require('express').Router()
 
 # oa modules
@@ -41,8 +41,8 @@ build_vars = ( req, override ) ->
     rules:      req.app.locals.rules
     fields:     Field.list()
     user:       req.user
-    debug_jade: debug
-    jade:       jade
+    debug_pug:  debug
+    pug:        pug
     uuid_enabled: config.app.uuid_enabled
     development: process.env.NODE_ENV == "development" ? true : false
 

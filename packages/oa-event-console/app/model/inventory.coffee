@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -54,9 +54,12 @@ InventorySchema.post 'remove', (doc) ->
     SocketIO.io.to('inventory').emit('deleted', doc)
 
 
+InventorySchema.post 'deleteMany', (doc) ->
+  debug "POST deleteMany", doc
+  if SocketIO.io?.to
+    SocketIO.io.to('inventory').emit('inventory::deleted', count: doc.n)
+
 # ### Export
 # Model promisifcation and export
 Inventory = mongoose.model 'Inventory', InventorySchema
-Promise.promisifyAll Inventory
-Promise.promisifyAll Inventory.prototype
 module.exports.Inventory = Inventory

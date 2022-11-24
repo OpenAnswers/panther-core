@@ -1,0 +1,21 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+tr.generic-fieldvalues-entry
+  td.form-group.has-feedback
+    .generic-fieldvalues-field.edit-padding
+      input.form-control(type="text" value="{{ name }}" placeholder="field"
+      name='mapping-field' class="generic-fieldvalues-field-{{ data.label }}")
+  | {{ #data.join_text }}
+  td
+    .generic-fieldvalues-join.generic-inputtext-padding {{ . }}
+  | {{ /data.join_text }}
+  td.form-group.has-feedback
+    .generic-fieldvalues-value.edit-padding
+      input.form-control(type="text" value="{{ value }}" placeholder="value"
+      name='mapping-value' class="generic-fieldvalues-value-{{ data.label }}")
+  td
+    span.glyphicon.glyphicon-remove.generic-delete-button.generic-fieldenums-delete-button.generic-glyph-padding

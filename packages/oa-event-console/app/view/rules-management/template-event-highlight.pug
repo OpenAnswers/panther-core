@@ -1,0 +1,16 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-event-highlight" type="text/x-mustache-template")
+  table.table.table_nested.table-hover.reference-event-table
+    tr.heading.reference-event-heading
+      th.col-xs-3 Field
+      th.col-xs-9 Value
+    | {{ #rows }}
+    tr.reference-event-entry(data-field="{{ key }}")
+      td.col-xs-3.reference-event-highlight-field {{ key }}
+      td.col-xs-9.reference-event-highlight-value(data-value="{{ value }}") {{ value }}
+    | {{ /rows }}

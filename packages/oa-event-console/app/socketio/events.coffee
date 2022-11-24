@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -57,7 +57,7 @@ apply_updates_db = ( type, ids, set_fields, push_fields = {}, user = 'system' )-
     
     debug "UPDATING, ", updates
 
-    Mongoose.alerts.updateAsync( query, updates, multi: true )
+    Mongoose.alerts.updateMany( query, updates, multi: true )
     .then ( update )->
       debug type, ids, update.result, type
 
@@ -131,7 +131,7 @@ copy_events_async = ( tag, expire_hours, ids )->
 
     query = _id: $in: ids
 
-    Mongoose.alerts.find( query ).toArrayAsync()
+    Mongoose.alerts.find( query ).toArray()
     .then ( docs )->
       debug 'docs to copy before removal', docs.length
 
@@ -147,6 +147,7 @@ copy_events_async = ( tag, expire_hours, ids )->
       batch_copy.execute()
 
     .then ( results )->
+      debug "copy_events_async results:", results
       resolve results
 
     .catch ( err )->
@@ -172,7 +173,7 @@ find_filter_from_socket_Async = ( socket )->
 
     debug 'find_socket_filter running query for default filter'
 
-    Filters.findOneAsync( user: evs.user(), default: true )
+    Filters.findOne( user: evs.user(), default: true )
     .then ( doc )->
       unless doc?
         logger.error "No default filter found for user [%s] using {}", evs.user()
@@ -195,23 +196,6 @@ find_filter_from_socket_Async = ( socket )->
 # and the counts updated (and possibly steamed out) via the incoming
 # events to the event_server process
 
-XXpromisedFilterSummary = ( )->
-  promise = Promise.props
-    sev_counts: Mongoose.alerts.aggregateAsync
-      $group:
-        _id: "$severity"
-        total: { $sum: 1 }
-    , {$sort: { _id: 1 }}
-    sev_counts_group: Mongoose.alerts.aggregateAsync
-      $group:
-        _id:
-          group: "$group"
-          severity: "$severity"
-        total: { $sum: 1 }
-    , {$sort: { _id: 1 }}
-    severities:
-      Severity.getSeveritiesWithIdAsync()
-  promise
 
 
 SocketIO.route_return 'events::severities', ( socket, data )->
@@ -219,7 +203,7 @@ SocketIO.route_return 'events::severities', ( socket, data )->
 
   promisedFilterSummary()
   .then ( results )->
-    # results: {sev_counts: [], sev_counts_group: []. severities: []}
+    # results: {sev_counts: [], sev_counts_group: [], severities: []}
     results.groups = groups
     logger.debug 'sending out sev results', results.sev_counts, results.sev_counts_group
     socket.emit 'events::severities', results
@@ -298,7 +282,7 @@ SocketIO.route 'events::severity', ( socket, data, client_cb )->
     throw new Errors.ValidateError "No severity on message payload"
 
   # check the severity specified is valid
-  Severity.findOneAsync( value: parseInt( data.severity ) )
+  Severity.findOne( value: parseInt( data.severity ) )
   .then ( doc )->
     unless doc
       throw Errors.QueryError "Severity value not found [#{data.severity}]"
@@ -336,7 +320,7 @@ SocketIO.route_return 'events::delete::all', (socket, data, client_cb )->
     logger.error "Permision denied delete::all - user is not an admin"
     throw new Errors.RequestError "Permision Denied"
 
-  Mongoose.alerts.removeAsync( {} )
+  Mongoose.alerts.deleteMany {} 
   .then ( removed )->
     logger.info "User [%s] deleted all events", evs.user(), removed.result.n
 
@@ -352,6 +336,7 @@ SocketIO.route_return 'events::delete::all', (socket, data, client_cb )->
       status: 'ok'
       rows: removed.result.n
 
+    response
   .catch (err)->
     logger.error "Deleting all failed ", err
 
@@ -392,7 +377,7 @@ SocketIO.route 'events::delete', ( socket, data, client_cb )->
   .then ( batch_result )->
     logger.info 'copied delete events [%j]: %s', batch_result, ids
     
-    Mongoose.alerts.removeAsync( remove_query )
+    Mongoose.alerts.removeMany( remove_query )
 
   .then ( remove )->
     logger.info socket.id, 'deleted ids', remove.result.n
@@ -496,7 +481,6 @@ SocketIO.route 'events::external_id', ( socket, data, client_cb )->
 
   # Setup the queries
   set_fields =
-    owner:        evs.user()
     external_id:  data.external_id
     state_change: new Date()
 
@@ -620,7 +604,7 @@ SocketIO.route_return 'events::read', ( socket, msg, client_cb )->
     Mongoose.alerts.find( query, fields )
       .sort( state_change: -1 )
       .limit( limit )
-      .toArrayAsync()
+      .toArray()
 
   .then ( docs )->
     if docs.length >= limit
@@ -666,7 +650,7 @@ SocketIO.route_return 'events::assign', ( socket, msg, client_cb )->
   query = { username: msg.user }
 
   # Find the user then update the alerts
-  User.findOneAsync( query ).then ( doc )->
+  User.findOne( query ).then ( doc )->
     unless doc?
       throw new Errors.ValidationError "Username does not exist [#{msg.user}]"
 
@@ -699,6 +683,7 @@ SocketIO.route_return 'events::assign', ( socket, msg, client_cb )->
 
 
 # ### event::occurrences
+# ### @deprecated seems is no longer used
 
 # Return the occurrences data for a single identifier.
 
@@ -709,12 +694,12 @@ server_event.on 'event::occurrences', ( socket, data, client_cb )->
   unless SocketIO.socket_check_msg(msg) and SocketIO.socket_check_data(msg)
     return false
 
-  Mongoose.alerts.findOneAsync( _id: data.id )
+  Mongoose.alerts.findOne _id: data.id 
   .then ( doc )->
     unless doc
       throw Errors.QueryError "Occurrence id not found [#{data.id}]"
 
-    Mongoose.alertoccurences.findOneAsync( _id: doc.identifier )
+    Mongoose.alertoccurences.findOne _id: doc.identifier 
   .then ( doc )->
     unless doc
       throw Errors.QueryError "Requested occurrences for identifer [#{data.identifier}] but it wasn't there"
@@ -750,12 +735,12 @@ SocketIO.route_return 'event::details', ( socket, msg, client_cb )->
   unless id = Mongoose.recid_to_objectid_false msg.id
     throw new Errors.ValidationError "Invalid event id", msg.id
 
-  Mongoose.alerts.findOneAsync( _id: id )
+  Mongoose.alerts.findOne _id: id 
   .then ( doc )->
     unless doc
       throw new Errors.QueryError "Requested id [#{id}] wasn't there"
     debug 'events::detail retrieved id [%s]', id, doc
-    Mongoose.alertoccurrences.findOneAsync( identifier: doc.identifier )
+    Mongoose.alertoccurrences.findOne identifier: doc.identifier
     .then ( occurrence )->
       if occurrence
         doc.occurrences = occurrence.current

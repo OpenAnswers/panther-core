@@ -1,0 +1,30 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+#nav.navbar.navbar-default.navbar-static-top(role='navigation')
+  .container
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand #{Name} #{title}
+
+    .navbar-collapse.collapse
+      
+      ul.nav.navbar-nav
+
+        block templatenav
+
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown') Nav
+          
+          ul.dropdown-menu(role='menu')
+            each val in [ 'Rules', 'Settings', 'Help', 'Logout' ]
+              li
+                a(href='#')= val

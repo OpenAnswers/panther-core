@@ -1,0 +1,27 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+doctype html
+
+html(lang="en")
+
+  head
+    title Tests
+    != js('bower/debug')
+    != js('bower/jquery')
+    != js('bower/jquery-ui')
+    != js('bower/chai')
+    != js('bower/sinon')
+    != js('bower/mocha')
+    != css('bower/mocha')
+    
+    //- refresh outside of production
+    - if( node_env === 'development' && !no_refresh_env ) refresh = js('js/refresh.js');
+        != refresh
+
+
+  body
+    block body

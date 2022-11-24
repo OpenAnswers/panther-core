@@ -76,10 +76,11 @@ class AdminUser
     data =
       user: id_user.user
       _id: id_user.id
-    socket.emit 'user::delete', data, ( response )->
+    socket.emit 'user::delete', data, ( error, response )->
       debug_admin 'deleted user', response
       # Wait for the update to propagate
       #send_read_all
+      if cb then cb( error, response)
     debug_admin 'deleting user'
 
 
@@ -96,10 +97,10 @@ class AdminUser
     debug_admin 'creating user'
     
 
-  @send_read_one: ( id, cb )->
+  @send_read_one: ( id_user, cb )->
     debug_admin 'read user', name
     socket.emit 'user::read',
-      id:  id
+      user:  id_user
     , ( error, user )->
       debug_admin 'read user', user
       if cb then cb( error, user )

@@ -1,15 +1,15 @@
 # This is an event console config
 
 app:
-  name: "Panther"
-  console: "Default"
+  name: 'Panther'
+  console: 'Default'
   # The from email address used when:
   # - sending password resets
   # - commiting rules to git
-  email: "you@example.com"
+  email: 'you@example.com'
 
   # The url that is used to access the web frontend
-  url: "http://localhost:3001"
+  url: 'http://localhost:3001'
 
   # external support URL, defaults to the Panther documentation project
   # support_url: "https://openanswers.github.io/panther-docs"
@@ -20,13 +20,13 @@ app:
   assets_build_dir: dist/builtAssets
 
   swagger_docs: true
-  swagger_json: "./dist/swagger.json"
+  swagger_json: './dist/swagger.json'
   key:
     apikey:
-      "uuid-blag-uuid": event_monitor_http
+      'uuid-blag-uuid': event_monitor_http
 
   upload:
-    maxsize: 32768
+    maxsize: 5532768
 
   archive_time:
     clear: 72
@@ -37,7 +37,7 @@ app:
 # Location of the Panther event-server
 event_server:
   host: localhost
-  port: 4003
+  port: 4002
 
 event_monitors:
   syslogd:
@@ -49,9 +49,9 @@ event_monitors:
 
 # mongoDB connection and collection details
 mongodb:
-  uri: "mongodb://127.0.0.1:27017/panther"
+  uri: 'mongodb://127.0.0.1:27017/panther'
   database: panther
-  collection: "alerts"
+  collection: 'alerts'
   # 12 seconds
   timer: 12000
   max_connects: 20
@@ -62,7 +62,7 @@ http:
 
 # SMTP server used when sending emails
 smtp:
-  host: "mta.example.com"
+  host: 'mta.example.com'
   port: 25
 
 session:
@@ -70,8 +70,8 @@ session:
   #  - can be blank and a random session secret will be generated each time the server is started.
   # secret: "some-random-string"
 
-  # timeout: session lifetime in ms
-  timeout: 172800000
+  # timeout: session lifetime in seconds ( 1209600 = two weeks)
+  timeout: 1209600
 
 # Configuration location for the server and monitor rules file.
 # The path must be accessible to the Panther:
@@ -79,7 +79,7 @@ session:
 # - event-console
 # - event-monitors-*
 rules:
-  path: "../../rules"
+  path: '../../rules'
   git: false
   push: false
   agents:

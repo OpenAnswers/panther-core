@@ -1,0 +1,33 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _template
+
+block nav
+  - var nav_location = 'rules'
+  include ./_nav_generic
+  
+block content
+  .container
+    #docheadings.markdown_toc.hidden-xs
+      nav.col-sm-3.markdown-docs-sidebar
+        ul#rules_info_sidebar.sidebar.nav.nav-stacked.fixed(role='tablist')
+          li #[a(href="#rules")      Rules]
+          li #[a(href="#order")      Order]
+          li #[a(href='#shortcuts')  Shortcuts]
+          li #[a(href='#selecting')  Selecting]
+          li #[a(href='#conditions') Conditions]
+          li #[a(href='#actions')    Actions]
+
+    .markdown.col-sm-9(data-spy='scroll' data-target='#docheadings')
+      .card.card-generic
+        a.anchor(name="getting-started")
+        .inner
+          .content
+            include:markdown-it rules.md
+
+      .markdown_anchor_gap
+

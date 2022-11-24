@@ -13,7 +13,7 @@ class ClipBoard
   ]
 
   # Store an array of the w2ui fields
-  @w2ui_fields: _.pluck( w2grid_all_columns, 'field' )
+  @w2ui_fields: _.map( w2grid_all_columns, 'field' )
 
 
   # Return the text for the brief details of an event

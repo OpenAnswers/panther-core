@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -44,5 +44,10 @@ class @SelectLessThan extends SelectBaseFieldValue
   }
 
   run: (event_obj)->
-    debug "run less_than", @field
-    return event_obj.get(@field) < @value
+    debug "run greater_than [%o]", @field
+    field_value = event_obj.get_any @field
+    return false unless field_value?
+
+    matched_value = field_value < @value
+    debug "less_than ", if matched_value then "✔️" else "❌"
+    matched_value

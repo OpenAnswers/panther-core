@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -96,7 +96,9 @@ class @Event
 
   # Get a field from the input event this was built from
   get_input: ( field ) ->
-    _.get @input, field
+    got = _.get @input, field
+    got
+
 
   # Set a field in the input event
   set_input: ( field, value ) ->
@@ -110,7 +112,7 @@ class @Event
   input_to_copy: ( input = @input ) ->
     debug 'putting input onto copy'
     for name, value of @input
-      debug ' putting name', name, value
+      debug ' putting name [%o], value [%o]', name, value
       @copy[name] = JSON.parse JSON.stringify(value)
 
   # Get a field from the original event
@@ -126,11 +128,32 @@ class @Event
 
   # Get a field from the modified copy
   get: ( field ) ->
-    _.get @copy, field
+    got = _.get @copy, field
+    got
 
   # Set a field in the modified copy
   set: ( field, value ) ->
     @copy[field] = value
+
+  # Get a field from any prefixed location
+  get_any: ( field ) ->
+    debug "get_any field:[%o]", field
+
+    value =
+      if field.indexOf('input.') is 0
+        field_name = field.replace 'input.', ''
+        @get_input field_name
+      else if field.indexOf('syslog.') is 0
+        field_name = field.replace 'syslog.', ''
+        @get_input field_name
+      else if field.indexOf('original.') is 0
+        field_name = field.replace 'original.', ''
+        @get_original field_name
+      else
+        @get field
+    debug "get_any value:[%o]", value
+    value
+
 
   # Field exists in the modified copy
   exists: ( field ) ->

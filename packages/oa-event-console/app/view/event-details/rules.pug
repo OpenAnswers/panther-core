@@ -1,0 +1,19 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+//- Render Template
+script(id="event-details-rules-template" type="text/x-handlebars-template")
+  tr
+    th.col-xs-3 Rule
+    th.col-xs-2 Id
+  |{{#history}}
+  tr
+    td.col-xs-3 {{timestamp}}
+    td.col-xs-2 {{user}}
+  |{{/history}}
+
+//- Conteiner
+table#event-details-modal-history-table.table.table_nested.table-hover

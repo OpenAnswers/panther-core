@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -37,7 +37,7 @@ SocketIO.route 'apikeys::read', ( socket, data, cb ) ->
     throw new Errors.ValidationError 'Invalid apikeys::read'
 
 
-  ApiKey.findAsync()
+  ApiKey.find()
   .then ( results ) ->
     debug 'sending apikeys::read response', results
 
@@ -65,7 +65,7 @@ SocketIO.route_return 'apikey::create', ( socket, data ) ->
     throw new Errors.ValidationError 'Invalid apikey::create'
 
 
-  return ApiKey.countAsync()
+  return ApiKey.count()
   .then ( apiUsageDoc ) ->
     logger.info 'apikey usage %d/%d', apiUsageDoc, config.app.apikey_limit
     throw new Errors.ValidationError "ApiKey usage exceeded" if apiUsageDoc >= config.app.apikey_limit
@@ -74,7 +74,7 @@ SocketIO.route_return 'apikey::create', ( socket, data ) ->
     apikey.username = socket.ev.user()
     apikey.created = new Date
 
-    return apikey.saveAsync()
+    return apikey.save()
     .then ( doc )->
       logger.info '%s %s New apikey added. key [%s]', socket.id, socket.ev.user(), doc.apikey
       SocketIO.io.emit 'apikey::updated'
@@ -113,7 +113,7 @@ SocketIO.route_return 'apikey::delete', ( socket, data ) ->
     logger.error "apikey::delete validation error", validatedData.error
     throw new Errors.ValidationError 'Invalid apikey::delete'
 
-  ApiKey.removeAsync apikey: validatedData.value.apikey
+  ApiKey.remove apikey: validatedData.value.apikey
   .then ( result ) ->
     SocketIO.io.emit 'apikey::updated'
     logger.info '%s %s Deleted API key', socket.id, socket.ev.user(), validatedData.value.apikey

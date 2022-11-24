@@ -75,6 +75,8 @@ class ConsoleSettings
     
     socket.emit 'settings::server::write', settings, (error,data)->
       debug_settings 'setting set', data
+      if data.tracking == null
+        ConsoleSettings.displayTrackingUnknown()
       data
   
   @displayTracking: ()->
@@ -82,6 +84,10 @@ class ConsoleSettings
       @displayTrackingOn()
     else
       @displayTrackingOff()
+
+  @displayTrackingUnknown: ()->
+    $('#console-settings-button-tracking-on').removeClass('btn-success')
+    $('#console-settings-button-tracking-off').removeClass('btn-warning')
 
   @displayTrackingOn: ()->
     $('#console-settings-button-tracking-on').addClass('btn-success')

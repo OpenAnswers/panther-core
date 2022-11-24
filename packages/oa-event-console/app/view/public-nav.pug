@@ -1,0 +1,16 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+.form.pull-right
+  form#nav-login-form.form-inline.nav-login(role='form' action='/login' method='post')
+    .form-group
+      input.form-control(type='text' name='username' placeholder='user')
+    .form-group
+      input.form-control(type='password' name='password' placeholder='password')
+    button.btn.btn-primary(type='submit') Log in
+
+.name
+  h2.text-muted #{name}

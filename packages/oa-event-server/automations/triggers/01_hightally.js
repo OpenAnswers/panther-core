@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+// Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 // All rights reserved.
 // This file is subject to the terms and conditions defined in the Software License Agreement.
 //
@@ -10,12 +10,12 @@
  * updates the severity to 3
  */
 module.exports = {
-  query: { tally: { $gte: 5 }, severity: {$lt : 3} },
+  query: { tally: { $gte: 5 }, severity: { $lt: 3 } },
 
   action: {
-    update: { severity: 3}
+    update: { severity: 3 },
   },
 
   when: { periodic: 17 },
-  activated: false
+  activated: false,
 };

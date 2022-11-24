@@ -1,0 +1,68 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+//- Render Template
+block template
+
+  script(id="admin-fields-template" type="text/x-handlebars-template")
+    
+    //- Header
+    thead
+      tr
+        th.col-xs-2 Field
+        th.col-xs-3 Type
+        th.col-xs-3 Size
+        th.col-xs-5 Created
+        //-th.col-xs-1 Password
+    
+    //- Content
+    |{{ #fields }}
+    
+    //- Display
+    tr.admin-field-row(id="field-{{_id}}" data-id="{{_id}}" data-field="{{fieldname}}")
+      td.col-xs-3 {{ fieldname }}
+      td.col-xs-3 {{ type }}
+      td.col-xs-3 {{ size }}
+      td.col-xs-5
+
+    //- Update Form
+    tr.admin-field-row-edit.hide(id="field-edit-{{_id}}" data-id="{{_id}}" data-field="{{fieldname}}")
+      td.col-xs-12.editing(colspan="4")
+        form.admin-field-row-edit-form(data-id="{{_id}}")
+          .row
+            .col-xs-3
+              input.form-control(type='hidden' name='_id' value='{{_id}}')
+              input.form-control(type='text' name='fieldname' value='{{fieldname}}')
+            .col-xs-3
+              input.form-control(type='text' name='type' value='{{type}}')
+            .col-xs-3
+              input.form-control(type='text' name='size' value='{{size}}')
+            .col-xs-3
+              button#admin-field-row-save-edit-submit.btn.btn-success.admin-field-row-save.marginright5(type='submit' value='Save') Save
+              button.btn.btn-primary.admin-field-row-cancel.marginright5(type="button") Cancel
+              button.btn.btn-danger.admin-field-row-delete.marginright5(type="button") Delete
+    |{{ /fields }}
+
+
+//- Container content
+table#admin-fields-table.table.table_nested.table-hover
+  //- This is where the fields/field data ends up
+
+
+//- Form to add fields
+.form-inline.form-group
+  form#admin-fields-create
+    .row.form-row
+      .col-sm-3.col-xs-3
+        input.form-control(type='text' name='fieldname' placeholder='Name')
+      .col-sm-3.col-xs-2
+        input.form-control(type='text' name='type' placeholder='Type')
+      .col-sm-3.col-xs-2
+        input.form-control(type='text' name='size' placeholder='Size')
+      .col-sm-3.col-xs-5(style="text-align: right;")
+        button#admin-field-create-submit.btn.btn-success.admin-fields-create-save.marginright5.disabled(type='submit' value='Add Field') Add
+        button.btn.btn-primary.admin-field-row-cancel.marginright5(type="reset") Cancel

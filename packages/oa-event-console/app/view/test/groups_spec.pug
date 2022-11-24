@@ -1,0 +1,26 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+mixin groups_spec
+  
+  include ../rules-management/template-rule
+  include ../rules-management/template-group
+  include ../rules-management/template-group-rule-select
+  include ../rules-management/template-tags
+
+  != js('js/rendered')
+  
+  != js('js/rules-management/rule')
+  != js('js/rules-management/rule_set')
+  != js('js/rules-management/group')
+  != js('js/rules-management/groups')
+  != js('test/groups_spec')
+
+  p group-render-test
+  #group-render-test
+
+  p groups-render-test
+  #groups-render-test

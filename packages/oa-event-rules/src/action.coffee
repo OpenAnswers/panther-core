@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -78,12 +78,20 @@ class @ActionBase
     value = format_string @value, event.copy
 
     # Check if the have a {input.structuredData} group in the message
-    if value.match( /\{input\.structuredData\.[\w\._]+}/ )
+    if value.match( /\{input\.structuredData\.[\w\._\-@]+\.[\w\._-]+\}/ )
       if event.has_structured_data()
-        debug 'found a {input.structuredData} value to replace', value, event.input.structuredData
+        debug 'found a {input.structuredData} value to replace [%o], [%o]', value, event.input.structuredData
         value = ActionBase.format_string_with_prefix 'input.structuredData', @value, event.input.structuredData
       else
         logger.warn 'Rule was looking for structured data but none was available'
+
+    # Check if the have a {input.structuredData1} group in the message
+    if value.match( /\{input\.structuredData1\.[\w\._\-@]+=[\w\._-]+\}/ )
+      if event.has_structured_data()
+        debug 'found a {input.structuredData1} value to replace [%o], [%o]', value, event.input.structuredData1
+        value = ActionBase.format_string_with_prefix 'input.structuredData1', @value, event.input.structuredData1
+      else
+        logger.warn 'Rule was looking for structuredData1 but none was available'
 
     # Check if the have a {input.} group in the message
     if value.match( /\{input\.[\w\._]+}/ )
@@ -116,7 +124,7 @@ class @ActionBase
   # I did this quickly, It needs a generic solution for . notation replacements
   # like `format_string` in `oa-helpers` where most of this is yanked from
   @format_string_with_prefix: ( prefix, str, args... )->
-    debug 'format_string_with_prefix in', prefix, str, args
+    debug 'format_string_with_prefix in [%o],[%o],[%o]', prefix, str, args
     # leave if there's something odd
     return str if typeof str isnt 'string'
     # leave unless we have data
@@ -127,9 +135,18 @@ class @ActionBase
 
     args = args[0] if typeof args[0] is 'object'
     for arg of args
-      debug 'format_string_with_prefix arg', arg, prefix, str
-      re  = RegExp "\\{#{prefix}\.#{arg}\\}", "gi"
-      str = str.replace re, args[arg]
+      debug 'format_string_with_prefix arg [%o], [%o], [%o]', arg, prefix, str
+
+      if typeof args[arg] is 'string'
+        re  = RegExp "\\{#{prefix}\.#{arg}\\}", "gi"
+        str = str.replace re, args[arg]
+      else if typeof args[arg] is 'object'
+        # nested object
+        for subarg of args[arg]
+          debug 'format_string_with_prefix subarg [%o].[%o], [%o], [%o]', arg, subarg, prefix, str
+          re = RegExp "\\{#{prefix}\.#{arg}\.#{subarg}\\}", "gi"
+          str = str.replace re, args[arg][subarg]
+
     return str
 
 

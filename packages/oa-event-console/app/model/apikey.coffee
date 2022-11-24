@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -77,7 +77,7 @@ ApiKeySchema.statics.user_tokens_Async = ( username )->
   debug 'user_tokens_Async running for username', username
   unless username
     throw new Errors.ValidationError 'Invalid User', username: username
-  @findAsync username: username
+  @find username: username
   .then ( doc )->
     debug 'user_tokens_Async returned for [%s]', username, doc
     unless doc
@@ -93,15 +93,13 @@ ApiKeySchema.statics.user_tokens_Async = ( username )->
     logger.error error, error.stack
     throw error
 
-ApiKeySchema.statics.delete_user = ( username, cb )->
-  @remove username: username, cb
+ApiKeySchema.statics.delete_user = ( username )->
+  @deleteOne username: username
 
 # #### Export
 
 # Model promisification and export
 ApiKey = mongoose.model 'ApiKey', ApiKeySchema
-Promise.promisifyAll ApiKey
-Promise.promisifyAll ApiKey.prototype
 module.exports =
   ApiKey: ApiKey
   APIKEY_LENGTH: APIKEY_LENGTH

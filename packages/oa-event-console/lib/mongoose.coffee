@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -24,13 +24,6 @@ config            = require('./config').get_instance()
   objhash }       = require 'oa-helpers'
 { server_event }  = require './eventemitter'
 
-# Promisify mongoose/mongo
-Promise.promisifyAll mongoose
-Promise.promisifyAll mongoose.mongo
-Promise.promisifyAll require('mongodb/lib/bulk/unordered')
-Promise.promisifyAll require('mongodb/lib/bulk/unordered').prototype
-Promise.promisifyAll require('mongodb/lib/bulk/ordered')
-Promise.promisifyAll require('mongodb/lib/bulk/ordered').prototype
 
 
 # ### Mongoose client
@@ -99,23 +92,27 @@ class Mongoose
     @connect_count += 1
     if @connect_count >= @connect_limit
       server_event.emit 'fatal', "Too many connection attempts: #{self.connect_count}"
-      
-    @db.open config.mongodb.uri, {}, ( err, res )->
-      if err
+    debug 'DB ', @db;
+    # https://mongoosejs.com/docs/5.x/docs/deprecations.html
+    # used by :
+    #   User.update_data -> User.findByIdAndUpdate()
+    @db.openUri config.mongodb.uri, {useCreateIndex: true, useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true}
+    .then (onFulFill, onRejected)->
+     if onRejected
+        logger.error "connection rejected", onRejected
         debug 'connect err!', err, config.mongodb.uri
         logger.warn "Error with initial connection. Retrying[#{self.connect_count}] in 2s", err.stack
         setTimeout ->
           self.do_connect()
         , 2000
         return
-      logger.info 'connection open cb', config.mongodb.uri
-      self.connect_count = 0
-      self.connected = true
-      connect_cb null, self.db if connect_cb
-      debug 'do_connect connected', res
-      self.db
-
-
+      if onFulFill
+        logger.info "connection open cb", config.mongodb.uri
+        self.connect_count = 0;
+        self.connected = true
+        connect_cb null, self.db if connect_cb
+        self.db
+      
   # ###### @.recids_to_objectid( ids )
 
   # Create mongoose object ids from id strings

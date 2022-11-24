@@ -1,37 +1,37 @@
 /*
-  * Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
-  * All rights reserved.  
-  * This file is subject to the terms and conditions defined in the Software License Agreement.
-  */
+ * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * All rights reserved.
+ * This file is subject to the terms and conditions defined in the Software License Agreement.
+ */
 
-const logging = require("oa-logging")("oa:event:server:alerts");
+const logging = require('oa-logging')('oa:event:server:alerts');
 var logger = logging.logger;
 
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-AlertDefinitions = require("./alertdefinition").Model;
+AlertDefinitions = require('./alertdefinition').Model;
 
-var loader = (exports.loader = function(options, cb) {
-  AlertDefinitions.find({}, function(err, rows) {
+var loader = (exports.loader = function (options, cb) {
+  AlertDefinitions.find({}, function (err, rows) {
     if (err) return cb(err);
     if (rows.length < 1) return cb(err);
 
     var historySchema = new Schema({
       timestamp: { type: Date },
       user: { type: String },
-      msg: { type: String }
+      msg: { type: String },
     });
 
     var notesSchema = new Schema({
       timestamp: { type: Date },
       user: { type: String },
-      msg: { type: String }
+      msg: { type: String },
     });
 
     var ruleMatchesSchema = new Schema({
       //      action: { type: String },
-      uuid: { type: String }
+      uuid: { type: String },
     });
 
     var definitions = new Object();
@@ -41,35 +41,35 @@ var loader = (exports.loader = function(options, cb) {
       notes: [notesSchema],
       matches: [ruleMatchesSchema],
       upsert_timestamps: [Number],
-      sequence_numbers: [Number]
+      sequence_numbers: [Number],
     };
 
-    rows.forEach(function(row) {
+    rows.forEach(function (row) {
       if (definitions[row.column] != undefined)
-        logger.error("Multiple rows found in alertdefinitions for column [" + row.column + "]");
+        logger.error('Multiple rows found in alertdefinitions for column [' + row.column + ']');
 
       definitions[row.column] = { type: row.type, priority: row.priority, label: row.label, width: row.width };
 
       switch (row.type) {
-        case "Number":
+        case 'Number':
           cast_hash[row.column] = { type: Number };
           break;
-        case "Date":
+        case 'Date':
           cast_hash[row.column] = { type: Date };
           break;
-        case "String":
+        case 'String':
         default:
-          cast_hash[row.column] = { type: String, default: "" };
+          cast_hash[row.column] = { type: String, default: '' };
           break;
       }
 
       if (row.column.match(/[a-z]+_occurrence/))
-        if (row.type != "Number") logger.warn(row.column + " is not of type Number");
+        if (row.type != 'Number') logger.warn(row.column + ' is not of type Number');
     });
 
     var alertSchema = new Schema(cast_hash, { use$SetOnSave: true });
 
-    alertSchema.pre("save", function(next) {
+    alertSchema.pre('save', function (next) {
       this.state_change = new Date();
       // set last_occurrenceif not already defined
       if (!this.last_occurrence) {
@@ -80,19 +80,19 @@ var loader = (exports.loader = function(options, cb) {
       next();
     });
 
-    alertSchema.virtual("flags").get(function() {
-      var flags = "";
+    alertSchema.virtual('flags').get(function () {
+      var flags = '';
       if (this.history && this.history.length > 0) {
-        flags += "H";
+        flags += 'H';
       }
       if (this.notes && this.notes.length > 0) {
-        flags += "N";
+        flags += 'N';
       }
       if (this.acknowledged && this.acknowledged === true) {
-        flags += "A";
+        flags += 'A';
       }
-      if (this.owner && this.owner != "") {
-        flags += "U";
+      if (this.owner && this.owner != '') {
+        flags += 'U';
       }
 
       return flags;
@@ -104,16 +104,16 @@ var loader = (exports.loader = function(options, cb) {
      * the first 8 chars of _id are the timestamp ar creation,
      * to the second.
      *
-     * it *should* match with first_occurrence if you remove 
+     * it *should* match with first_occurrence if you remove
      * the milliseconds which are also encoded into first_occurrence
      */
-    alertSchema.virtual("created_at").get(function() {
-      var _id = "" + this._id;
+    alertSchema.virtual('created_at').get(function () {
+      var _id = '' + this._id;
       var date = new Date(parseInt(_id.slice(0, 8), 16));
       return date;
     });
 
-    alertSchema.method("toClient", function() {
+    alertSchema.method('toClient', function () {
       /*
        * we munge the data that gets sent to the client such that
        * (first|last)_occurrence gets set corrcetly,
@@ -135,7 +135,7 @@ var loader = (exports.loader = function(options, cb) {
       return lert;
     });
 
-    alertSchema.method("toDetails", function() {
+    alertSchema.method('toDetails', function () {
       var lert = this.toObject();
 
       var notes = lert.notes || [];
@@ -147,14 +147,14 @@ var loader = (exports.loader = function(options, cb) {
       delete lert.notes;
 
       var details = [];
-      Object.keys(lert).forEach(function(key) {
+      Object.keys(lert).forEach(function (key) {
         details.push({ column: key, value: lert[key] });
       });
 
       return { details: details, notes: notes, history: history, timestamps: timestamps };
     });
 
-    alertSchema.method("toShellEnv", function() {
+    alertSchema.method('toShellEnv', function () {
       var lert = this.toObject();
       /*
        * when running via ExternalCommands we have the ability to select the columns we
@@ -175,6 +175,6 @@ var loader = (exports.loader = function(options, cb) {
       return lert;
     });
 
-    cb(null, mongoose.model("alerts", alertSchema));
+    cb(null, mongoose.model('alerts', alertSchema));
   });
 });

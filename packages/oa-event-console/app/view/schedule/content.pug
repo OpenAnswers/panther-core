@@ -1,0 +1,122 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+
+//- Render schedule table template
+
+
+script(id="rules-schedules-template" type="text/x-mustache-template")
+
+  thead
+    tr
+      th.col-xs-2 Name
+      th.col-xs-2 Start 
+      th.col-xs-2 End
+      th.col-xs-3.rules-schedule-weekdays
+        .container-fluid
+          .row
+            .col-xs-1.text-warning S
+            .col-xs-1 M
+            .col-xs-1 T
+            .col-xs-1 W
+            .col-xs-1 T
+            .col-xs-1 F
+            .col-xs-1.text-warning S
+      th.col-xs-1
+      th.col-xs-1
+
+
+  //-Content
+  //- Loop over `schedules` supplied by render function
+  |{{#schedules}}
+  tr.rules-schedule-row(id="schedule-{{uuid}}" data-id="{{uuid}}")
+    td.col-xs-2.rules-schedule-name {{name}}
+    td.col-xs-2.rules-schedule-start {{start}}
+    td.col-xs-2.rules-schedule-end {{end}}
+    td.col-xs-3.rules-schedule-weekdays
+      .container-fluid
+        .row
+          form.rules-schedule-edit-row(id="rules-schedule-edit-{{uuid}}" data-id="{{uuid}}")
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Sunday" "{{#Sunday}}checked{{/Sunday}}")
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Monday" "{{#Monday}}checked{{/Monday}}" )
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Tuesday" "{{#Tuesday}}checked{{/Tuesday}}" )
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Wednesday" "{{#Wednesday}}checked{{/Wednesday}}" )
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Thursday" "{{#Thursday}}checked{{/Thursday}}" )
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Friday" "{{#Friday}}checked{{/Friday}}" )
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Saturday" "{{#Saturday}}checked{{/Saturday}}" )
+    td.col-xs-1
+      button.rules-schedule-update-button.btn.btn-info.hidden(type="submit" value="Update") Update
+    td.col-xs-1
+      button.rules-schedule-delete-button.btn.btn-warning(type="submit" value="Delete") Delete
+    //-td.col-xs-1
+      button#rules-schedule-update-button.btn.btn-success(type="submit" value="Update" data) Update
+
+  |{{/schedules}}
+
+
+ 
+
+
+
+//- Container content
+table#rules-schedules-table.table.table-nested.table-hover
+
+
+form#rules-schedule-create
+  table#rules-schedule-create-table.table.table-nested.table-hover
+    thead
+      tr
+        th.col-xs-2 Name
+        th.col-xs-2 Start 
+        th.col-xs-2 End
+        th.col-xs-3.rules-schedule-weekdays
+          .container-fluid
+            .row
+              .col-xs-1.text-warning S
+              .col-xs-1 M
+              .col-xs-1 T
+              .col-xs-1 W
+              .col-xs-1 T
+              .col-xs-1 F
+              .col-xs-1.text-warning S
+
+    tr.rules-schedule-row
+      td.col-xs-2.rules-schedule-name 
+        input.form-control(type="text" name="schedule-name" placeholder="Give it a name")
+      td.col-xs-2.rules-schedule-start 
+          input.form-control(type="text" name="schedule-start" placeholder="08:00") 
+      td.col-xs-2.rules-schedule-end 
+          input.form-control(type="text" name="schedule-end" placeholder="08:00") 
+      td.col-xs-3.rules-schedule-weekdays
+        .container-fluid
+          .row.rules-schedule-edit-row
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Sunday" checked)
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Monday" checked)
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Tuesday" checked)
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Wednesday" checked)
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Thursday" checked)
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Friday" checked)
+            label.col-xs-1
+              input(class="rules-schedule-dow" type="checkbox" name="days" value="Saturday" checked)
+      td.col-xs-1
+      td.col-xs-1
+        button#rules-schedule-create-button.btn.btn-success(type="submit" value="Save") Add
+
+

@@ -50,10 +50,18 @@ test_messages =
     daemon: 'taskgated'
     daemon_pid: '94'
     structuredData:
+      timeQuality: 
+        tzKnown: '1'
+        isSynced: '1'
+        syncAccuracy: '666000'
       '123messageid':
         whatever: 'what what what'
         message: 'there is more in the structured data'
         more: 'this is more'
+      '456messageid':
+        msgparam1: 'message param1'
+      'zoo@123':
+        msgparam2: 'message param2'
 
 
 # Onto the tests
@@ -115,6 +123,77 @@ describe 'AgentSyslogd', ->
       expect( ev.get 'fieldname_that_goes_lower' ).to.equal 'testshouldbelower'
       expect( ev.get 'fieldname_that_goes_upper' ).to.equal 'TESTSHOULDBEUPPER'
 
+  describe 'Severity Mapping Strings', ->
+
+    the_syslog = null
+    ev = null
+
+    before ->
+      ev = new Event
+      ev.input = 
+        prival: 151
+        facilityID: 18
+        severityID: 7
+        facility: 'local2'
+        type: 'RFC5424'
+        host: 'desktop'
+        message: 'message!!!!!!'
+
+      the_syslog = AgentSyslogd.generate {
+        severity_map:
+          debug: 1
+          info: 1
+          notice: 1
+          warn: 2
+          err: 3
+          crit: 4
+          alert: 5
+          emerg: 5
+        field_map:
+          whatever: 'whatever'
+        identifier: '{node}:{severity}:{summary}'
+        rules: [
+            name: 1
+            match:
+              a_field: 'testing'
+            discard: true
+          ,
+            name: 2
+            equals:
+              b_field: 'exact'
+            set:
+              c_field: 'someothervalue'
+        ]
+ 
+      }
+    it 'has a severity map', ->
+      expect( the_syslog.severity_map() ).to.be.a 'object'
+    
+    it 'can map debug', ->
+      ev.input.severity = 'debug'
+      new_ev = the_syslog.run ev
+      expect( new_ev.get 'severity' ).to.equal 1
+
+    it 'can map info', ->
+      ev.input.severity = 'info'
+      new_ev = the_syslog.run ev
+      expect( new_ev.get 'severity' ).to.equal 1
+    # ...
+    it 'can map crit', ->
+      ev.input.severity = 'crit'
+      new_ev = the_syslog.run ev
+      expect( new_ev.get 'severity' ).to.equal 4
+
+    it 'can map alert', ->
+      ev.input.severity = 'alert'
+      new_ev = the_syslog.run ev
+      expect( new_ev.get 'severity' ).to.equal 5
+
+    it 'can map emerg', ->
+      ev.input.severity = 'emerg'
+      new_ev = the_syslog.run ev
+      expect( new_ev.get 'severity' ).to.equal 5
+
 
   describe 'Generates', ->
 
@@ -144,6 +223,15 @@ describe 'AgentSyslogd', ->
               b_field: 'exact'
             set:
               c_field: 'someothervalue'
+          ,
+            name: 3
+            match:
+              'input.type': 'RFC5424'
+            set:
+              d_field: 'syslog5424'
+              e_field: 'type={input.type}'
+              m_field: 'more={input.structuredData.123messageid.more}'
+              z_field: '{input.structuredData.zoo@123.msgparam2}'
           ]
       }
 
@@ -173,7 +261,32 @@ describe 'AgentSyslogd', ->
       new_ev = the_syslog.run ev
 
       expect( new_ev.get 'severity' ).to.equal -1
-      expect( new_ev.get_input 'message_id' ).to.equal '123messageid'
+      expect( new_ev.get_input 'structuredData' ).to.be.a 'object'
+      expect( new_ev.get_input 'structuredData' ).to.have.keys '123messageid', '456messageid', 'zoo@123', 'timeQuality'
+
+    it 'can get() structured data', ->
+      ev = new Event
+      ev.input = test_messages.structured1
+      new_ev = the_syslog.run ev
+
+      debug "EV1 %O", new_ev
+      expect( new_ev.get 'structuredData.123messageid.whatever').to.equal 'what what what'
+      expect( new_ev.get_input 'structuredData.123messageid.whatever').to.equal 'what what what'
+      expect( new_ev.get_any 'input.structuredData.123messageid.whatever').to.equal 'what what what'
+      expect( new_ev.get 'structuredData.zoo@123.msgparam2').to.equal 'message param2'
+      expect( new_ev.get_any 'input.structuredData.zoo@123.msgparam2').to.equal 'message param2'
+      expect( new_ev.get_input 'structuredData.zoo@123.msgparam2').to.equal 'message param2'
+
+    it 'can get() syslog type', ->
+      ev = new Event
+      ev.input = test_messages.structured1
+      new_ev = the_syslog.run ev
+
+      debug "EV1 %O", new_ev
+      expect( new_ev.get 'd_field').to.equal 'syslog5424'
+      expect( new_ev.get_input 'structuredData.123messageid.whatever').to.equal 'what what what'
+      expect( new_ev.get_any 'input.structuredData.123messageid.whatever').to.equal 'what what what'
+
 
     it 'can use a syslog rule 1', ->
       ev = Event.generate
@@ -192,3 +305,12 @@ describe 'AgentSyslogd', ->
       new_ev = the_syslog.run ev
 
       expect( new_ev.get 'c_field' ).to.equal 'someothervalue'
+
+    it 'can use a syslog rule 3', ->
+      ev = new Event
+      ev.input = test_messages.structured1
+      new_ev = the_syslog.run ev
+
+      debug "EV3 ", new_ev.input
+      expect( new_ev.get 'm_field').to.equal 'more=this is more'
+      expect( new_ev.get 'z_field').to.equal 'message param2'

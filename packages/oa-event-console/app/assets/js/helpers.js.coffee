@@ -160,7 +160,7 @@ class Helpers
     'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   @random_string = ( length, set = Helpers.default_rnd_set ) ->
-    _.sample(set, length).join ''
+    _.sampleSize(set, length).join ''
       
 
   # ###### delay( ms_Integer, fn_Function )

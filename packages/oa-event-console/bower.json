@@ -1,10 +1,7 @@
 {
   "name": "node-oa-event_console",
   "version": "1.1.0",
-  "authors": [
-    "Matt Hoyle <matt@deployable.co>",
-    "Vince Scott <vince@openanswers.co.uk>"
-  ],
+  "authors": ["Matt Hoyle <matt@deployable.co>", "Vince Scott <vince@openanswers.co.uk>"],
   "keywords": ["event"],
   "license": "MIT",
   "homepage": "http://openanswers.co.uk",
@@ -23,7 +20,7 @@
     "jquery-highlightRegex": "0.1.2",
     "jquery-timeago": "1.4.1",
     "jquery-ui": "1.11.4",
-    "lodash": "~3.10.1",
+    "lodash": "4.17.21",
     "metrics-graphics": "=2.6.0",
     "mocha": "~2.3.4",
     "mustache": "~2.0",

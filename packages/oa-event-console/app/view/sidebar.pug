@@ -1,0 +1,29 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+block script
+  != js('bower/jquery-timeago.js')
+
+block template
+  script(id="template-sidebar-entry" type="text/x-mustache-template")
+    include ./sidebar-entries/sidebar-entry
+
+  include ./sidebar-entries/activity-templates
+
+  script(id="template-sidebar-user-entry" type="text/x-mustache-template")
+    include ./sidebar-entries/sidebar-user-entry
+
+
+#sidebarContainer
+  #sidebar
+    #sidebarTitle
+      .icons 
+        #sidebar-minimise.glyphicon.glyphicon-triangle-right &nbsp;
+      .title ACTIVITY
+    .entries
+    .user-list
+      .users
+

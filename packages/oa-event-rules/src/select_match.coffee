@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -158,15 +158,15 @@ class @SelectMatch  extends SelectBaseFieldValue
   # ###### run( event_object )
   # Run this match against an event
   run: (event_obj) ->
-    debug "run: match", @field, @value, event_obj.get(@field)
+    debug "run: match field:[%o], value:[%o], field_value:[%o]", @field, @value, event_obj.get_any(@field)
 
     # Check for the field
-    unless event_obj.get(@field)?
-      debug 'run: match no field', @field
-      return false
+    field_value = event_obj.get_any(@field)
+    return false unless field_value?
+
 
     # Now check the value against the match
-    if match = "#{event_obj.get(@field)}".match(@value)
+    if match = "#{field_value}".match(@value)
       ret = true
       debug 'run: match was saved to event', match
       event_obj.match match

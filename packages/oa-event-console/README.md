@@ -2,22 +2,22 @@
 
 Front end for the event management system. Turn your data into manageable events
 
-Copyright (C) 2015, 2020, Open Answers Ltd http://www.openanswers.co.uk/
+Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 All rights reserved.
 
 ## Application Details
 
-The app uses [NodeJS](https://nodejs.org/), [Express4](http://expressjs.com/), [SocketIO](http://socket.io/), [MongoDB](https://www.mongodb.org/) and is written in Coffeescript.
+The app uses [NodeJS](https://nodejs.org/), [Express4](https://expressjs.com/), [SocketIO](https://socket.io/), [MongoDB](https://www.mongodb.org/) and is written in Coffeescript.
 
-[Bluebird](https://github.com/petkaantonov/bluebird) promises ([A+](https://promisesaplus.com/)) are used for asynchronous tasks and error handling.
+[Bluebird](https://bluebirdjs.com) promises ([A+](https://promisesaplus.com/)) are used for asynchronous tasks and error handling.
 
-[Jade](http://jade-lang.com/) templates are used on the server side and some [Mustache](https://mustache.github.io/) is use for client templates. The CSS is written in [Less](http://lesscss.org/).
+[PugJS](https://pugjs.org/) templates are used on the server side and some [Mustache](https://mustache.github.io/) is use for client templates. The CSS is written in [Less](https://lesscss.org/).
 
 [connect-assets](https://github.com/adunkman/connect-assets) is use for asset build pipeline to deliver Javascript and CSS to the client.
 
-[d3](http://d3js.org/) and [MetricsGraphics.js](http://metricsgraphicsjs.org/) are used for visualisation
+[d3](https://d3js.org/) and [MetricsGraphics.js](https://metricsgraphicsjs.org/) are used for visualisation
 
-[Mocha](https://mochajs.org/), [Chai](http://chaijs.com/) and [Webdriver.io](http://webdriver.io/) are used for testing.
+[Mocha](https://mochajs.org/), [Chai](https://chaijs.com/) are used for testing.
 
 ## Links
 
@@ -51,5 +51,3 @@ The app uses [NodeJS](https://nodejs.org/), [Express4](http://expressjs.com/), [
 `test/unit/*_spec.coffee` Unit tests.
 
 `test/func/*_spec.coffee` Functional tests.
-
-`test/webdriver/*_spec.coffee` Webdriver.io browser tests.

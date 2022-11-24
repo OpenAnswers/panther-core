@@ -1,12 +1,10 @@
 /*
- * Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
- * All rights reserved.  
+ * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * All rights reserved.
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
 
-
-
-var Class = require( 'joose' ).Class;
+var Class = require('joose').Class;
 
 /*
  * AgentRole
@@ -14,17 +12,15 @@ var Class = require( 'joose' ).Class;
  * and they have an 'eventCB' that gets called with parsed tokens from the monitor
  */
 
-var AgentRole = exports.Role = Class({
-
+var AgentRole = (exports.Role = Class({
   my: {
     has: {
-      properties: { is: 'ro', init: [] }
-    }
+      properties: { is: 'ro', init: [] },
+    },
   },
 
   has: {
-    props:    { is: 'ro', required: true },
-    eventCB:  { is: 'ro', required: true }
-  }
-
-});
+    props: { is: 'ro', required: true },
+    eventCB: { is: 'ro', required: true },
+  },
+}));

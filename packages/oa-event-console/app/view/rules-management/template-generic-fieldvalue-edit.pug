@@ -1,0 +1,26 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-generic-fieldvalue-edit" type="text/x-mustache-template")
+  .generic-fieldvalue-edit(id="{{ data.ueid }}-edit"
+  data-name="{{ data.name }}" class="{{ data.class }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.generic-fieldvalue-delete-button
+      .left
+        .generic-fixed-width
+          .generic-fieldvalue-field.edit-padding
+            input.form-control(type="text" value="{{data.field}}" placeholder="field"
+            class="generic-fieldvalue-field-{{data.field}}")
+        .generic-flexible-width
+          .generic-fieldvalue-value.edit-padding
+            input.form-control(type="text" value="{{data.value}}" placeholder="value"
+            class="generic-fieldvalue-value-{{data.field}}")
+        .generic-value-save-interface.hidden
+          .text-center
+            +button_word_save('group-save')
+            +button_word_cancel('group-cancel')
+          .margintop10

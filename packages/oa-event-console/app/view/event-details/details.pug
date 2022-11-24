@@ -1,0 +1,86 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="event-details-details-field-template" type="text/x-handlebars-template")
+  .entry
+    .title {{title}}
+    .content
+      |{{#content}}
+      |  {{content}}
+      |{{/content}}
+      |{{^content}}
+      |  None
+      |{{/content}}
+
+script(id="event-details-details-fields-template" type="text/x-handlebars-template")
+  .entry
+    .title Node
+    .content {{node}}
+  .entry
+    .title Owner
+    .content
+      |{{#owner}}
+      |  {{owner}}
+      |{{/owner}}
+      |{{^owner}}
+      |  None
+      |{{/owner}}
+  .entry
+    .title Severity
+    .content {{severity}}
+  .entry
+    .title Group
+    .content 
+      |{{#group}}
+      |  {{group}}
+      |{{/group}}
+      |{{^group}}
+      |  None
+      |{{/group}}
+
+script(id="event-details-details-summary-template" type="text/x-handlebars-template")
+  .entry
+    .title Summary
+    .content
+      | {{{summary}}}
+
+
+//- Container content for templates to be rendered into
+#event-details-modal-details
+  .row.info.margintop15
+
+    .col-xs-12
+      .card.card-event-details
+        #event-details-widget-summary.event-details-widget
+
+  .row.info.margintop15
+
+    .col-xs-3
+      .card.card-event-details
+        #event-details-widget-field-node.event-details-widget
+
+    .col-xs-3
+      .card.card-event-details
+        #event-details-widget-field-owner.event-details-widget
+
+    .col-xs-3
+      .card.card-event-details
+        #event-details-widget-field-severity.event-details-widget
+
+    .col-xs-3
+      .card.card-event-details
+        #event-details-widget-field-group.event-details-widget
+
+  .row.info.margintop15
+
+    .col-xs-12
+      #event-details-widget-occurrences.card.card-event-details
+        .title Occurrences
+        .event-details-occurrences-widget
+          #ev-occurrences.canvas-holder
+            
+
+  .row.info.margintop15

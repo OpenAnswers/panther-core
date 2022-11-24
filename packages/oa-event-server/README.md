@@ -3,7 +3,7 @@ Panther Event Server
 
 Storage and Management of events.
 
-Copyright (C) 2015, Open Answers Ltd http://www.openanswers.co.uk/
+Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 All rights reserved.
 
 ## Application Details

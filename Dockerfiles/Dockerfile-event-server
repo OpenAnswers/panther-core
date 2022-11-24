@@ -1,4 +1,4 @@
-FROM panther-builder:12.21.0-alpine3.12 as builder
+FROM panther-builder:gallium-alpine3.15 as builder
 ARG BUILDTIME_ENV=production
 
 #RUN npm install -g yarn
@@ -37,9 +37,9 @@ RUN yarn run lerna run build
 RUN yarn install --production=true
 
 RUN find $BUILD_DIR/packages -type f -exec chmod ugo+r '{}' \; && \
-    find $BUILD_DIR/packages -type d -exec chmod ugo+rx '{}' \;
+  find $BUILD_DIR/packages -type d -exec chmod ugo+rx '{}' \;
 
-FROM panther-runtime:12.21.0-alpine3.12
+FROM panther-runtime:gallium-alpine3.15
 LABEL component="panther/server"
 
 COPY --from=builder /build/node_modules /app/node_modules

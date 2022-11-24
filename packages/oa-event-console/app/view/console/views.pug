@@ -1,0 +1,12 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+each view in filters
+  li
+    a.view-link(
+      href=`#/view/${view._id}`
+      data-viewid=`${view._id}`
+      data-viewname=`${view.name}`) #{view.name}

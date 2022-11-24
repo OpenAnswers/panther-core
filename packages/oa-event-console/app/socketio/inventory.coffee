@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -50,13 +50,14 @@ SocketIO.route_return 'inventory::delete', ( socket, request ) ->
 
   # Setup a query
   remove_query = _id: $in: object_ids
+  debug 'deleting many inventory with: ', remove_query
 
-  Inventory.removeAsync(remove_query)
+  Inventory.deleteMany remove_query
   .then ( removed_docs )->
-    debug "inventory deleted", removed_docs.result.n
+    debug "inventory deleted", removed_docs.n
     doc =
       ids: validated_ids
-      rows: removed_docs.result.n
+      rows: removed_docs.n
   .catch (err)->
     logger.error "inventory::delete", err
     throw new Errors.ValidationError('Incorrect format')

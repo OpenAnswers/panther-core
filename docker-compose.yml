@@ -1,7 +1,7 @@
 version: '3'
 services:
   mongodb:
-    image: mongo:3.2.16
+    image: mongo:3.6.23
     container_name: mongo
     hostname: mongodb
     restart: unless-stopped
@@ -11,7 +11,7 @@ services:
       - '27017'
 
   event-console:
-    image: openanswers/panther-console:4
+    image: openanswers/panther-console:4.1
     container_name: event-console
     hostname: console
     restart: unless-stopped
@@ -31,7 +31,7 @@ services:
       - rules-vol:/app/rules:rw
 
   event-server:
-    image: openanswers/panther-server:4
+    image: openanswers/panther-server:4.1
     container_name: event-server
     hostname: server
     restart: unless-stopped
@@ -45,7 +45,7 @@ services:
       - rules-vol:/app/rules:ro
 
   event-monitors-http:
-    image: openanswers/panther-monitors:4
+    image: openanswers/panther-monitors:4.1
     container_name: event-monitors-http
     hostname: event-monitors-http
     restart: unless-stopped
@@ -59,7 +59,7 @@ services:
       - rules-vol:/app/rules:ro
 
   event-monitors-syslogd:
-    image: openanswers/panther-monitors:4
+    image: openanswers/panther-monitors:4.1
     container_name: event-monitors-syslogd
     hostname: event-monitors-syslogd
     restart: unless-stopped

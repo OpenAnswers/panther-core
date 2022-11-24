@@ -1,0 +1,28 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+#console-support-modal.modal.fade
+  .modal-dialog.modal-md
+    .modal-content
+      table.table.table-nested
+        tr
+          td.h4.text-center Support
+        tr
+          td.text-center If you require any assistance, please first check the 
+            | Documentation found at the top of the page to see if that can answer your question. 
+            br
+            | If you cannot find the answer to your question you can get in contact with us using one of the following methods: 
+        tr
+          td.text-center Email: 
+            a(href="mail-to:panther-support@openanswers.co.uk") Panther Support 
+        tr
+          td.text-center
+            | Phone: +44 (0)208 864 6999
+
+      .modal-footer.dropup
+        .btn-group
+          button.btn.btn-default(data-dismiss='modal') Close

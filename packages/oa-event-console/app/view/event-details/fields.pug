@@ -1,0 +1,19 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+//- Render templates
+script(id="event-details-fields-heading-template" type="text/x-handlebars-template")
+  thead
+    tr
+      th.col-xs-3 Field
+      th.col-xs-9 Value
+script(id="event-details-fields-row-template" type="text/x-handlebars-template")
+  tr
+    td.col-xs-3 {{name}}
+    td.col-xs-9 {{value}}
+
+//- Container content
+table#event-details-modal-fields-table.table.table_nested.table-hover

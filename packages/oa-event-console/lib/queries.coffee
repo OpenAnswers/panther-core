@@ -1,6 +1,6 @@
 
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -33,20 +33,22 @@ class Stuff
 
 @promisedFilterSummary = ( )->
   promise = Promise.props
-    sev_counts: Mongoose.alerts.aggregateAsync
+    sev_counts: Mongoose.alerts.aggregate([
       $group:
         _id: "$severity"
         total: { $sum: 1 }
-    , {$sort: { _id: 1 }}
-    sev_counts_group: Mongoose.alerts.aggregateAsync
+    ]).sort( {_id: 1 } ).toArray()
+
+    sev_counts_group: Mongoose.alerts.aggregate([
       $group:
         _id:
           group: "$group"
           severity: "$severity"
         total: { $sum: 1 }
-    , {$sort: { _id: 1 }}
-    severities:
-      Severity.getSeveritiesWithIdAsync()
+    ]).sort( {_id:1}).toArray()
+
+    severities: 
+      Severity.getSeveritiesWithId()
   promise
 
 module.exports.promisedFilterSummary = @promisedFilterSummary

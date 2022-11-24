@@ -27,7 +27,10 @@ class DeleteAll
       if err
         Message.error "Deletion failed"
       else
-        Message.info_label "All events were Deleted (count=#{response.rows})"
+        if response.rows > 0
+          Message.info_label "All events were Deleted (count=#{response.rows})"
+        else
+          Message.info_label "No events were Deleted" 
     @hide_confirmation()
 
   # Send Delete to server

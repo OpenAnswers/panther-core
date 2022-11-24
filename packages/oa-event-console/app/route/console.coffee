@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -59,20 +59,20 @@ router.get '/', ( req, res, next ) ->
   # Promise all the queries we need for the setup of the console
   Promise.props
     users:
-      User.getUserListAsync()
+      User.getUserList()
 
     filters:
       Filters.find({ user: req.user.username })
       .sort({ name: 1 })
       .select( '_id name default' )
-      .execAsync()
+      .exec()
 
     default_filter:
-      Filters.findOneAsync { user: req.user.username, default: true },
+      Filters.findOne { user: req.user.username, default: true },
         { _id: 1, name: 1 }
 
     severities:
-      Severity.getSeveritiesWithIdAsync()
+      Severity.getSeveritiesWithId()
 
   # Now render it
   .then ( results ) ->
@@ -144,7 +144,7 @@ router.get '/', ( req, res, next ) ->
 
   # Severity css
 router.get '/severities.css', ( req, res, next ) ->
-  Severity.findAsync { system: true }, { _id: 0, value: 1, label: 1, background: 1 }
+  Severity.find { system: true }, { _id: 0, value: 1, label: 1, background: 1 }
   .then ( docs ) ->
     debug 'sevs', docs
     res.set 'Content-Type', 'text/css'

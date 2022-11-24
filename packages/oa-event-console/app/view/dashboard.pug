@@ -1,0 +1,100 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _template
+
+block css
+  link(rel='stylesheet', href='/console/severities.css', type='text/css' )
+  != css('css/w2ui.css')
+  != css('css/dashboard.css')
+
+block template
+  script(id="template-activity-stream-entry" type="text/x-mustache-template")
+    include dashboard-widgets/activity-stream-entry
+  script(id="template-news-entry" type="text/x-mustache-template")
+    include dashboard-widgets/news-stream-entry
+  script(id="template-inventory-stream-entry" type="text/x-mustache-template")
+    include dashboard-widgets/inventory-stream-entry
+
+block nav
+  - var nav_location = 'dashboard'
+  include _nav_generic
+
+
+block content
+  include ./dashboard-widgets/inventory-context
+
+  .header
+  .container
+    .card.card-dashboard-jumbo
+      .inner
+        .row
+          .col-sm-4
+            #console-name #{config.app.console}
+            #welcome Welcome, #{user.username}
+            #console-button
+              a(href="/console", type="button" value='Open Console').btn.btn-accent Open Console
+          .col-sm-8
+            .row
+              .col-sm-12.col-centered.margintop10
+                .hidden-sm.col-md-2.col-md-offset-1.dashboard-metric.dashboard-metric-indeterminate
+                  .number.number-indeterminate 0
+                  .label-severity.label-severity-purple
+                    a.label-severity-text(href="/console#/severity/Indeterminate") Indeterminate
+
+                .hidden-sm.col-md-2.dashboard-metric.dashboard-metric-warning
+                  .number.number-warning 0
+                  .label-severity.label-severity-blue
+                      a.label-severity-text(href="/console#/severity/Warning") Warning
+
+                .col-sm-4.col-md-2.dashboard-metric.dashboard-metric-minor
+                  .number.number-minor 0
+                  .label-severity.label-severity-yellow
+                      a.label-severity-text(href="/console#/severity/Minor") Minor
+                    
+                .col-sm-4.col-md-2.dashboard-metric.dashboard-metric-major
+                  .number.number-major 0
+                  .label-severity.label-severity-orange
+                      a.label-severity-text(href="/console#/severity/Major") Major
+
+                .col-sm-4.col-md-2.dashboard-metric.dashboard-metric-critical
+                  .number.number-critical 0
+                  .label-severity.label-severity-red
+                      a.label-severity-text(href="/console#/severity/Critical") Critical
+
+             
+    .row.info.margintop15
+      .col-sm-6
+        .card.card-dashboard-info
+          .inner
+            .title
+              p Event Groups
+            .row.margintop15(style="margin-left: 0px; margin-right: 0px; margin-bottom: 10px;")
+              .col-sm-12
+                #charts_svg_1
+                #charts_svg_2
+      .col-sm-6
+        .card.card-dashboard-info
+          .inner
+            .title
+              p Activity Stream 
+            .activity-widget
+      .col-sm-6.margintop15
+        .card.card-dashboard-info
+          .inner
+            .title
+              p Inventory
+            #inventory-grid.grid(style="width: 100%; height: 250px;")
+                
+
+block script
+  != js('js/charts')
+  != js('js/dashboard')
+  != js('js/widget-activity-stream')
+  != js('js/widget-summary-stream')
+  != js('js/widget-inventory-stream')
+  != js('js/w2ui.js')
+

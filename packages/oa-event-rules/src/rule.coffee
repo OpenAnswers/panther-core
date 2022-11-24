@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -98,12 +98,13 @@ class @Rule
 
     # Now we run the select against the object
     # If true we run the action
-    debug 'run test select', @select.toString(), options
     if @select.run(event_obj, options) is true
       event_obj.add_matched { from: 'RuleSelector', uuid: @uuid, name: @name }
-      debug 'HIT rule - ', @uuid
-      debug 'run action', @action.toString(), options
+      debug 'Select matched for [%o] [%o] ✔️', @uuid, @select.toString()
+      debug 'run action ', @action.toString(), options
       @action.run event_obj, options
+    else 
+      debug 'Selected skipped for [%o] [%o] ❌', @uuid, @select.toString()
       
     event_obj
 

@@ -246,6 +246,45 @@ describe 'Select', ->
       expect( ins.selects[0] ).to.be.an.instanceof SelectEquals
       done()
 
+    it 'generates an object from two definitions', (done) ->
+      ins = Select.generate
+        equals:
+          fieldname: 'value'
+          altname: 'altvalue'
+      expect( ins ).to.be.an.instanceof Select
+      expect( ins.run ).to.exist
+      debug "TD %O", ins.selects
+      expect( ins.selects[0] ).to.be.an.instanceof SelectEquals
+      expect( ins.selects[1] ).to.be.an.instanceof SelectEquals
+      done()
+
+
+    it 'generates an object from one definition with two possibilities', (done) ->
+      ins = Select.generate
+        equals:
+          fieldname: [ 'value1', 'value2' ]
+      expect( ins ).to.be.an.instanceof Select
+      expect( ins.run ).to.exist
+      debug "TD %O", ins.selects
+      expect( ins.selects[0] ).to.be.an.instanceof SelectEquals
+      done()
+
+    it 'generates an object from two definition with two possibilities', (done) ->
+      ins = Select.generate
+        equals:
+          fieldname: [ 'value1', 'value2' ]
+          altname: [ 'altvalue1', 'altvalue2' ]
+      expect( ins ).to.be.an.instanceof Select
+      expect( ins.run ).to.exist
+      debug "TD %O", ins.selects
+      expect( ins.selects[0] ).to.be.an.instanceof SelectEquals
+      expect( ins.selects[1] ).to.be.an.instanceof SelectEquals
+      done()
+
+
+
+
+
     it 'error nicely on missing params', (done) ->
       fn = -> new SelectEquals
       expect( fn ).to.throw( 'param 1: field' )
@@ -256,15 +295,28 @@ describe 'Select', ->
       expect( fn ).to.throw( 'param 2: value' )
       done()
 
-    it 'can run a successful match', (done) ->
+    it 'can run a successful match (single)', (done) ->
       ev = Event.generate fieldname: 'mvalue'
       matcher = new SelectEquals 'fieldname', 'mvalue'
       expect( matcher.run ev ).to.equal( true )
       done()
 
-    it 'can run a failed match', (done) ->
+    it 'can run a failed match (single)', (done) ->
       ev = Event.generate fieldname: 'nope'
       matcher = new SelectEquals 'fieldname', 'fvalue'
+      expect( matcher.run ev ).to.equal( false )
+      done()
+
+
+    it 'can run a successful match (many)', (done) ->
+      ev = Event.generate fieldname: 'mvalue'
+      matcher = new SelectEquals 'fieldname', [ 'notme', 'also not me', 'mvalue' ]
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can run a failed match (many)', (done) ->
+      ev = Event.generate fieldname: 'nope'
+      matcher = new SelectEquals 'fieldname', [ 'fvalue', 'another fvalue', 'last_chance' ]
       expect( matcher.run ev ).to.equal( false )
       done()
 
@@ -670,4 +722,131 @@ describe 'Select', ->
       fn = -> Select.generate
         name: 'select'
       expect( fn ).to.throw( Errors.ValidationError, /Failed to generate select/ )
+      done()
+
+  describe 'Select from extra fields', ->
+
+    ev = null
+    source_event =
+      node: 'localhost'
+      tag: 'tagged'
+      extra: 'stuff'
+      addendum: 'additional info'
+
+    beforeEach ->
+      ev = Event.generate source_event
+
+    # starts_with
+    it 'can use additional extra data for StartsWith', (done) ->
+      matcher = new SelectStartsWith 'extra', 'stu'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can use additional addendum data for StartsWith', (done) ->
+      matcher = new SelectStartsWith 'addendum', 'addit'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can use additional data for StartsWith (input)', (done) ->
+      matcher = new SelectStartsWith 'input.extra', 'stu'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can use additional data for StartsWith (original)', (done) ->
+      matcher = new SelectStartsWith 'original.extra', 'stu'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+
+    # ends_with
+    it 'can use additional data for EndsWith (input)', (done) ->
+      matcher = new SelectEndsWith 'input.extra', 'tuff'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can use additional data for EndsWith (original)', (done) ->
+      matcher = new SelectEndsWith 'original.extra', 'tuff'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+
+    # equals
+    it 'can use additional data for Equals (input)', (done) ->
+      matcher = new SelectEquals 'input.extra', 'stuff'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can use additional data for Equals (original)', (done) ->
+      matcher = new SelectEquals 'original.extra', 'stuff'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    # field_exists
+    it 'can use additional data for FieldExists (input.extra)', (done) ->
+      matcher = new SelectFieldExists 'input.extra'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can detect missing additional data for FieldExists (input)', (done) ->
+      matcher = new SelectFieldExists 'input.bogus'
+      expect( matcher.run ev ).to.equal( false )
+      done()
+
+
+    it 'can use additional data for FieldExists (original.extra)', (done) ->
+      matcher = new SelectFieldExists 'original.extra'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'can detect missing additional data for FieldExists (original)', (done) ->
+      matcher = new SelectFieldExists 'original.bogus'
+      expect( matcher.run ev ).to.equal( false )
+      done()
+
+
+
+    # field_missing
+    it 'can use additional data for FieldMissing (input.extra)', (done) ->
+      matcher = new SelectFieldMissing 'input.extra'
+      expect( matcher.run ev ).to.equal( false )
+      done()
+
+    it 'can detect missing additional data for FieldMissing (input)', (done) ->
+      matcher = new SelectFieldMissing 'input.bogus'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+
+    it 'can use additional data for FieldMissing (original.extra)', (done) ->
+      matcher = new SelectFieldMissing 'original.extra'
+      expect( matcher.run ev ).to.equal( false )
+      done()
+
+    it 'can detect missing additional data for FieldMissing (original)', (done) ->
+      matcher = new SelectFieldMissing 'original.bogus'
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+
+    # match
+    it 'can match on extra data in the input', (done) ->
+      matcher = new SelectMatch 'input.extra', [ '/^st/', 'uff$/' ]
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'cant match on extra data in the input', (done) ->
+      matcher = new SelectMatch 'input.extra', [ '/^nst/', 'nuff$/' ]
+      expect( matcher.run ev ).to.equal( false )
+      done()
+
+
+
+    it 'can match on addendum data in the input', (done) ->
+      matcher = new SelectMatch 'input.addendum', [ '/^add/', 'info$/' ]
+      expect( matcher.run ev ).to.equal( true )
+      done()
+
+    it 'cant match on addendum data in the input', (done) ->
+      matcher = new SelectMatch 'input.addendum', [ '/^nadd/', 'ninfo$/' ]
+      expect( matcher.run ev ).to.equal( false )
       done()

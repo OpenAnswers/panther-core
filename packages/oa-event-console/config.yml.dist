@@ -30,7 +30,7 @@ app:
 
 event_server:
   host: localhost
-  port: 4003
+  port: 4002
 
 event_monitors:
   syslogd:

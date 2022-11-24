@@ -1,0 +1,15 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-select-initial-view" type="text/x-mustache-template")
+  .select-entry-view(data-select-id="{{ data.verb }}")
+    .inner
+      span.select-view-text {{ data.friendly_before }}
+      span.select-view-text.select-operator-view {{ data.verb_english }}&nbsp;
+      span.select-view-text {{ data.friendly_after }}
+
+
+

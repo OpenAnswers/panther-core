@@ -1,0 +1,128 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+//- Button groups for an input gorup
+mixin button_save_cancel( id )
+  .input-group-btn
+    +button_only_save(id + "-save").rule-group-save&attributes(attributes)
+    +button_only_delete(id + "-cancel").rule-group-delete&attributes(attributes)
+
+mixin button_save_cancel_delete( id )
+  .input-group-btn
+    +button_only_save(id + "-save").rule-group-save&attributes(attributes)
+    +button_only_cancel(id + "-cancel").rule-group-cancel&attributes(attributes)
+    +button_only_delete(id + "-delete").rule-group-delete&attributes(attributes)
+
+
+//- The for normal buttons, no variation
+
+mixin button_only_save( id )
+  button.btn.btn-success.button-save.mixin-button(type="button" value='Save'
+    title="Save"
+    data-id=`${id}`)&attributes(attributes)
+    span.glyphicon.glyphicon-ok(aria-hidden="true" title="Save")
+
+mixin button_only_add( id )
+  button.btn.btn-success.button-save.mixin-button(type="button" value='Add'
+    title="Add"
+    data-id=`${id}`)&attributes(attributes) 
+    span.glyphicon.glyphicon-ok(aria-hidden="true" title="Add")
+
+mixin button_only_cancel( id )
+  button.btn.btn-primary.button-cancel.mixin-button(type="button" value='Cancel'
+    title="Cancel"
+    data-id=`${id}`)&attributes(attributes)
+    span.glyphicon.glyphicon-remove.mixin-button(aria-hidden="true" title="Cancel")
+
+mixin button_only_delete( id )
+  button.btn.btn-danger.button-delete.mixin-button(type="button" value='Delete'
+    title="Delete"
+    data-id=`${id}`)&attributes(attributes)
+    span.glyphicon.glyphicon-trash(aria-hidden="true" title="Delete")
+
+
+//- Small buttons with only glyphs
+
+mixin button_save( id, context )
+  - var context = typeof(context)==='undefined' ? '' : " "+context  
+  button.btn.btn-success.button-save.mixin-button.marginright5(type="button"
+    title=`Save${context}` value=`Save${context}` class=`${margin_class}`
+    data-id=`${id}`)&attributes(attributes)
+    span.glyphicon.glyphicon-ok(aria-hidden="true" title=`Save${context}`)
+
+mixin button_add( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-success.button-save.mixin-button.marginright5(type="button"
+    title=`Add${context}`
+    value=`Add${context}`
+    data-id=`${id}`)&attributes(attributes) 
+    span.glyphicon.glyphicon-ok(aria-hidden="true" title=`Add${context}`)
+
+mixin button_cancel( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-primary.button-cancel.mixin-button.marginright5(type="button"
+    title=`Cancel${context}`
+    value=`Cancel${context}`
+    data-id=`${id}`)&attributes(attributes)
+    span.glyphicon.glyphicon-remove(aria-hidden="true" title=`Cancel${context}`)
+
+mixin button_delete( id, context)
+  +button_delete_title(id, context, "Delete " + context)
+
+mixin button_delete_title( id, context, title )
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-danger.button-delete.mixin-button.marginright5(type="button"
+    title=title value='Delete'
+    data-id=`${id}`)&attributes(attributes)
+    span.glyphicon.glyphicon-trash(aria-hidden="true" title=title)
+
+
+//- Buttons with words and glyph
+
+mixin button_word_yes( id, context)
+  - var context = typeof(context)==='undefined' ? 'Yes' : " "+context
+  button.btn.btn-success.button-yes.mixin-button.marginright5(type="button"
+    title=`${context}`
+    data-id="${id}")&attributes(attributes) #{context} &nbsp;#[span.glyphicon.glyphicon-ok(aria-hidden="true" title="#{context}")]
+
+mixin button_word_no( id, context)
+  - var context = typeof(context)==='undefined' ? 'No' : " "+context
+  button.btn.btn-warning.button-no.mixin-button.marginright5(type="button"
+    title=`${context}`
+    data-id=`${id}`)&attributes(attributes) #{context} &nbsp;#[span.glyphicon.glyphicon-remove(aria-hidden="true" title="#{context}")]
+
+
+mixin button_word_save( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-success.button-save.mixin-button.marginright5(type="button"
+    title=`Save${context}`
+    data-id=`${id}`)&attributes(attributes) Save#{context} &nbsp;#[span.glyphicon.glyphicon-ok(aria-hidden="true" title="Save#{context}")]
+
+mixin button_word_update( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-success.button-update.mixin-button.marginright5(type="button"
+    title=`Update${context}`
+    data-id=`${id}`)&attributes(attributes) Update#{context} &nbsp;#[span.glyphicon.glyphicon-ok(aria-hidden="true" title="Update#{context}")]
+
+
+mixin button_word_add( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-success.button-save.mixin-button.marginright5(type="button"
+    title=`Add${context}`
+    data-id=`${id}`)&attributes(attributes) Add#{context} &nbsp;#[span.glyphicon.glyphicon-ok(aria-hidden="true" title="Add#{context}")]
+
+mixin button_word_cancel( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-primary.button-cancel.mixin-button.marginright5(type="button"
+    title=`Cancel${context}`
+    data-id=`${id}`)&attributes(attributes) Cancel#{context} &nbsp;#[span.glyphicon.glyphicon-remove(aria-hidden="true" title="Cancel#{context}")]
+
+mixin button_word_delete( id, context)
+  - var context = typeof(context)==='undefined' ? '' : " "+context
+  button.btn.btn-danger.button-delete.mixin-button.marginright5(type="button"
+    title=`Delete${context}` value="Delete#{context}"
+    data-id=`${id}`)&attributes(attributes) Delete#{context} &nbsp;#[span.glyphicon.glyphicon-trash(aria-hidden="true" title="Delete#{context}")]
+

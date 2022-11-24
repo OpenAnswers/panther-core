@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -64,14 +64,15 @@ router.post '/requested', ( req, res )->
 
   validate_form().then (validatedBody)->
     debug 'validated, finding user', validatedBody.email
-    User.findOneAsync email: validatedBody.email
+    email = validatedBody.email?.toLowerCase()
+    User.findOne email: email
   .then ( user )->
     debug 'query got user', user
     unless user
       # This is not a known email address, so log the attempt
       throw new NoUserError("#{req.body.email}")
     user.generate_token()
-    user.saveAsync()
+    user.save()
   .then ( user )->
     debug 'User saved', user
     logger.info 'Password resetting started for user id [%s]', user.id
@@ -151,9 +152,8 @@ router.get '/reset/:token', ( req, res )->
   validatedData = validation.value
 
   debug 'validatedData: ', validatedData
-  User.findOneAsync "reset.token": validatedData
+  User.findOne "reset.token": validatedData
   .then ( user )->
-    logger.warn 'Attempting password reset for user id [%s]', user.id
     unless user
       res.render 'password-requested',
         title: 'Password Token'
@@ -161,6 +161,7 @@ router.get '/reset/:token', ( req, res )->
           error: 'Token not found, try again'
       throw new Errors.ValidationError 'Token not found, try again'
 
+    logger.warn 'Attempting password reset for user id [%s]', user.id
     res.render 'password-reset',
       title: 'Password Reset'
       token: user.reset.token
@@ -211,7 +212,7 @@ router.post '/reset', ( req, res )->
         title: 'Password Reset'
         token: value.token
 
-  User.findOneAsync "reset.token": value.token
+  User.findOne "reset.token": value.token
   .then ( user )->
     unless user
       logger.warn 'Password reset token did not exist [%s]', value.token
@@ -221,13 +222,13 @@ router.post '/reset', ( req, res )->
           error: 'Token not found'
       throw new Errors.ValidationError 'Invalid token, try again'
 
-    user.setPasswordAsync value.password
+    user.setPassword value.password
 
   .then ( user )->
     # expire the token
     user.reset =
       expires: moment().toDate()
-    user.saveAsync()
+    user.save()
 
   .then ( user )->
     logger.info 'Password has been reset for user id [%s]', user.id

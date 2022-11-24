@@ -1,0 +1,19 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-select-fieldvalueor-view" type="text/x-mustache-template")
+  .select-entry-view.scrollable(data-select-id="{{ data.verb }}" class="action-{{ data.verb }}")
+    .inner
+      span.select-view-text The field&nbsp;
+      span.select-view-text.select-field-view #[code {{ data.field }}]
+      span.select-view-text &nbsp;{{ data.friendly_before }}
+      span.select-view-text.select-operator-view {{ data.verb_english }}
+      span.select-view-text &nbsp;{{ data.friendly_after }}
+      //-| {{#data.value}}
+      span.select-view-value.select-value-view {{{ data.values_string }}}
+      //-| {{/data.value}}
+
+

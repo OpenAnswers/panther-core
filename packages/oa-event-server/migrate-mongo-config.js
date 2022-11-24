@@ -1,10 +1,11 @@
 // In this file you can configure migrate-mongo
 
-let MONGO_URL = process.env['MONGO_URL'] || 'mongodb://mongodb:27017/panther';
+let MONGO_URL = process.env['MONGO_URL'] || 'mongodb://mongodb:27017';
 
 const config = {
   mongodb: {
     url: MONGO_URL,
+    databaseName: 'panther',
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting
