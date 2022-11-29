@@ -1,6 +1,6 @@
 {
   "name": "panther-core",
-  "version": "4.0.11-alpha",
+  "version": "4.1.0",
   "description": "Core Panther products",
   "main": "index.js",
   "private": true,
