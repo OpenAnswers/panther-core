@@ -87,14 +87,14 @@ describe 'Groups', ->
     it 'should rename and match the original yaml', ->
       groups.update_group_name "More gro#$!-_up", "Other"
       expect( groups.to_yaml_obj() )
-        .to.have.deep.property '_order[0]'
+        .to.have.nested.property '_order[0]'
         .and.to.equal 'Other'
       expect( groups.to_yaml_obj() )
-        .to.have.deep.property '_order[1]'
+        .to.have.nested.property '_order[1]'
         .and.to.equal 'Test group 1'
       expect( groups.to_yaml_obj() )
-        .to.have.deep.property 'Other.select'
-        .and.to.equal none: true
+        .to.have.deep.nested.property 'Other.select',
+          none: true
 
   describe 'the groups order array', ->
     

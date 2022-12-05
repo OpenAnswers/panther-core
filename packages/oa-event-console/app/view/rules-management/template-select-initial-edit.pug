@@ -1,0 +1,16 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-select-initial-edit" type="text/x-mustache-template")
+  .select-entry-edit.collapse(data-select-id="{{data.verb}}" class="action-{{ data.verb }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.select-delete-button
+      .left
+        .selects-fixed-width
+          .select-operator.edit-padding
+            input.form-control(type="text" value="" name='selector' placeholder="Choose Selector"
+            class="input-verb-select-{{ data.verb }}-operator")

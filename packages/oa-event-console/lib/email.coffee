@@ -1,6 +1,6 @@
 
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -18,7 +18,7 @@
 # npm modules
 Promise           = require 'bluebird'
 nodemailer        = require 'nodemailer'
-jade              = require 'jade'
+pug               = require 'pug'
 _                 = require 'lodash'
 
 # node modules
@@ -40,8 +40,12 @@ config            = require('./config').get_instance()
 #     pass: 'userpass'
 
 transport_options =
+  secure: config.smtp.secure ? false
+  ignoreTLS: config.smtp.ignoreTLS ? true
   port: config.smtp.port || 25
   host: config.smtp.host || 'localhost'
+
+debug "transport options", transport_options
 
 transport = Promise.promisifyAll nodemailer.createTransport( transport_options )
 
@@ -58,7 +62,7 @@ compiled_templates = {}
 # Should support text as well but found it difficult to build
 # The "if text file exists, build it" flow with promises
 
-# `template.name`:  Name of the template to lookup, without the .jade
+# `template.name`:  Name of the template to lookup, without the .pug
 # `template.values`: Values to pass into template rendering
 
 build_template = ( template )->
@@ -67,11 +71,11 @@ build_template = ( template )->
   template.values.url ?= config.app.url
   template.values.support_url ?= config.app.support_url
 
-  html_file = config.path.join config.path.emails, "#{template.name}.jade"
-  #text_file = config.path.join config.path.emails, "#{template.name}.text.jade"
+  html_file = config.path.join config.path.emails, "#{template.name}.pug"
+  #text_file = config.path.join config.path.emails, "#{template.name}.text.pug"
 
   unless compiled_templates[html_file]
-    compiled_templates[html_file] = jade.compileFile html_file
+    compiled_templates[html_file] = pug.compileFile html_file
 
   resolve = compiled_templates[html_file] template.values
 
@@ -81,7 +85,7 @@ build_template = ( template )->
 # Adds in some extra log handling to an email
 
 # `email_options`: from nodemailer
-# `email_options.template:` Render a jade template for html content
+# `email_options.template:` Render a pug template for html content
 
 send_email_Async = ( email_options )->
   new Promise ( resolve, reject )->

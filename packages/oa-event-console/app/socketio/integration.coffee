@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -35,7 +35,7 @@ SocketIO.route 'integration::read', ( socket, data, socket_cb ) ->
 # Update
 SocketIO.route 'integration::update', ( socket, data, socket_cb ) ->
   logger.info 'Updating integration %j', data, socket.id, socket.ev.user()
-  Integrations.updateAsync data
+  Integrations.update data
   .then ( response ) ->
     debug 'update response', response
     socket_cb response
@@ -50,7 +50,7 @@ SocketIO.route 'integration::update', ( socket, data, socket_cb ) ->
 # Delete
 SocketIO.route 'integration::delete', ( socket, data, socket_cb ) ->
   logger.info 'Deleting integration', socket.id, data
-  Integrations.deleteAsync data._id
+  Integrations.deleteOne _id: data._id
   .then ( response ) ->
     socket.ev.info "Deleted integration #{data._id}"
     socket_cb response

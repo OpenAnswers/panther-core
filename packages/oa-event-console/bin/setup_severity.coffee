@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -117,7 +117,7 @@ Mongoose.db.once 'open', (cb) ->
   logger.info 'Script connection open', config.mongodb.uri
 
   # See if we have any severities
-  Severity.findAsync system: true
+  Severity.find system: true
   .then ( docs )->
     if docs.length > 0
       logger.warn 'We already have severities [%s], no need to setup', docs.length
@@ -126,7 +126,7 @@ Mongoose.db.once 'open', (cb) ->
     # In case we needed a remove, this is a bit of a hack to Promisify around 
     # the if. `false` will be returned if `docs.length` is 0
     logger.warn 'Removing system severities', docs.length
-    Severity.removeAsync system: true
+    Severity.deleteMany system: true
   .then ( nothing )->
 
     logger.info 'Setting up default severities in database'
@@ -136,7 +136,7 @@ Mongoose.db.once 'open', (cb) ->
     for severity_data in default_severity_data
       logger.info 'Starting on severity [%s]', severity_data.label
       db_sev = new Severity severity_data
-      severity_saves[severity_data.label] = db_sev.saveAsync()
+      severity_saves[severity_data.label] = db_sev.save()
   
     # And run severity inserts
     Promise.props( severity_saves )

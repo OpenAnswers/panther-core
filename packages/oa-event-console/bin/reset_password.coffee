@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -81,10 +81,10 @@ Mongoose.connect ->
 Mongoose.db.once 'open', (cb) ->
   logger.info 'Connection open', config.mongodb.uri
 
-  User.findOneAsync username: opt.user
+  User.findOne username: opt.user
   .then ( user )->
     user.generate_token(1440)
-    user.saveAsync()
+    user.save()
 
   .then ( user )->
     reset_url = "#{config.app.url}/password/reset/#{user.reset.token}"

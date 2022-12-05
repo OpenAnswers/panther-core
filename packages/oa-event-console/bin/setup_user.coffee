@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -92,12 +92,12 @@ setup_Async = ( details )->
     delete details.password
     newuser = null
 
-    User.registerAsync user, password
+    User.register user, password
     .then ( res_newuser )->
       newuser = res_newuser
       console.log 'setup user', details.username, newuser.created
       
-      Filters.setup_initial_views_Async res_newuser.username
+      Filters.setup_initial_views res_newuser.username
     .then ( results )->
       logger.info 'viewMine setup', results.mine._id
       logger.info 'viewAll setup', results.all._id
@@ -118,14 +118,14 @@ setup_filters = ->
 password_Async = ( details )->
   debug 'pass details', details
   new Promise (resolve, reject)->
-    User.findOneAsync username: details.username
+    User.findOne username: details.username
     .then ( user )->
-      user.setPasswordAsync details.password
+      user.setPassword details.password
 
     .then ( user )->
       user.email = details.email
       user.group = details.group if argv.group or argv.g
-      user.saveAsync()
+      user.save()
 
     .then ( res )->
       logger.info 'user password saved'
@@ -153,7 +153,7 @@ Mongoose.db.once 'open', (cb) ->
 
   debug 'details', details
 
-  User.collection.findOneAsync( username: details.username )
+  User.collection.findOne( username: details.username )
   .then ( res )->
     if res
       password_Async details

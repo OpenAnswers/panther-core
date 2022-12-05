@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -143,7 +143,7 @@ class @RuleSet
         debug "stopping was set by " + rule.uuid
         break
 
-    debug "EVENT_OBJ", event_obj
+    debug "EVENT_OBJ %o", event_obj
     event_obj
 
   find: ( id )->

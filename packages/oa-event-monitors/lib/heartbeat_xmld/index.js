@@ -1,9 +1,8 @@
 /*
- * Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
- * All rights reserved.  
+ * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * All rights reserved.
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
-
 
 /*
  * Heartbeat (XMLD) monitor will listen on a port for an XML document of the form
@@ -28,56 +27,50 @@
  *
  */
 
+var logging = require('oa-logging')('oa:event:monitors:heartbeat_xmld');
+var logger = logging.logger;
+var debug = logging.debug;
 
-var logging = require('oa-logging')('oa:event:monitors:heartbeat_xmld')
-var logger = logging.logger
-var debug = logging.debug
+var Class = require('joose').Class;
+var AgentRole = require('../utils/agent_role').Role;
+var XmlListener = require('../utils/xml_listener').XmlListener;
+var nconf = require('nconf'); // get access to command line args
 
-var Class = require( 'joose' ).Class;
-var AgentRole = require( '../utils/agent_role' ).Role;
-var XmlListener = require( '../utils/xml_listener' ).XmlListener;
-var nconf = require( 'nconf' ); // get access to command line args
-
-var SampleAgent = exports.Agent = Class({
-
+var SampleAgent = (exports.Agent = Class({
   isa: XmlListener,
   /*
    * inherits a start() method for listening on a port
-   * and will call parseRecord( object ) with the 
+   * and will call parseRecord( object ) with the
    * root elemnents mapped to keys/values in <object>
    */
 
   my: {
     has: {
-      /* 
+      /*
        * heartbeat_xmld.ini must have the follwoing in it:
        *
        * [props]
        * port_number = <some port number to listen on>
        */
-      properties: { is: 'ro', init: [ "port_number" ] }
-    }
+      properties: { is: 'ro', init: ['port_number'] },
+    },
   },
 
-  does: [ AgentRole ],
+  does: [AgentRole],
 
   methods: {
-    parseRecord: function( record )
-    {
+    parseRecord: function (record) {
       var self = this;
 
       /*
        * ensure that the mandatory fields are present
        */
 
-      if( record.message == undefined )
-        return logger.error( "XML missing a message token" );
+      if (record.message == undefined) return logger.error('XML missing a message token');
 
-      if( record.mtype == undefined )
-        return logger.error( "XML missing a mtype token" );
+      if (record.mtype == undefined) return logger.error('XML missing a mtype token');
 
-      if( record.hostname == undefined )
-        return logger.error( "XML missing a hostname token" );
+      if (record.hostname == undefined) return logger.error('XML missing a hostname token');
 
       /*
        * build an initial object to pass to the rule engine
@@ -86,24 +79,22 @@ var SampleAgent = exports.Agent = Class({
         message: record.message,
         mtype: record.mtype,
         hostname: record.hostname,
-        lines: []
+        lines: [],
       };
 
       /*
        * split out any lines into their own tokens
        */
-      var message_lines = record.message.split( '\n' );
+      var message_lines = record.message.split('\n');
       var position = 0;
-      while( position < message_lines.length )
-      {
+      while (position < message_lines.length) {
         obj['message_' + position] = message_lines[position];
-        obj.lines.push( message_lines[position] );
-        position ++;
+        obj.lines.push(message_lines[position]);
+        position++;
       }
 
-      // send the token/values to the rules engine 
-      self.getEventCB()( obj );
-    }
-  }
-});
-
+      // send the token/values to the rules engine
+      self.getEventCB()(obj);
+    },
+  },
+}));

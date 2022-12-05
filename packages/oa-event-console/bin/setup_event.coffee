@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -89,7 +89,7 @@ Mongoose.db.once 'open', (cb) ->
 
     debug 'event details', event
 
-    inserts.push Mongoose.alerts.updateAsync( event, $set:event, {upsert:true, multi:true })
+    inserts.push Mongoose.alerts.update( event, $set:event, {upsert:true, multi:true })
   
   Promise.all( inserts )
   .then ( res )->

@@ -1,9 +1,12 @@
 {
   "name": "oa-helpers",
-  "version": "4.0.10",
+  "version": "4.1.0",
   "private": true,
   "description": "OA Helper methods",
   "main": "lib/helpers.js",
+  "engines": {
+    "node": ">=16.13.0 <17"
+  },
   "files": [
     "lib/*.js"
   ],
@@ -25,16 +28,16 @@
   "devDependencies": {
     "benchmark": "^2.1.0",
     "chai": "^3.5.0",
-    "coffee-script": "^1.9.1",
+    "coffeescript": "1.12.7",
     "docco": "^0.7.0",
-    "mocha": "^2.4.5",
+    "mocha": "~9.2.2",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
     "bluebird": "~3.3.5",
-    "debug": "~2.2.0",
-    "lodash": "4.17.20",
+    "debug": "4.3.4",
+    "lodash": "4.17.21",
     "node-uuid": "1.4.7"
   }
 }

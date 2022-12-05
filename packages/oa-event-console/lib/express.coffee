@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -13,9 +13,9 @@
 express          = require 'express'
 io               = require 'socket.io'
 http             = require 'http'
-jade             = require 'jade'
+pug              = require 'pug'
 session          = require 'express-session'
-MongoStore       = require('connect-mongo')(session)
+MongoStore       = require('connect-mongo')
 Assets           = require "connect-assets"
 favicon          = require 'serve-favicon'
 bodyParser       = require 'body-parser'
@@ -63,8 +63,8 @@ class ExpressApp
     @app.locals.name  = @config.app.name
     @app.locals.email = @config.app.email
     @app.locals.config = @config
-    @app.locals.version = process.env.PANTHER_VERSION || require('../package.json').version
-    @app.locals.node_env = process.env.NODE_ENV || 'development'
+    @app.locals.version = require('../package.json').version
+    @app.locals.node_env = process.env.NODE_ENV || 'production'
     @app.locals.no_refresh_env = process.env.NO_REFRESH?
 
     @app.locals.nav_user = [
@@ -109,12 +109,12 @@ class ExpressApp
     # Configure views
     logger.info  'Views', @path.views
     @app.set     'views', @path.views
-    @app.set     'view engine', 'jade'
-    @app.engine  'jade', jade.__express
+    @app.set     'view engine', 'pug'
+    @app.engine  'pug', pug.__express
 
-    # Prod view jade pre caching
+    # Prod view pug pre caching
     if @app.get('is_production')
-      require('./express-jade-cache')(@path.views)
+      require('./express-pug-cache')(@path.views)
 
 
     # ### Assets
@@ -149,13 +149,15 @@ class ExpressApp
     # ### Sessions/Auth
 
     # Setup the session to use mongoose
-    @config.session.store = new MongoStore
+    @config.session.store = MongoStore.create
       #mongooseConnection: Mongoose.db
-      url: @config.mongodb.uri || 'http://localhost:27017/sessions'
+      mongoUrl: @config.mongodb.uri || 'http://localhost:27017/sessions'
+      mongoOptions:
+        useUnifiedTopology: true
       ttl: @config.session.timeout || ( 60 * 60 * 1000 )
-      collection: @config.session.collection || 'sessions_passport'
+      collectionName: @config.session.collection || 'sessions_passport'
 
-    debug 'session store setup and addede to config', @config.session.store
+    debug 'session store setup and added to config', @config.session.store
 
     # behind a TLS reverse proxy trust it
     if @config.app.url.match(/^https/)

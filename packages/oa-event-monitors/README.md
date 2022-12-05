@@ -1,6 +1,6 @@
 # Panther Event Monitors
 
-Copyright (C) 2018, Open Answers Ltd http://www.openanswers.co.uk/
+Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 All rights reserved.
 
 ## Monitors

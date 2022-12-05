@@ -220,8 +220,8 @@ describe 'Sample rules file', ->
         returned_ev = the_rules.run match_positive, 
           tracking_matches: true
 
-        # console.log "tracked [1] ", inspect returned_ev.matches, false, 4
-        expect( returned_ev.matches.global).to.be.an('array').that.includes
+        # debug 'match %O', returned_ev.matches.global
+        expect( returned_ev.matches.global).to.be.an('array').that.deep.includes
           from: 'RuleSelector',
           uuid: '1234-simple2-discard',
           name: 'simple2 test discard'

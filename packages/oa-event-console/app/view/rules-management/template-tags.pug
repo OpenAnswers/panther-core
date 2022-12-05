@@ -1,0 +1,43 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+//- not mustache templates but can be pulled in rendering via jquery
+
+script(id="template-tag-discard" type="text/x-plain-template")
+  .tag.tag-discard
+    .colour.colour-red
+    .text Discard
+
+script(id="template-tag-set" type="text/x-plain-template")
+  .tag.tag-set
+    .colour.colour-blue
+    .text Set
+
+script(id="template-tag-replace" type="text/x-plain-template")
+  .tag.tag-replace
+    .colour.colour-green
+    .text Replace
+
+script(id="template-tag-skip" type="text/x-plain-template")
+  .tag.tag-skip
+    .colour.colour-purple
+    .text Disabled
+
+script(id="template-tag-stop_rule_set" type="text/x-plain-template")
+  .tag.tag-stop_rule_set
+    .colour.colour-orange
+    .text Stop Rule Set
+
+script(id="template-tag-stop" type="text/x-plain-template")
+  .tag.tag-stop
+    .colour.colour-yellow
+    .text Stop
+
+script(id="template-tag-debug" type="text/x-plain-template")
+  .tag.tag-debug
+    .colour.colour-yellow
+    .text Debug

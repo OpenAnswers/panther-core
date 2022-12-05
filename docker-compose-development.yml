@@ -1,14 +1,14 @@
-version: "3"
+version: '3'
 services:
   mongodb:
-    image: mongo:3.2.16
+    image: mongo:3.6.23
     container_name: mongodb
     hostname: mongodb
     restart: unless-stopped
     environment:
       - TZ=Europe/London
     expose:
-      - "27017"
+      - '27017'
     ports:
       - 27017:27017
 
@@ -50,7 +50,7 @@ services:
     hostname: event-monitors-http
     restart: unless-stopped
     ports:
-      - "5001:5001"
+      - '5001:5001'
     env_file: .env
     command: http
     depends_on:
@@ -65,7 +65,7 @@ services:
     hostname: event-monitors-syslogd
     restart: unless-stopped
     ports:
-      - "1514:1514"
+      - '1514:1514'
     env_file: .env
     command: syslogd
     depends_on:

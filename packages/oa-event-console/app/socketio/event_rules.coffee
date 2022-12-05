@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -667,7 +667,7 @@ SocketIO.route_return 'event_rules::save', ( socket, request, socket_cb )->
   git_opts =
     git_push: config.rules.push
     user_name: socket.ev.user()
-    user_email: config.app.email
+    user_email: socket.ev.email()
 
   rules_save.apply event_rules, [event_rules.path, git_opts]
   .then ( res )->
@@ -839,7 +839,7 @@ SocketIO.route_return 'event_rules::query::id', ( socket, msg, socket_cb )->
     tracking_matches: true
 
   # find the event
-  Mongoose.alerts.findOneAsync( _id: id )
+  Mongoose.alerts.findOne _id: id 
   .then ( doc )->
     unless doc
       throw new Errors.QueryError "Requested id [#{id}] wasn't there"
@@ -854,7 +854,7 @@ SocketIO.route_return 'event_rules::query::id', ( socket, msg, socket_cb )->
 SocketIO.route_return 'event_rules::matches::read', (socket, data, socket_cb)->
 
   Mongoose.rulematches.find {}, {_id: 0}
-  .toArrayAsync()
+  .toArray()
   .then (doc)->
     unless doc
       throw new Errors.SocketMsgError "no message payload"

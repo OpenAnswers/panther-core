@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -77,38 +77,44 @@ FilterSchema = new mongoose.Schema
 
 
 # Update
-FilterSchema.statics.update_data = ( data, cb )->
+## returns a `Promise` which resolves to the updates Filter or a rejects with an Error
+## @return {Promise}
+FilterSchema.statics.update_data = ( data )->
+  self=@
   debug 'findByIdAndUpdate data', data
+
   unless data._id?
-    return cb new Errors.ValidationError('No _id field in update data')
+    return Promise.reject(new Errors.ValidationError('No _id field in update data'))
   unless data.name?
-    return cb new Errors.ValidationError('No name field in update data')
+    return Promise.reject(new Errors.ValidationError('No name field in update data'))
+  
   data.name = "#{data.name}"
 
-  @findByIdAndUpdate data._id, data, cb
+  @findByIdAndUpdate data._id, data
 
 
 # Set default
-FilterSchema.statics.set_default = ( user, id, cb )->
+FilterSchema.statics.set_default = ( user, id )->
   debug 'set_default view', user, id
-  cb new Errors.ValidationError('No id in update data') unless id?
-  cb new Errors.ValidationError('No user in update data') unless user?
+
+  unless id?
+    return Promise.reject new Errors.ValidationError('No id in update data') 
+  unless user?
+    return Promise.reject new Errors.ValidationError('No user in update data') 
   self = @
 
-  @updateAsync { user: user, default: true }, { default: false }, { multi: true}
+  @update { user: user, default: true }, { default: false }, { multi: true}
   .then ( response )->
     logger.warn "User had no default", user, id if response.n is 0
-    self.findByIdAndUpdateAsync id, default: true
+    self.findByIdAndUpdate id, default: true
 
   .then ( response )->
-    return cb "User had no default" if response.n is 0
-    cb null, "Default set to id [#{id}] for user [#{user}]"
+    if response.n is 0
+      Promise.reject "User had no default"
+    "Default set to id [#{id}] for user [#{user}]"
     
-  .catch ( err )->
-    return cb err
 
-
-FilterSchema.statics.setup_initial_views_Async = ( user )->
+FilterSchema.statics.setup_initial_views = ( user )->
   self = @
   new Promise ( resolve, reject )->
 
@@ -141,10 +147,10 @@ FilterSchema.statics.setup_initial_views_Async = ( user )->
 
 
     Promise.props
-      mine:  self.createAsync(views.mine)
-      all:   self.createAsync(views.all)
-      unack: self.createAsync(views.unack)
-      ack: self.createAsync(views.ack)
+      mine:  self.create(views.mine)
+      all:   self.create(views.all)
+      unack: self.create(views.unack)
+      ack: self.create(views.ack)
     .then ( results )->
       logger.debug results, ''
       resolve results
@@ -153,13 +159,12 @@ FilterSchema.statics.setup_initial_views_Async = ( user )->
       reject error
 
 # delete filters belonging to a user
-FilterSchema.statics.delete_user = ( user, cb )->
-  cb new Errors.ValidationError('No user for delete') unless user?
-  @remove user: user, cb
+FilterSchema.statics.delete_user = ( user )->
+  unless user?
+    return Promise.reject new Errors.ValidationError('No user for delete') 
+  @deleteOne user: user
 
 # Export the model on this
 @Filters = mongoose.model 'Filters', FilterSchema
 
 # and make it bluebird promisey
-Promise.promisifyAll @Filters
-Promise.promisifyAll @Filters.prototype

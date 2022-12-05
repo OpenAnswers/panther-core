@@ -1,0 +1,83 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _template
+
+
+block css
+  link(rel='stylesheet', href='/console/severities.css', type='text/css' )
+
+
+block script
+  != js('bower/d3')
+  != js('js/d3.helpers')
+  //-!= js('js/d3.severity')
+  //-!= js('js/d3.sev_summary')
+  //-!= js('js/d3.stack')
+  != js('js/d3.stack.svg')
+  != js('js/d3.occurrence')
+  != js('js/console/console-event-detail-test')
+
+  script(type="text/javascript" charset="utf-8").
+    var sev_counts = !{JSON.stringify(results.sev_counts)};
+    var sev_counts_group = !{JSON.stringify(results.sev_counts_group)};
+    var severities = !{JSON.stringify(results.severities)};
+    var groups = !{JSON.stringify(results.groups)};
+    var doc = !{JSON.stringify(results.doc)};
+
+
+block content
+  .container.margintop15
+
+    #event-detail-occurrences.tab-pane.active
+
+      .info.margintop15
+        .content.card.card-generic
+          .inner
+            .title Simple Dots
+            .content.margintop15
+              #chart2
+
+      .info.margintop15
+        .content.card.card-generic
+          .inner
+            .title Events Occurrences - #{results.doc._id}
+            .content.margintop15
+              #chart1
+
+      .info.margintop15
+        .content.card.card-generic
+          .inner
+            .title Event Summary
+            .content.margintop15
+              .row
+                .col-md-6
+                  #charts_svg_1
+                .col-md-6
+                  #charts_svg_2
+              
+
+      .info.margintop15
+        .content.card.card-generic
+          .inner
+            .title Severity Bars
+            .content.margintop15
+              #severity_bars_div
+                #severity_bars.svg-container
+
+      .info.margintop15
+        .content.card.card-generic
+          .inner
+            .title Tween
+            .content.margintop15
+              #testing
+
+      .info.margintop15
+        .content.card.card-generic
+          .inner
+            .title stack html/css
+            .content.margintop15
+              #charts

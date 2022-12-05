@@ -1,5 +1,5 @@
 //- 
-//- Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 //- All rights reserved.
 //- This file is subject to the terms and conditions defined in the Software License Agreement.
 //-  
@@ -17,6 +17,6 @@ block content
           a(href="#order")      Order
 
   .markdown(data-spy='scroll' data-target='#docheadings')
-    include:md settings.md
+    include:markdown-it settings.md
 
   .markdown_anchor_gap

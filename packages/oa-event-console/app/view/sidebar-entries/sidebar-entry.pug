@@ -1,0 +1,16 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+.sidebarEntry( 
+  data-time="{{ time }}"
+  data-event="{{ event }}"
+  data-ids="{{ ids_str }}"
+  data-identifiers = "{{ identifiers }}")
+
+  .content
+    //.avatar
+    .message {{& message }}
+    .time.pull-right(title="{{ time }}") just now

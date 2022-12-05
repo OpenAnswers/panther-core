@@ -7,14 +7,14 @@ agent:
   # Syslog levels are 7-0, 0 being most important
   # Event console severities is 1-5  (0 or -1 will be removed)
   severity_map:
-    7: 1
-    6: 2
-    5: 2
-    4: 2
-    3: 3
-    2: 4
-    1: 5
-    0: 5
+    debug: 1
+    info: 2
+    notice: 2
+    warn: 3
+    err: 3
+    crit: 4
+    alert: 5
+    emerg: 5
 
   # Syslog fields are mapped to event console fields
   field_map:
@@ -36,6 +36,18 @@ agent:
   identifier: '{node}:{severity}:{summary}'
 
   rules:
+    - name: set agent 5424
+      set:
+        agent: syslogd RFC5424
+      equals:
+        input.type: RFC5424
+      uuid: b8b67d50-f7c8-11ec-8df0-6d4ca7857473
+    - name: set agent 3164
+      set:
+        agent: syslogd RFC3164
+      equals:
+        input.type: RFC3164
+      uuid: d2541b50-f7c8-11ec-8df0-6d4ca7857473
     - name: rfc5424 app tag
       field_exists: input.appName
       set:

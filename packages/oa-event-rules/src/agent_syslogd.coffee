@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2020,2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -82,10 +82,12 @@ class AgentSyslogd extends Agent
 
     # Deal with a RFC5424 structured data message
     @run_structured_data_flatten( event_obj )
+    # debug "run_structured_data_flatten()-> [%o]", event_obj
 
     # Run the rest of the Agent basics
     super event_obj
 
+    # debug "run()-> [%o]", event_obj
     event_obj
 
 
@@ -93,13 +95,14 @@ class AgentSyslogd extends Agent
   # Map the syslog severity to an event console severity
   # Modifies event_obj
   run_severity_map: ( event_obj )->
-    sev = event_obj.get_input 'severityID'
-    sev_map = @_severity_map[sev]
-    debug 'mapping sev of', sev, sev_map, @_severity_map
+    sev_id = event_obj.get_input 'severityID'
+    sev_name = event_obj.get_input 'severity'
+    sev_map = @_severity_map[sev_id] || @_severity_map[sev_name]
+    debug 'mapping sev of [%s/%s]', sev_id, sev_name, sev_map, @_severity_map
     if sev_map
       event_obj.set 'severity', sev_map
     else
-      logger.error 'No severity mapping for sev [%s]', sev, event_obj, @_severity_map, ''
+      logger.error 'No severity mapping for sev [%s/%s]', sev_id, sev_name, event_obj, @_severity_map, ''
 
 
   # ###### run_field_map( event_object )
@@ -113,14 +116,16 @@ class AgentSyslogd extends Agent
     true #so the for loop doesn't return an array
 
   # Flatten the syslog structuredData object
-  # Take the message ID out of the tree, and into a field
-  # Then all structured data is directly accessible
-  # This would fail if there were more than one message id's
-  # but i don't think that can happen(?)
+  # Take each message ID out of the tree, and append to an array
+  # flatten structeredData param by prepending "{sd-id}-", saving in `flatData`
+  # e.g.
+  # ##### logger -n localhost -T -P 6514 -p local2.info --rfc5424 --sd-id golfish@123 --sd-param thread=\"hungry\" --sd-param priority=\"high\" --sd-id appName@2 --sd-param bob=\"bob3\" "karwar"
+  #
 
+  # Input Data
   #     message: whatever
   #     structuredData:
-  #        "a@message#id":
+  #        "a@sd#id":
   #          any_field: value
   #          other_fudle: something
   #          message: whatever
@@ -128,23 +133,31 @@ class AgentSyslogd extends Agent
   # to
 
   #     message: whatever
-  #     message_id: "a@message#id"
-  #     structuredData:
-  #       any_field: value
-  #       other_fudle: something
-  #       message: whatever
+  #     sd_ids: [ "a@sd#id" ]
+  #     flatData:
+  #       a@sd#id=any_field: value
+  #       a@sd#id=other_fudle: something
+  #       a@sd#id=message: whatever
 
   run_structured_data_flatten: ( event_obj )->
-    debug 'maybe flattening syslog struc', event_obj.has_structured_data()
     return unless event_obj.has_structured_data()
 
     structuredData = event_obj.get_input('structuredData')
-    debug 'flattening syslog struc', structuredData
-    for id, data of structuredData
-      event_obj.set_input 'message_id', id
-      event_obj.set_input 'structuredData', data
+    debug 'flattening syslog struct [%o]', structuredData
+    flatData = {}
+    sdIds = []
+    for sdId, data of structuredData
+      sdIds.push sdId
 
-    debug 'flattened syslog struc', event_obj.syslog
+      for paramName, paramValue of data
+        flatData['' + sdId + '=' + paramName] = paramValue
+
+    event_obj.set "structuredDataIds", sdIds
+
+    # replace structuredData with a flattened version
+
+    event_obj.set "structuredData", structuredData
+    event_obj.set "structuredData1", flatData
 
 
   # Convert syslog structure to yaml

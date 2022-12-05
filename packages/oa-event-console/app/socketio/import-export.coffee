@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -12,7 +12,6 @@
 
 # NPM modules
 Promise = require 'bluebird'
-needle  = Promise.promisifyAll require('needle')
 lodashKeys = require('lodash/keys')
 lodashHas = require('lodash/has')
 lodashGet = require('lodash/get')

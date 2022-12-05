@@ -1,0 +1,30 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+//- Render a card
+//- `title`: The title text for the card
+//- `type`: The type(class) to pull in for the card which 
+//-   defaults to `.card-generic`
+mixin card(title, type)
+  - var type = type || "card-generic"
+  .card.marginbottom15( class=`${type}` )&attributes(attributes)
+    .inner
+      .title.marginbottom15 #{title}
+      .content
+        block
+
+//- Render an unauth card in the middle with bootstrap layout
+//- `title`: The title text for the card
+//- `type`: The type(class) to pull in for the card which 
+//-   defaults set in the `card` mixin
+mixin unauth_card(title, type)
+  .row&attributes(attributes)
+    .col-xs-0.col-sm-2.col-md-3.col-lg-4
+    .col-xs-12.col-sm-8.col-md-6.col-lg-4
+      +card(title, type)
+        block
+    .col-xs-0.col-sm-2.col-md-3.col-lg-4

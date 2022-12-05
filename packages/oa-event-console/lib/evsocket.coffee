@@ -1,6 +1,6 @@
 
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -77,6 +77,13 @@ class EvSocket
     unless @socket.request?.user
       throw new Errors.SocketError 'No user structure on socket.request'
     @socket.request.user.username
+
+  # ### email()
+  # return the passport authed socket email address
+  email: ->
+    unless @socket.request?.user
+      throw new Errors.SocketError 'No user structure on socket.request'
+    @socket.request.user.email
 
 
   # ###### rooms()

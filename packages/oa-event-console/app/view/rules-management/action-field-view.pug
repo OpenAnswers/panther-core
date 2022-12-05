@@ -1,0 +1,14 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-action-field-view" type="text/x-mustache-template")
+  .action-entry-view(data-action-id="{{ data.verb }}" 
+  data-action-uvid="{{ data.uvid }}" class="action-{{ data.verb }}")
+    .inner
+      span.action-view-gem(class="action-view-gem-{{ data.verb }}")
+      span.action-view-operator {{ data.verb }}
+      span.action-view-text  the field
+      span.action-view-field {{ data.field }}

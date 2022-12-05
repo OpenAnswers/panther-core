@@ -1,6 +1,6 @@
 
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -96,7 +96,7 @@ CertificateSchema.statics.delete = ( data, cb )->
 CertificateSchema.statics.findName = ( name, cb )->
   debug 'findName'
 
-  @findOneAsync( name: name )
+  @findOne( name: name )
   .then ( docs )->
     found = false
     found = true if docs
@@ -111,7 +111,7 @@ CertificateSchema.statics.findName = ( name, cb )->
 CertificateSchema.statics.getKey = ( id, cb )->
   debug 'getKey'
 
-  @findOneAsync( _id: id )
+  @findOne( _id: id )
   .then ( doc )->
     unless doc
       return cb "No key found for #{id}"
@@ -127,7 +127,7 @@ CertificateSchema.statics.getKey = ( id, cb )->
 CertificateSchema.statics.getCert = ( id, cb )->
   debug 'getCert'
 
-  @findOneAsync( _id: id )
+  @findOne( _id: id )
   .then ( doc )->
     unless doc
       return cb "No cert found for #{id}"

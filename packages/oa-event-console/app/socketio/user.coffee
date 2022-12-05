@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -24,7 +24,7 @@ config            = require('../../lib/config').get_instance()
 
 Joi               = require('@hapi/joi')
 
-{ users_read_schema, user_update_schema, user_create_schema, user_delete_schema, user_reset_password_schema }   = require('../validations/index')
+{ users_read_schema, user_read_schema, user_update_schema, user_create_schema, user_delete_schema, user_reset_password_schema }   = require('../validations/index')
 
 # Read all
 SocketIO.route_return 'users::read', ( socket, data, cb ) ->
@@ -40,7 +40,7 @@ SocketIO.route_return 'users::read', ( socket, data, cb ) ->
     logger.error "users::read validation error", validatedData.error
     throw new Errors.ValidationError 'Invalid users data'
  
-  User.read_all_minus_adminAsync()
+  User.read_all_minus_admin()
   .then ( response )->
     debug 'sending users::read response', response
     response
@@ -91,24 +91,24 @@ SocketIO.route_return 'user::create', ( socket, data ) ->
   data.user.email_token_expires = moment().add(14, 'days').toDate()
   
   # Create the user in the DB
-  User.registerAsync data.user, data.user.email_token
+  User.register data.user, data.user.email_token
   .then ( user_res )->
     logger.info 'New user added by [%s]. User [%s] Group [%s]',
       socket.ev.user(), data.user.username, data.user.group, data.user.email
 
     SocketIO.io.emit 'users::updated'
     # User has been created succesfully, now populate the default views
-    Filters.setup_initial_views_Async(data.user.username)
+    Filters.setup_initial_views(data.user.username)
 
   .then ( filter_res )->
     logger.info 'Initial views added for user [%s]', data.user.username
 
     # Create a longer lived reset token
 
-    User.findOneAsync username: data.user.username
+    User.findOne username: data.user.username
     .then ( user )->
       user.generate_token( 2880 ) # two days for the initial login
-      user.saveAsync()
+      user.save()
 
   .then ( updatedUserRes )->
 
@@ -147,7 +147,7 @@ SocketIO.route_return 'user::update', ( socket, data ) ->
   validatedData = validation.value
   debug '%s is Updating user [%s] with data: ', socket.ev.user(), validatedData.username, validatedData
 
-  User.update_data_Async validatedData
+  User.update_data validatedData
   .then ( response ) ->
     logger.info '%s User updated [%s]', socket.ev.user(), validatedData.username
     debug 'update response', response
@@ -169,11 +169,14 @@ SocketIO.route 'user::read', ( socket, data, cb )->
 
   validatedData = validation.value
 
-  User.read_oneAsync validatedData.user
-  .then ( error, response )->
+  User.read_one validatedData.user
+  .then ( response )->
     debug 'sending user::read response', response
-    cb response
+    cb null, response
     # user: User.one( req.body.user )
+  .catch (error)->
+    logger.info 'User.read_one failed', error
+    null
 
 
 # Delete
@@ -194,15 +197,15 @@ SocketIO.route 'user::delete', ( socket, data, cb )->
 
   Promise.props
     user:
-      User.deleteAsync validatedData.user
+      User.delete_user validatedData.user
     filters:
-      Filters.delete_userAsync validatedData.user
+      Filters.delete_user validatedData.user
     apikeys:
-      ApiKey.delete_userAsync validatedData.user
+      ApiKey.delete_user validatedData.user
   .then ( results )->
     debug "Deletion results", results
     socket.ev.info "Deleted user #{validatedData.user}"
-    cb results.user
+    cb null, results.user
     SocketIO.io.emit 'users::updated'
   .catch Errors.ValidationError, ( err )->
     logger.error 'admin user delete failed', data, err.message, err
@@ -228,10 +231,10 @@ SocketIO.route 'user::reset_password', ( socket, data, cb )->
   validatedData = validation.value
 
   
-  User.findOneAsync username: validatedData.user
+  User.findOne username: validatedData.user
   .then ( user )->
     user.generate_token(1440)
-    user.saveAsync()
+    user.save()
 
   .then ( user )->
     reset_url = "#{config.app.url}/password/reset/#{user.reset.token}"

@@ -1,4 +1,4 @@
-FROM panther-builder:12.21.0-alpine3.12 as builder
+FROM panther-builder:gallium-alpine3.15 as builder
 ARG BUILDTIME_ENV=production
 
 #RUN npm install -g yarn
@@ -41,7 +41,7 @@ RUN yarn install --production=true
 RUN find $BUILD_DIR/packages -type f -exec chmod ugo+r '{}' \; && \
     find $BUILD_DIR/packages -type d -exec chmod ugo+rx '{}' \;
 
-FROM panther-runtime:12.21.0-alpine3.12
+FROM panther-runtime:gallium-alpine3.15
 LABEL component="panther/console"
 
 # required for using git to version control rules
@@ -89,8 +89,8 @@ RUN find /app/rules -type f -exec chmod ugo+r '{}' \; && \
     find /app/rules -type d -exec chmod ugo+rx '{}' \; && \
     chmod ugo+rx /app/entrypoint.sh
 
-ARG BUILD_PANTHER_VERSION=unknown
-ENV PANTHER_VERSION=$BUILD_PANTHER_VERSION
+ARG BUILD_PANTHER_VERSION=
+ENV BUILD_PANTHER_VERSION=$BUILD_PANTHER_VERSION
 
 
 ARG RUNTIME_ENV=production

@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -30,19 +30,10 @@ class @SelectFieldMissing extends SelectBaseField
   }
 
   run: (event_obj)->
-    debug "run field_missing", @field
+    debug "run field_missing [%o]", @field
 
-    if @field.indexOf('syslog.') is 0
-      input_field_name = @field.replace 'syslog.', ''
-      return !event_obj.get_input( input_field_name )?
+    matched_value = !event_obj.get_any(@field)?
+    debug "field_missing ", if matched_value then "✔️" else "❌"
+    matched_value
     
-    if @field.indexOf('input.') is 0
-      input_field_name = @field.replace 'input.', ''
-      return !event_obj.get_input( input_field_name )?
-
-    if @field.indexOf('original.') is 0
-      original_field_name = @field.replace 'original.', ''
-      return !event_obj.get_original( original_field_name )?
-
-    return !event_obj.get(@field)?
 

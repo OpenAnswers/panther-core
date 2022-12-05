@@ -1,10 +1,10 @@
 /*
-  * Copyright (C) 2012, Open Answers Ltd http://www.openanswers.co.uk/
-  * All rights reserved.  
-  * This file is subject to the terms and conditions defined in the Software License Agreement.
-  */
+ * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * All rights reserved.
+ * This file is subject to the terms and conditions defined in the Software License Agreement.
+ */
 
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var AlertDefinitionSchema = new Schema({
@@ -13,23 +13,23 @@ var AlertDefinitionSchema = new Schema({
   priority: { type: String },
   display_type: {
     type: String,
-    get: function(dt) {
+    get: function (dt) {
       return dt || this.type;
-    }
+    },
   },
   type: { type: String },
   label: { type: String },
-  width: { type: String }
+  width: { type: String },
 })
 
-  .pre("save", function(next) {
+  .pre('save', function (next) {
     if (!this.display_type) this.display_type = this.type;
 
     next();
   })
 
-  .static("getDefaultLayout", function(fn) {
-    this.find({}, { column: 1, width: 1 }, function(err, rows) {
+  .static('getDefaultLayout', function (fn) {
+    this.find({}, { column: 1, width: 1 }, function (err, rows) {
       var a = [];
       for (var i = 0; i < rows.length; i++) {
         a.push({ field: rows[i].column, width: rows[i].width });
@@ -38,10 +38,10 @@ var AlertDefinitionSchema = new Schema({
     });
   })
 
-  .static("getMandatoryColumns", function(cb) {
-    this.find({ priority: "M" }, { column: 1 }, function(err, rows) {
+  .static('getMandatoryColumns', function (cb) {
+    this.find({ priority: 'M' }, { column: 1 }, function (err, rows) {
       if (err) return cb(err);
-      var mandatory_columns = rows.map(function(row) {
+      var mandatory_columns = rows.map(function (row) {
         return row.column;
       });
 
@@ -49,10 +49,10 @@ var AlertDefinitionSchema = new Schema({
     });
   })
 
-  .static("getAllowedColumns", function(cb) {
-    this.find({}, { column: 1 }, function(err, rows) {
+  .static('getAllowedColumns', function (cb) {
+    this.find({}, { column: 1 }, function (err, rows) {
       if (err) return cb(err);
-      var allowed_columns = rows.map(function(row) {
+      var allowed_columns = rows.map(function (row) {
         return row.column;
       });
 
@@ -60,15 +60,15 @@ var AlertDefinitionSchema = new Schema({
     });
   });
 
-AlertDefinitionSchema.statics.toExtModelFields = function(cb) {
-  this.find({}, { column: 1, type: 1, display_type: 1 }, function(err, rows) {
+AlertDefinitionSchema.statics.toExtModelFields = function (cb) {
+  this.find({}, { column: 1, type: 1, display_type: 1 }, function (err, rows) {
     if (err) return cb(err);
-    var ret_rows = rows.map(function(row) {
+    var ret_rows = rows.map(function (row) {
       var o = { name: row.column };
-      if (row.type == "String") o.type = "string";
-      if (row.type == "Number") {
-        if (row.display_type == "Date") o.type = "date";
-        else o.type = "int";
+      if (row.type == 'String') o.type = 'string';
+      if (row.type == 'Number') {
+        if (row.display_type == 'Date') o.type = 'date';
+        else o.type = 'int';
       }
 
       return o;
@@ -77,5 +77,5 @@ AlertDefinitionSchema.statics.toExtModelFields = function(cb) {
   });
 };
 
-exports.Model = mongoose.model("AlertDefinition", AlertDefinitionSchema);
+exports.Model = mongoose.model('AlertDefinition', AlertDefinitionSchema);
 exports.Schema = AlertDefinitionSchema;

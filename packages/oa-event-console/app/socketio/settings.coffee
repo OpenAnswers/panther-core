@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -10,7 +10,7 @@
 { SocketIO }      = require '../../lib/socketio'
 
 Promise = require 'bluebird'
-needle  = Promise.promisifyAll require('needle')
+needle  = require('needle')
 lodashKeys = require('lodash/keys')
 lodashHas = require('lodash/has')
 lodashGet = require('lodash/get')
@@ -22,11 +22,21 @@ settings_url = 'http://' + event_server.host + ':' + event_server.port + '/api/v
 # Client joining the activities stream
 
 SocketIO.route_return 'settings::server::read', ( socket, data, socket_cb )->
-  debug 'got settings::server::read', data
-  needle.getAsync( settings_url + '/tracking' )
-  .then ( response )->
-    debug 'sending settings', response.body
-    response.body
+  tracking_url = settings_url + '/tracking'
+  debug 'got settings::server::read url', tracking_url
+
+  needle( 'get', tracking_url, {}, {json:true} )
+  .then (response)->
+
+    if response.statusCode != 200
+      throw new Errors.HttpError404
+    
+    body = response.body
+    body
+    
+  .catch (error)->
+    logger.error error
+    throw error
 
 SocketIO.route_return 'settings::server::write', ( socket, data, socket_cb)->
   debug 'got settings::server::write', data
@@ -36,7 +46,12 @@ SocketIO.route_return 'settings::server::write', ( socket, data, socket_cb)->
 
   value = lodashGet data, "tracking", 0
 
-  needle.postAsync settings_url + '/tracking', {value: value}
+  needle('post', settings_url + '/tracking', {value: value} )
   .then (response)->
+    if response.statusCode != 200
+      throw new Error.HttpError404
     debug 'writing setting', response.body
     response.body
+  .catch (error)->
+    SocketIO.io.emit 'tracking::unavailable'
+    tracking: null

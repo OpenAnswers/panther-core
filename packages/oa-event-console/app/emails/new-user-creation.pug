@@ -1,0 +1,30 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+include _template
+
+block content
+  p Welcome to Panther
+  p A new account has been created for you: <strong>#{username}</strong>
+
+  p Please follow this link to set a password:
+  a(href=`${url}/password/reset/${token}`) #{url}/password/reset/#{token}
+
+  p Login is accessed here 
+    a(href=`${url}`) #{url}
+
+  p Visit the Panther 
+    a(href=`${support_url}`) Documentation
+    |  for more information including:
+  ul
+    li
+      a(href=`${support_url}#/help/README`) Getting started for the first time?
+    li
+      a(href=`${support_url}/#/dashboard/README`) Welcome the Dashboard
+    li
+      a(href=`${support_url}/#/console/README`) The Event Console
+
+  

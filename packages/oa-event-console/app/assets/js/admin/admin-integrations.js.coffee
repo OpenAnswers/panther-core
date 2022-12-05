@@ -43,7 +43,7 @@ class AdminIntegrations
 
 # An instance of AdminIntegration controls a user created integration
 
-# The templates are rendered in jade and placed in a <script> tag to
+# The templates are rendered in pug and placed in a <script> tag to
 # hide them from normal flow
 
 class AdminIntegration

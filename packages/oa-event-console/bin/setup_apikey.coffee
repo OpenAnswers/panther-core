@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -74,19 +74,19 @@ Mongoose.connect ->
 
   debug 'owner', opt.owner
 
-  ApiKey.findOneAsync username: opt.owner
+  ApiKey.findOne username: opt.owner
   .then (result)->
     if opt.once
       unless result
         apiKey = new ApiKey()
         apiKey.username = opt.owner
         apiKey.created = new Date
-        apiKey.saveAsync()
+        apiKey.save()
     else
       apiKey = new ApiKey()
       apiKey.username = opt.owner
       apiKey.created = new Date
-      apiKey.saveAsync()
+      apiKey.save()
   .then ( res )->
     debug 'res', res
     if res

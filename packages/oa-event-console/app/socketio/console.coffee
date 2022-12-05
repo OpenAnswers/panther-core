@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -33,7 +33,7 @@ SocketIO.route 'console::set_view', ( socket, data, client_cb ) ->
     evs.warn 'Filter id not valid', id
     return false
 
-  Filters.findOneAsync( user: evs.user(), _id: id )
+  Filters.findOne( user: evs.user(), _id: id )
   .then ( doc ) ->
     unless doc?
       evs.warn "No default filter found, using all"
@@ -94,7 +94,7 @@ SocketIO.route 'console::set_severity', ( socket, data, client_cb ) ->
   else
     query = { label: data.severity }
 
-  Severity.findOneAsync query
+  Severity.findOne query
   .then ( doc ) ->
     unless doc?
       evs.warn "No severity found, using All"

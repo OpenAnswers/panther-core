@@ -1,0 +1,90 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _template
+
+block script
+  != js('bower/FileSaver')
+  != js('js/admin')
+
+block nav
+  - var nav_location = 'admin'
+  include ./_nav_generic
+  
+block content
+  .header
+  .container
+    
+    //ul.nav.nav-tabs.pull-right
+      li.active #[a(href="#users") Users]
+      li #[a(href="#integrations") Integrations]
+      li #[a(href="#fields") Fields]
+
+    h2 Administration
+    .divider.marginbottom20
+    
+    .info.marginbottom15
+      .card.card-generic
+        .inner
+          a(name="console_users")
+          .title Console Users
+          .content
+            .help Grant new users access and reset passwords
+            #admin-users-content
+              include admin/users
+
+    .info.marginbottom15
+      .card.card-generic
+        .inner
+          a(name="syslog_tarball")
+          .title Event Logger Configuration Download
+          .content
+            .help Download configuration file archives for client event log systems
+            #admin-downloads-content
+              include admin/downloads
+
+    .info.marginbottom15
+      .card.card-generic
+        .inner
+          a(name="api_keys")
+          .title API Keys
+          .content
+            .help Create an API Key to generate events via the HTTP monitor
+            #admin-apikeys-content
+              include admin/apikeys
+
+    .info.marginbottom15
+      .card.card-generic
+        .inner
+          a(name="delete_all")
+          .title Delete All Events
+          .content
+            .help This will reset the events database and remove all events
+            #admin-delete-all-content
+              br
+              include admin/delete-all
+
+
+    if node_env == "development"
+      .info.marginbottom15.development
+        .card.card-generic(style='overflow: auto;')
+          .inner
+            a(name="integrations")
+            .title Integrations
+            .content
+              .help Setup your event inputs and the external systems to forward event information to.
+              #admin-integrations-content
+                include admin/integrations
+
+      .info.marginbottom15.development
+        .card.card-generic
+          .inner
+            a(name="console_fields")
+            .title Console Fields
+            .content
+              .help Setup extra console fields on top of the defaults. You rules can then populate fields specific to your events.
+              #admin-fields-content
+                include admin/fields

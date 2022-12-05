@@ -1,0 +1,91 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+
+//- This is the event details modal
+    Each tab has it's own pug file and templates
+
+#event-details-modal.modal.fade
+  .modal-dialog.modal-lg
+    .modal-content
+
+      #event-details-modal-tabpanel.modal-body(role='tabpanel')
+
+        //- Buttons for the content tabs
+        button.close(data-dismiss='modal' aria-lable='Close')
+          span(aria-hidden='true') &times;
+        ul.nav.nav-tabs
+          li.active
+            a(href='#event-details-modal-details' data-toggle="tab") Details
+          li
+            a(href='#event-details-modal-notes' data-toggle="tab")   Notes
+          li
+            a(href='#event-details-modal-history' data-toggle="tab") History
+          li
+            a(href='#event-details-modal-fields' data-toggle="tab") Fields
+          li
+            a(href='#event-details-modal-matches' data-toggle="tab") Matches
+
+        //- Content container for each tab
+        .tab-content
+          #event-details-modal-details.tab-pane.active
+            include event-details/details
+
+          #event-details-modal-notes.tab-pane
+            include event-details/notes
+
+          #event-details-modal-history.tab-pane
+            include event-details/history
+
+          #event-details-modal-fields.tab-pane
+            include event-details/fields
+
+          #event-details-modal-matches.tab-pane
+            include event-details/matches
+
+      //- Buttons in the footer      
+      .modal-footer.dropup
+
+        .btn-group
+          button.btn.btn-default.event-detail-acknowledge(data-action="acknowledge" value='Acknowledge') 
+            |Acknowledge
+        
+        .btn-group
+          button.btn.btn-default.event-detail-unacknowledge(data-action="unacknowledge" value='Unacknowledge')
+            |Unacknowledge
+
+        .btn-group
+          button.btn.btn-default.dropdown-toggle.event-detail-assign(data-toggle="dropdown" name='assign')
+            |Assign #[span.caret]
+          ul.dropdown-menu(role='menu')
+            for user in users
+              li
+                a(href="#" data-action="assign" data-user=`${user.username}`) #{user.username}
+        
+        .btn-group
+          button.btn.btn-default.event-detail-clear(data-action="clear" value='Clear')
+            |Clear
+        
+        .btn-group
+          button.btn.btn-default.dropdown-toggle.event-detail-severity(data-toggle="dropdown" name='severity')
+            |Severity #[span.caret]
+          ul.dropdown-menu(role='menu')
+            for severity in severities
+              li
+                a(href="#" data-action="severity" data-severity=`${severity.value}`)
+                  |#{severity.label}
+
+        .btn-group
+          button.btn.btn-default.dropdown-toggle.event-detail-tools(data-toggle="dropdown" name='tools') 
+            |Tools #[span.caret]
+          ul.dropdown-menu(role='menu')
+            li #[a(data-action="create-rule") Create Rule]
+            //li #[a(href="#") Create Incident]
+            li #[a.copy-details-full(data-clipboard-target="#clipboard_full_text") Copy Full Event]
+            li #[a.copy-details-brief(data-clipboard-target="#clipboard_brief_text") Copy Event Summary]
+
+        .btn-group
+          button.btn.btn-default(data-dismiss='modal' value='Close') Close

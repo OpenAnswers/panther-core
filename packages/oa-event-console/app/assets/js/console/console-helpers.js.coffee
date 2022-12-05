@@ -75,7 +75,7 @@ w2size = ->
 
 # **Note** this relies on the `w2grid_all_columns` global :|
 # Store an array of w2ui data fields
-w2ui_date_fields = _.pluck(
+w2ui_date_fields = _.map(
   _.filter( w2grid_all_columns, display_type: 'Date' ),
   'field'
 )

@@ -1,0 +1,10 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+for severity in severities
+  // sevs
+  li#action_menu_assign_test
+    a(tabindex='-1' action='severity' severity=severity.value) #{severity.label}

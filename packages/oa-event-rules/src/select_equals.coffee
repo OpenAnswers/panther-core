@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -101,9 +101,31 @@ class @SelectEquals  extends SelectBaseFieldValue
 
   # Run the event through the matcher
   run: (event_obj) ->
-    debug "run: equals", @field, @value, @toString()
-    return false unless event_obj.get(@field)?
-    event_obj.get(@field) == @value
+    debug "run: equals field:[%o], value:[%o], %o", @field, @value, @toString()
+
+    field_value = event_obj.get_any @field
+    return false unless field_value?
+    debug "considering field_value:[%o]", field_value
+
+    matched_result = 
+      if Array.isArray @value
+        found_in_array = false
+        for inner_value in @value
+          debug "trying inner [%o]", inner_value
+          if field_value == inner_value
+            found_in_array = true
+            break
+        found_in_array
+      else
+        field_value == @value
+
+
+    # matched_value = field_value == @value
+
+    debug "equals ", if matched_result then "✔️" else "❌"
+    matched_result
+
+
 
   # Conver match to english string
   toString: ->

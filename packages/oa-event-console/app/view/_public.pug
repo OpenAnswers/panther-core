@@ -1,0 +1,31 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+doctype html
+
+html(lang="en")
+
+  head
+    title #{title} - #{name}
+    include _scripts
+    include _css
+    include _favicon
+    != css('css/index')
+
+    //- refresh outside of production
+    - if( node_env === 'development' && !no_refresh_env ) refresh = js('js/refresh.js');
+    != refresh
+
+  body
+    //- Load the mixins content
+    .container
+      block content
+
+    //- Then any custom scripts for the mixin
+    block script
+
+    //- And anything last
+    block footer

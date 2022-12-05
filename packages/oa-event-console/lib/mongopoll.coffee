@@ -1,6 +1,6 @@
 
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -250,7 +250,7 @@ class MongoPoll extends MongoPollBase
     require('./mongoose').Mongoose.alerts
       .find query, filter
       .sort sort
-      .toArrayAsync()
+      .toArray()
 
 
   # ###### emit_current_ids()
@@ -271,7 +271,7 @@ class MongoPoll extends MongoPollBase
 
     p = require('./mongoose').Mongoose.alerts
       .find filter, { _id: 1 }
-      .toArrayAsync()
+      .toArray()
     debug "Finder returned"
 
     p.then ( ids ) ->

@@ -1,72 +1,72 @@
 /*
- * Copyright (C) 2015, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
  * All rights reserved.
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
 
 // Logging
-var logging = require("oa-logging")("oa:event:server:monitor_server");
+var logging = require('oa-logging')('oa:event:server:monitor_server');
 var logger = logging.logger;
 var debug = logging.debug;
 
 // Node modules
-var inspect = require("util").inspect;
-var EventEmitter = require("events").EventEmitter;
-var http = require("http");
+var inspect = require('util').inspect;
+var EventEmitter = require('events').EventEmitter;
+var http = require('http');
 
-var Class = require("joose").Class;
-var SocketIO = require("socket.io");
-var lodashKeys = require("lodash/keys");
-let Joose = require("joose");
-let Promise = require("bluebird");
-let lodashGet = require("lodash/get");
-let lodashHas = require("lodash/has");
-let lodashJoin = require("lodash/join");
-let lodashFlattenDeep = require("lodash/flattenDeep");
-let lodashMap = require("lodash/map");
-let lodashSize = require("lodash/size");
-let lodashPickBy = require("lodash/pickBy");
+var Class = require('joose').Class;
+var SocketIO = require('socket.io');
+var lodashKeys = require('lodash/keys');
+let Joose = require('joose');
+let Promise = require('bluebird');
+let lodashGet = require('lodash/get');
+let lodashHas = require('lodash/has');
+let lodashJoin = require('lodash/join');
+let lodashFlattenDeep = require('lodash/flattenDeep');
+let lodashMap = require('lodash/map');
+let lodashSize = require('lodash/size');
+let lodashPickBy = require('lodash/pickBy');
 
-let lodashIsFunction = require("lodash/isFunction");
+let lodashIsFunction = require('lodash/isFunction');
 
 // version
-exports.version = require("../package.json").version;
+exports.version = require('../package.json').version;
 
-var AlertOccurrences = require("./alert_occurrences").Model;
-var AlertMatches = require("./alert_matches").Model;
-var RuleMatches = require("./rule_matches").Model;
-var Inventory = require("./inventory").Model;
+var AlertOccurrences = require('./alert_occurrences').Model;
+var AlertMatches = require('./alert_matches').Model;
+var RuleMatches = require('./rule_matches').Model;
+var Inventory = require('./inventory').Model;
 
-var Errors = require("oa-errors");
+var Errors = require('oa-errors');
 
-var OAmonHome = require("./OAmonHome").OAmonHome;
+var OAmonHome = require('./OAmonHome').OAmonHome;
 var oamonhome = new OAmonHome();
 
-var rules = require("oa-event-rules");
+var rules = require('oa-event-rules');
 var EventRules = rules.EventRules;
 
-var ServerConfig = require("./server_config");
+var ServerConfig = require('./server_config');
 var server_config = new ServerConfig.ServerConfig();
 
 // ## class MonitorServer
 
-exports.MonitorServer = Class("MonitorServer", {
+exports.MonitorServer = Class('MonitorServer', {
   meta: Joose.Meta.Class,
   isa: EventEmitter,
 
   has: {
     Alerts: Joose.I.Object,
-    endpoint: { is: "rw", init: server_config.DeltaPort() },
-    mandatoryColumns: { is: "rw" },
-    allowedColumns: { is: "rw" },
-    listeningSocket: { is: "rw" },
-    serverRules: { is: "rw" },
-    serverRulesFile: { is: "rw", init: server_config.RulesFile() },
-    serverRulesTracking: { is: "rw", init: server_config.RulesTracking() }
+    endpoint: { is: 'rw', init: server_config.DeltaPort() },
+    mandatoryColumns: { is: 'rw' },
+    allowedColumns: { is: 'rw' },
+    listeningSocket: { is: 'rw' },
+    serverRules: { is: 'rw' },
+    serverRulesFile: { is: 'rw', init: server_config.RulesFile() },
+    serverRulesTracking: { is: 'rw', init: server_config.RulesTracking() },
   },
 
   methods: {
-    start: function(cb) {
+    start: function (cb) {
       var self = this;
 
       try {
@@ -74,14 +74,14 @@ exports.MonitorServer = Class("MonitorServer", {
           new EventRules({
             server: true,
             path: this.getServerRulesFile(),
-            reload_cb: function(event, path) {
-              logger.info("Rules have been reloaded", path);
-            }
+            reload_cb: function (event, path) {
+              logger.info('Rules have been reloaded', path);
+            },
           })
         );
-        logger.info("Server Rules loaded from yaml");
+        logger.info('Server Rules loaded from yaml');
       } catch (err) {
-        let message = "Failed to load rules:\n" + err;
+        let message = 'Failed to load rules:\n' + err;
         logger.error(message);
         if (cb) cb(err);
         process.exit(1); // eslint-disable-line no-process-exit
@@ -89,37 +89,37 @@ exports.MonitorServer = Class("MonitorServer", {
 
       var sock_options = {
         logger: {
-          debug: function(msg) {
+          debug: function (msg) {
             logger.debug(msg);
           },
-          info: function(msg) {
+          info: function (msg) {
             logger.info(msg);
           },
-          warn: function(msg) {
+          warn: function (msg) {
             logger.warn(msg);
           },
-          error: function(msg) {
+          error: function (msg) {
             logger.error(msg);
-          }
-        }
+          },
+        },
       };
 
       var port = self.getEndpoint();
 
-      logger.debug("Socket.IO going to listen on " + port);
-      if (typeof port != "number") throw new Error("sockio_port not a number");
+      logger.debug('Socket.IO going to listen on ' + port);
+      if (typeof port != 'number') throw new Error('sockio_port not a number');
 
       // Setup a web server for socketio to listen on
-      var http_srv = http.Server(function(req, res) {
+      var http_srv = http.Server(function (req, res) {
         res.writeHead(404);
         res.end();
       });
 
       http_srv.listen(port);
 
-      http_srv.on("listen", function(err) {
+      http_srv.on('listen', function (err) {
         if (err) throw err;
-        logger.info("SocketIO web server listening on port [" + port + "]");
+        logger.info('SocketIO web server listening on port [' + port + ']');
       });
 
       // Attach socketio to the web server
@@ -129,50 +129,50 @@ exports.MonitorServer = Class("MonitorServer", {
       this.setListeningSocket(sock);
 
       // When a new event is recieved handle it within this class
-      self.on("newevent", function(ev, cb) {
+      self.on('newevent', function (ev, cb) {
         try {
-          logger.silly("newevent in", ev, "");
+          logger.silly('newevent in', ev, '');
           self.newevent(ev, cb);
         } catch (err) {
-          logger.error("Error in newevent [%s]", err.message, err.stack);
+          logger.error('Error in newevent [%s]', err.message, err.stack);
           if (cb) cb(err);
         }
       });
 
       // Get ready to receive events from monitors
-      sock.sockets.on("connection", function(accepted_socket) {
+      sock.sockets.on('connection', function (accepted_socket) {
         self.startReceivingAlerts(accepted_socket);
         self.startHandshake(accepted_socket);
       });
 
-      sock.sockets.on("disconnect", function(accepted_socket) {
-        logger.warn("monitor client disconnected");
+      sock.sockets.on('disconnect', function (accepted_socket) {
+        logger.warn('monitor client disconnected');
       });
 
-      sock.sockets.on("ping", function(accepted_socket) {
-        debug("monitor client ping:", accepted_socket);
+      sock.sockets.on('ping', function (accepted_socket) {
+        debug('monitor client ping:', accepted_socket);
       });
 
       if (cb) cb(null);
     },
 
-    newevent: function(ev, cb) {
-      debug("got newevent", ev);
+    newevent: function (ev, cb) {
+      debug('got newevent', ev);
 
-      if (ev.mode === undefined) return logger.error("new event recieved without a valid mode value");
+      if (ev.mode === undefined) return logger.error('new event recieved without a valid mode value');
 
-      if (ev.mode === "insert") this.insertevent(ev, cb);
-      else if (ev.mode === "inserts") this.insertevents(ev, cb);
-      else logger.warn("unhandled event recieved: " + ev.mode);
+      if (ev.mode === 'insert') this.insertevent(ev, cb);
+      else if (ev.mode === 'inserts') this.insertevents(ev, cb);
+      else logger.warn('unhandled event recieved: ' + ev.mode);
     },
 
     // update counter of rules uuid usage
-    promisedRuleMatches: function(processed_event) {
+    promisedRuleMatches: function (processed_event) {
       // get the uuids of each applied rule
       let matchedRules = this.flattenMatches(processed_event);
 
       // upsert function
-      const f = (uuid) => {
+      const f = uuid => {
         let query = { rule_uuid: uuid };
         let update = { $set: { rule_uuid: uuid }, $inc: { tally: 1 } };
         return RuleMatches.update(query, update, { upsert: true });
@@ -184,41 +184,41 @@ exports.MonitorServer = Class("MonitorServer", {
       return Promise.all(matchedPromises);
     },
 
-    promisedAlertMatches: function(processed_event) {
+    promisedAlertMatches: function (processed_event) {
       let fields = processed_event.copy;
       let flattened = this.flattenMatches(processed_event);
       let query = { identifier: fields.identifier };
       let options = { upsert: true, new: true };
       let tnow = new Date();
 
-      debug("Tracking: " + fields.identifier + " matches " + flattened);
+      debug('Tracking: ' + fields.identifier + ' matches ' + flattened);
 
       return AlertMatches.update(
         query,
         {
           identifier: fields.identifier,
           rule_uuids: flattened,
-          updated_at: tnow
+          updated_at: tnow,
         },
         options
       );
     },
 
-    promisedUpdateInventory: function(node) {
-      debug("updating inventory for ", node);
+    promisedUpdateInventory: function (node) {
+      debug('updating inventory for ', node);
       let t = new Date();
       return Inventory.update({ node: node }, { $set: { last_seen: t } }, { upsert: true });
     },
 
     // ###### insertevent( event, callback )*
     // Insert one event into the database
-    insertevent: function(ev, cb) {
+    insertevent: function (ev, cb) {
       var self = this;
-      debug("insertevent");
-      if (!lodashIsFunction(cb)) throw new Error("cb not fn");
+      debug('insertevent');
+      if (!lodashIsFunction(cb)) throw new Error('cb not fn');
 
       if (ev.fields === undefined) {
-        var error = new Errors.ValidationError("Insert object is missing the fields property");
+        var error = new Errors.ValidationError('Insert object is missing the fields property');
         if (cb) cb(error);
         return logger.error(error);
       }
@@ -230,14 +230,14 @@ exports.MonitorServer = Class("MonitorServer", {
       // update and rules tracking data
       let tracking = self.getServerRulesTracking();
       debug(
-        "Event entering rules processing tracking=",
+        'Event entering rules processing tracking=',
         tracking,
-        lodashKeys(ev.fields).join(","),
+        lodashKeys(ev.fields).join(','),
         ev.fields.identifier
       );
 
       var processed_event = self.getServerRules().run(ev.fields, { tracking_matches: tracking });
-      debug("Event after rules processing", tracking, processed_event);
+      debug('Event after rules processing', tracking, processed_event);
 
       /*
             // Check the event is ok
@@ -253,24 +253,24 @@ exports.MonitorServer = Class("MonitorServer", {
 
       // all recieved events update inventory and occurrences
       let allPromises = {
-        inventory: self.promisedUpdateInventory(processed_event.get("node")),
-        occurences: self.promisedUpdateOccurences(processed_event)
+        inventory: self.promisedUpdateInventory(processed_event.get('node')),
+        occurences: self.promisedUpdateOccurences(processed_event),
       };
 
       // track rules usage when enabled
       if (tracking) {
-        allPromises.tracking = self.promisedRuleMatches(processed_event).catch((e) => {
+        allPromises.tracking = self.promisedRuleMatches(processed_event).catch(e => {
           if (e && e.message) {
-            logger.error("Failed to update rule matches ", e.message);
+            logger.error('Failed to update rule matches ', e.message);
           } else {
-            logger.error("Failed to update rule matches ", e);
+            logger.error('Failed to update rule matches ', e);
           }
         });
-        allPromises.matches = self.promisedAlertMatches(processed_event).catch((e) => {
+        allPromises.matches = self.promisedAlertMatches(processed_event).catch(e => {
           if (e && e.message) {
-            logger.error("Failed to update alert matches ", e.message);
+            logger.error('Failed to update alert matches ', e.message);
           } else {
-            logger.error("Failed to update alert matches ", e);
+            logger.error('Failed to update alert matches ', e);
           }
         });
       }
@@ -281,47 +281,47 @@ exports.MonitorServer = Class("MonitorServer", {
       }
 
       Promise.props(allPromises)
-        .then((promiseResults) => {
+        .then(promiseResults => {
           // strip hidden properties
           let simplifiedNewEvent = lodashPickBy(processed_event.copy, (value, key) => {
             return !key.match(/^_/);
           });
 
           if (promiseResults.alert) {
-            let identifier = processed_event.get("identifier");
+            let identifier = processed_event.get('identifier');
 
-            if (lodashGet(promiseResults, "alert.nModified") == 0) {
+            if (lodashGet(promiseResults, 'alert.nModified') == 0) {
               return cb(null, {
-                message: "Saved new event: " + identifier,
-                state: "inserted",
-                event: simplifiedNewEvent
+                message: 'Saved new event: ' + identifier,
+                state: 'inserted',
+                event: simplifiedNewEvent,
               });
             } else {
-              return cb(null, { message: "Updated event: " + identifier, state: "updated" });
+              return cb(null, { message: 'Updated event: ' + identifier, state: 'updated' });
             }
           } else {
             logger.info(
-              "Event dropped. id[%s]",
-              processed_event.get("identifier"),
-              processed_event.get("_pre_identifier"),
+              'Event dropped. id[%s]',
+              processed_event.get('identifier'),
+              processed_event.get('_pre_identifier'),
               lodashJoin(self.flattenMatches(processed_event))
             );
 
-            var response = { message: "Event discarded", state: "dropped", event: simplifiedNewEvent };
+            var response = { message: 'Event discarded', state: 'dropped', event: simplifiedNewEvent };
             return cb(response);
           }
         })
-        .catch((e) => {
+        .catch(e => {
           if (e && e.message) {
-            logger.error("UpsertAlert Failed with " + e.message);
+            logger.error('UpsertAlert Failed with ' + e.message);
           } else {
-            logger.error("UpsertAlert ", e);
+            logger.error('UpsertAlert ', e);
           }
           return cb(e);
         });
     },
 
-    promisedUpsertAlert: function(processed_event) {
+    promisedUpsertAlert: function (processed_event) {
       let fields = processed_event.copy;
       let time_now = new Date();
 
@@ -334,7 +334,7 @@ exports.MonitorServer = Class("MonitorServer", {
       let operation = {
         $set: update.$set,
         $inc: update.$inc,
-        $setOnInsert: lert
+        $setOnInsert: lert,
       };
       let options = { upsert: true };
 
@@ -349,10 +349,10 @@ exports.MonitorServer = Class("MonitorServer", {
 
       return this.Alerts.update(query, operation, options)
         .exec()
-        .catch((e) => {
+        .catch(e => {
           // catch duplicate key and attempt update
           if (e && e.code === 11000) {
-            logger.info("E11000 caught and updated ", query, update);
+            logger.info('E11000 caught and updated ', query, update);
             return this.Alerts.findAndModify(query, [], update);
           } else {
             return e;
@@ -361,32 +361,32 @@ exports.MonitorServer = Class("MonitorServer", {
     },
 
     // Inserts a batch of events to the database
-    insertevents: function(evs, cb) {
+    insertevents: function (evs, cb) {
       var self = this;
       if (evs.alerts === undefined) {
-        if (cb) cb("alerts not present");
-        return logger.error("alerts not present");
+        if (cb) cb('alerts not present');
+        return logger.error('alerts not present');
       }
-      evs.alerts.forEach(function(ev) {
+      evs.alerts.forEach(function (ev) {
         self.insertevent(ev);
       });
       // Do some async cb stuff so we can return a cb with
       // all success or those failed
     },
 
-    increment_tally_by: function(fields) {
+    increment_tally_by: function (fields) {
       /*
        * work out a number to increment the tally by
        */
       var increment_by = 1;
       if (fields.tally) {
         var parsed_tally = parseInt(fields.tally);
-        if (parsed_tally != "NaN" && parsed_tally > 0) increment_by = parsed_tally;
+        if (parsed_tally != 'NaN' && parsed_tally > 0) increment_by = parsed_tally;
       }
       return increment_by;
     },
 
-    update_with: function(fields) {
+    update_with: function (fields) {
       // Allow the newly arrived event to set the following fields
       var self = this;
       var time_now = new Date();
@@ -394,34 +394,34 @@ exports.MonitorServer = Class("MonitorServer", {
         $set: {
           state_change: time_now,
           last_occurrence: fields.last_occurrence || time_now,
-          alert_key: fields.alert_key || "",
-          summary: fields.summary || ""
+          alert_key: fields.alert_key || '',
+          summary: fields.summary || '',
         },
         // newly arrived event also increments the tally
-        $inc: { tally: self.increment_tally_by(fields) }
+        $inc: { tally: self.increment_tally_by(fields) },
       };
     },
 
     // extract the uuid strings into an array
-    flattenMatches: function(processed_event) {
-      if (!lodashHas(processed_event, "matches")) {
+    flattenMatches: function (processed_event) {
+      if (!lodashHas(processed_event, 'matches')) {
         return [];
       }
 
-      let global_matches = lodashGet(processed_event, "matches.global", []);
-      let global_uuids = lodashMap(global_matches, "uuid");
+      let global_matches = lodashGet(processed_event, 'matches.global', []);
+      let global_uuids = lodashMap(global_matches, 'uuid');
 
-      let group_matches = lodashGet(processed_event, "matches.group", []);
+      let group_matches = lodashGet(processed_event, 'matches.group', []);
       let group_uuids = lodashMap(group_matches, (value, key) => {
         let group_uuid = [value.group_uuid];
-        let match_uuids = lodashMap(value.matches, "uuid");
+        let match_uuids = lodashMap(value.matches, 'uuid');
         return [group_uuid, match_uuids];
       });
 
       return lodashFlattenDeep([global_uuids, group_uuids]);
     },
 
-    promisedUpdateOccurences: function(processed_event) {
+    promisedUpdateOccurences: function (processed_event) {
       let fields = processed_event.copy;
       let options = { upsert: true, new: true };
 
@@ -433,19 +433,19 @@ exports.MonitorServer = Class("MonitorServer", {
         {
           $push: {
             current: {
-              $each: [update_with["$set"].last_occurrence],
-              $slice: -1440
-            }
+              $each: [update_with['$set'].last_occurrence],
+              $slice: -1440,
+            },
           },
-          $set: { updated_at: update_with["$set"].last_occurrence }
+          $set: { updated_at: update_with['$set'].last_occurrence },
         },
         options
       );
     },
 
-    promisedUpdateAlert: function(processed_event, socket_cb) {
+    promisedUpdateAlert: function (processed_event, socket_cb) {
       if (!lodashIsFunction(socket_cb)) {
-        throw new Error("invalid arg");
+        throw new Error('invalid arg');
       }
       let fields = processed_event.copy;
       let options = { upsert: true, new: true };
@@ -463,7 +463,7 @@ exports.MonitorServer = Class("MonitorServer", {
       if (this.getServerRulesTracking()) {
         let flattened = this.flattenMatches(processed_event);
 
-        debug("Tracking: " + fields.identifier + " matches " + flattened);
+        debug('Tracking: ' + fields.identifier + ' matches ' + flattened);
 
         let promiseUpdateMatches = AlertMatches.update(
           query,
@@ -476,19 +476,19 @@ exports.MonitorServer = Class("MonitorServer", {
 
       // run all the promises
       Promise.all(promisesToRun)
-        .then((results) => {
+        .then(results => {
           return socket_cb(null, {
-            message: "Updated alert: " + fields.identifier,
-            state: "updated"
+            message: 'Updated alert: ' + fields.identifier,
+            state: 'updated',
           });
         })
-        .catch((err) => {
+        .catch(err => {
           logger.error(err);
           socket_cb(err);
         });
     },
 
-    insert_new_event: function(processed_event, socket_cb) {
+    insert_new_event: function (processed_event, socket_cb) {
       var self = this;
       var fields = processed_event.copy;
       var time_now = new Date();
@@ -501,12 +501,12 @@ exports.MonitorServer = Class("MonitorServer", {
 
       // attach "nicer" matches the the event
       if (lodashSize(processed_event.matches) > 0) {
-        new_fields["matches"] = processed_event.matches;
+        new_fields['matches'] = processed_event.matches;
       }
 
       var new_lert = new self.Alerts(new_fields);
-      new_lert.save(function(err) {
-        logger.debug("Attempting to save new alert: " + new_fields.identifier);
+      new_lert.save(function (err) {
+        logger.debug('Attempting to save new alert: ' + new_fields.identifier);
         /*
          * was the alert already found in the database?
          * this can happen when there is a high insert rate
@@ -515,19 +515,19 @@ exports.MonitorServer = Class("MonitorServer", {
          */
         if (err && err.code === 11000) {
           // duplicate key
-          logger.warn("Dupe err.code 11000" + err);
+          logger.warn('Dupe err.code 11000' + err);
           self.promisedUpdateAlert(processed_event, socket_cb);
         } else if (err) {
           if (socket_cb) socket_cb(err);
-          logger.error("Error saving new alert", err);
+          logger.error('Error saving new alert', err);
         } else {
-          debug("Saved new alert", new_lert);
-          logger.info("Saved new event", new_lert.identifier);
+          debug('Saved new alert', new_lert);
+          logger.info('Saved new event', new_lert.identifier);
           if (socket_cb)
             socket_cb(null, {
-              message: "Saved new event: " + new_lert.identifier,
+              message: 'Saved new event: ' + new_lert.identifier,
               event: new_lert,
-              state: "inserted"
+              state: 'inserted',
             });
           // The model already does this
           // var update_query = { identifier: new_fields.identifier };
@@ -539,16 +539,16 @@ exports.MonitorServer = Class("MonitorServer", {
       });
     },
 
-    startReceivingAlerts: function(accepted_socket) {
+    startReceivingAlerts: function (accepted_socket) {
       var self = this;
 
       var validated_identifiers = [];
 
-      accepted_socket.on("insert_events", function(events, recv_cb) {
-        events.forEach(function(ev) {
-          self.validate_event(ev, function(err) {
+      accepted_socket.on('insert_events', function (events, recv_cb) {
+        events.forEach(function (ev) {
+          self.validate_event(ev, function (err) {
             if (!err) {
-              self.emit("newevent", { mode: "insert", fields: ev }, recv_cb);
+              self.emit('newevent', { mode: 'insert', fields: ev }, recv_cb);
               validated_identifiers.push(ev.identifier);
             }
           });
@@ -557,16 +557,16 @@ exports.MonitorServer = Class("MonitorServer", {
         validated_identifiers = [];
       });
 
-      accepted_socket.on("insert_event", function(ev, recv_cb) {
+      accepted_socket.on('insert_event', function (ev, recv_cb) {
         if (!lodashIsFunction(recv_cb)) {
-          recv_cb = function(data) {
-            debug("NO CB for insert_event", data);
+          recv_cb = function (data) {
+            debug('NO CB for insert_event', data);
           };
         }
-        logger.debug("Identifier: " + ev.identifier || "unknown");
-        self.validate_event(ev, function(err) {
+        logger.debug('Identifier: ' + ev.identifier || 'unknown');
+        self.validate_event(ev, function (err) {
           if (!err) {
-            self.emit("newevent", { mode: "insert", fields: ev }, recv_cb);
+            self.emit('newevent', { mode: 'insert', fields: ev }, recv_cb);
             validated_identifiers.push(ev.identifier);
           }
         });
@@ -574,38 +574,38 @@ exports.MonitorServer = Class("MonitorServer", {
         validated_identifiers = [];
       });
     },
-    startHandshake: function(accepted_socket) {
-      logger.debug("starting handshake...");
+    startHandshake: function (accepted_socket) {
+      logger.debug('starting handshake...');
 
       var profile = {
         columns: {
           all: this.getAllowedColumns(),
-          mandatory: this.getMandatoryColumns()
+          mandatory: this.getMandatoryColumns(),
         },
-        severities: [] // FIXME
+        severities: [], // FIXME
       };
-      debug("sending greetings: " + inspect(profile));
+      debug('sending greetings: ' + inspect(profile));
 
-      accepted_socket.emit("greetings", { profile: profile }, function(data) {
-        debug("greetings response data: " + inspect(data));
+      accepted_socket.emit('greetings', { profile: profile }, function (data) {
+        debug('greetings response data: ' + inspect(data));
       });
     },
-    validate_event: function(ev, cb) {
+    validate_event: function (ev, cb) {
       var missing_columns = [];
       var ret = null;
-      this.getMandatoryColumns().forEach(function(column) {
+      this.getMandatoryColumns().forEach(function (column) {
         if (ev[column] == undefined) missing_columns.push(column);
       });
 
       if (missing_columns.length > 0) {
-        var msg = "";
-        if (ev.identifier) msg += "identifier [" + ev.identifier + "] ";
-        msg += "missing mandatory columns [" + missing_columns.join(", ") + "]";
+        var msg = '';
+        if (ev.identifier) msg += 'identifier [' + ev.identifier + '] ';
+        msg += 'missing mandatory columns [' + missing_columns.join(', ') + ']';
         logger.error(msg);
         ret = new Errors.ValidationError(msg);
       }
 
       cb(ret);
-    }
-  }
+    },
+  },
 });

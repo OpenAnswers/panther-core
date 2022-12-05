@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -43,29 +43,22 @@ SeveritySchema = new mongoose.Schema
 
 
 # Just get the labels and values
-SeveritySchema.statics.getLabels = (cb)->
+SeveritySchema.statics.getLabels = ()->
   @find   system: true
   .select value:  1, label:1
   .sort   value: -1
-  .exec   cb
+  .exec() 
 
 # Get the label, value and colour
-SeveritySchema.statics.getSeverities = (cb)->
-  @find   system: true
-  .select value:  1, label: 1, background: 1
-  .sort   value: -1
-  .exec   cb
-
-# Get the label, value and colour
-SeveritySchema.statics.getSeveritiesWithId = (cb)->
+SeveritySchema.statics.getSeveritiesWithId = ()->
   @find   system: true
   .select _id: 1, value:  1, label: 1, background: 1
   .sort   value: -1
-  .exec   cb
+  .exec()
 
 
 # Export and Promisify the model
 Severity   = mongoose.model 'Severity', SeveritySchema
-Promise.promisifyAll Severity
-Promise.promisifyAll Severity.prototype
+#Promise.promisifyAll Severity
+#Promise.promisifyAll Severity.prototype
 module.exports.Severity = Severity

@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -105,7 +105,7 @@ router.param 'apikey', ( req, res, next, apikey ) ->
 #                   type: boolean
 ###
 router.get '/exists/:apikey', ( req, res, next ) ->
-  ApiKey.findOneAsync { apikey: req.apikey }
+  ApiKey.findOne { apikey: req.apikey }
   .then ( doc ) ->
     unless doc
       return res.json { found: false }
@@ -155,7 +155,7 @@ router.use (req, res, next) ->
 #         $ref: '#/responses/Unauthorised'
 ###
 router.get '/read', ( req, res, next ) ->
-  ApiKey.findAsync()
+  ApiKey.find()
   .then ( docs ) ->
     res.json {
       results: docs.length
@@ -198,7 +198,7 @@ router.get '/read', ( req, res, next ) ->
 ###
 
 router.get '/read/:apikey', ( req, res, next ) ->
-  ApiKey.findOneAsync { apikey: req.apikey }
+  ApiKey.findOne { apikey: req.apikey }
   .then ( doc ) ->
     unless doc
       next new Errors.HttpError404
@@ -240,17 +240,17 @@ router.get '/read/:apikey', ( req, res, next ) ->
 
 router.delete '/delete/:apikey', ( req, res, next ) ->
   logger.debug 'removing apikey', req.apikey
-  ApiKey.removeAsync { apikey: req.apikey }
+  ApiKey.deleteOne { apikey: req.apikey }
   .then ( doc ) ->
     debug 'remove doc result', doc?.result
     unless doc
       throw new Errors.HttpError404
     
-    if doc.result.ok isnt 1 or doc.result.n isnt 1
+    if doc.ok isnt 1 or doc.n isnt 1
       throw new Errors.HttpError404
 
     logger.info 'apikey removed', req.apikey
-    res.json { result: doc.result, message: "deleted" }
+    res.json { result: doc, message: "deleted" }
   
   .catch ( err ) ->
     debug 'remove error', err

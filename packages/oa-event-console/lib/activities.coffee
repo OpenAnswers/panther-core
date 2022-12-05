@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -205,7 +205,7 @@ class Activities
 
       debug 'Saving new activity to db', activity
 
-      activity.saveAsync()
+      activity.save()
       .then ( result )->
         resolve result
 

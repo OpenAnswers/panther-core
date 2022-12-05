@@ -1,0 +1,60 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _nav
+
+
+block pagenav
+  if ( user )
+    li.dropdown(class=(nav_location == 'dashboard') ? 'active' : '' )
+      a(href='/dashboard') Dashboard
+      
+
+    li.dropdown(class=(nav_location == 'console') ? 'active' : '' )
+      a(href='/console/') Console
+
+
+    li.dropdown(class=(nav_location == 'rules') ? 'active' : '' )
+      a.dropdown-toggle(href='/rules', data-toggle='dropdown') Rules
+        span.caret
+      ul.dropdown-menu(role='menu')
+        each link,name in { 'Create New Rule':'/rules/new' }
+          li
+            a(href=link)= name
+        li.divider
+        each link,name in { 'Global Rules':'/rules/globals', 'Group Rules':'/rules/groups', 'Schedules':'/rules/schedules' }
+          li
+            a(href=link)= name
+        li.divider
+        include _nav_generic_agent
+        li.divider
+        if ( user.group && user.group === 'admin' )
+          each link,name in { 'Import/Export':'/rules/data/export'}
+            li
+              a(href=link)= name
+        else
+          each link,name in { 'Export':'/rules/data/export'}
+            li
+              a(href=link)= name
+
+
+    li.dropdown(class=(nav_location == 'views') ? 'active' : '' )
+      a(href='/views') Views
+
+    //- li.dropdown(class=(nav_location == 'integrations') ? 'active' : '' )
+    //-   a(href='/integrations') Integrations
+
+    if ( user.group && user.group === 'admin' )
+      li.dropdown(class=(nav_location == 'apiconsole') ? 'active' : '' )
+        a(href='/apiconsole') API
+
+    if ( user.group && user.group === 'admin' )
+      li.dropdown(class=(nav_location == 'admin') ? 'active' : '' )
+        a(href='/admin') Admin
+  else
+    li.dropdown(class=(nav_location == 'login') ? 'active' : '' )
+      a(href='/login') Login
+

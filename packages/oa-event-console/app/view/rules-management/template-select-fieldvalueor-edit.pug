@@ -1,0 +1,29 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+script(id="template-select-fieldvalueor-edit" type="text/x-mustache-template")
+  .select-entry-edit.collapse(data-select-id="{{data.verb}}" class="action-{{ data.verb }}")
+    .inner
+      .right
+        span.glyphicon.glyphicon-remove.select-delete-button
+      .left
+        .selects-fixed-width
+          .select-field.edit-padding
+            input.form-control(type="text" value="{{data.field}}" placeholder="field" name='field'
+            class="input-verb-select-{{ data.verb }}-field")
+          .select-operator.edit-padding
+            input.form-control(type="text" value="{{data.verb}}" name='operator' placeholder="operator"
+            class="input-verb-select-{{ data.verb }}-operator")
+        .selects-flexible-width
+          | {{# data.value }}
+          .select-values.select-values-edit.edit-padding.input-group.has-feedback.has-clear
+            input.form-control(type="text" value="{{ . }}"  operator="value" name='value'
+            class="input-verb-select-{{ data.verb }}-values" 
+            placeholder="{{ data.value_placeholder }}")
+            span.select-values-delete.glyphicon.form-control-feedback.form-control-clear.glyphicon-remove(data-index="{{ data.value_fn }}")
+          | {{/ data.value }}
+          .select-add-values.edit-padding.btn.btn-success.margintop5
+            | Add New Value

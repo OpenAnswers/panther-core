@@ -1,0 +1,52 @@
+//- 
+//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _template
+
+
+block script
+  //-!= js('js/_rules-management.js')
+  != js('js/import-export.js')
+  != js('bower/FileSaver.js')
+
+  script(src='/siofu/client.js')
+
+
+block nav
+  - var nav_location = 'rules';
+  include ./_nav_generic
+
+block css
+  != css('css/rules-management.css')
+
+block content
+  .header
+  .container
+    h1 Rule: Import / Export 
+
+    .card.card-generic
+      .inner
+        .title Download your rules
+        .content.row
+          .col-md-2
+            #data-export.btn.btn-success(value='Download') Download
+          .col-md-2 rules.yaml
+            
+          
+
+    if ( user.group && user.group === 'admin' )
+      .card.card-generic.margintop15
+        .inner 
+          .title Upload your rules 
+          .content.row
+            .col-md-6
+              p Uploaded rules must be in YAML format
+          .content.row
+            .col-md-4
+              #rule-activate.btn.btn-success Activate
+              input#siofu_input(type="file" name='upload-rules')
+            .col-md-6
+              #rule-filename 

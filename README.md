@@ -1,5 +1,7 @@
 ![Panther Logo](/packages/oa-event-console/public/panther_logo_border.png)
 
+Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+All rights reserved.
 # Description
 
 Panther is an event consolidation and management application that centralizes and manages events from IT systems, networks and applications in a single console. Support and Operations teams benefit from increased efficiency and speed to problem resolution by being able to quickly and easily identify the monitoring events that are most important.
@@ -78,7 +80,7 @@ To change the initial username/password credentials modify the following environ
 version: '3'
 services:
   mongodb:
-    image: mongo:3.2.16
+    image: mongo:3.6.23
     container_name: mongo
     hostname: mongodb
     restart: unless-stopped

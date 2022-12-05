@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2020, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -148,7 +148,7 @@ class @SelectSchedule  extends SelectBaseFieldValue
   # ###### run( event_object )
   # Run this match against an event
   run: (event_obj) ->
-    debug "run: schedule", @field, @value, event_obj.get(@field)
+    debug "run: schedule field:[%o], value:[%o], field_value: [%o]", @field, @value, event_obj.get_any(@field)
 
     # find the schedule
     schedule = Schedules.find_by_name @value
