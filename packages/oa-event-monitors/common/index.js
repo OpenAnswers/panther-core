@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
  * All rights reserved.
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
@@ -468,8 +468,6 @@ OaMon.prototype.readyAlerts = function (callback) {
 
     if (nconf.get('oneshot')) self.monitor.sendOneAlert(e, cb, qcb);
     else self.monitor.sendAlert(e, cb, qcb);
-
-    if (qcb) qcb(null, { status: 'queued' });
   });
 
   callback(null);

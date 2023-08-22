@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -95,7 +95,7 @@ route = (app) ->
     # Note passport.authenticate creates a function that is
     # called with ( req, res, next)
     passport.authenticate( 'local', (err, user, info) ->
-      logger.info 'Passport Authenticate err[%s] user[%s] info[%s] req.body.user[%s]', err, user, info, req.body.username
+      logger.info 'Passport Authenticate err[%s] info[%s] req.body.user[%s]', err, info, req.body.username
       if err
         logger.error 'Authentication passport error for user[%s]', user, err, ''
         return next(err)

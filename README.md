@@ -1,6 +1,6 @@
 ![Panther Logo](/packages/oa-event-console/public/panther_logo_border.png)
 
-Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 All rights reserved.
 # Description
 

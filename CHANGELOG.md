@@ -1,3 +1,45 @@
+# Panther 4.1.3
+
+## Changes
+- Docker base images updated to node 18 alpine3.18
+
+## NPM dependencies
+- socket.io@4
+- lerna@7
+- minimist@1.2.8
+- tough-cookie@4.1.3
+
+# Panther 4.1.2
+
+## Changes
+- when creating a rule in the gui it would be nice for a new tab to be opened
+- `external_id` added as a defualt column
+
+## NPM dependencies
+- migrate-mongo@10.0.0
+
+# Panther 4.1.1
+
+## Fixes
+
+- Parse errors in rule imports are exposed to the client.
+- Groups drop down menu has scrollbar added.
+- Dashboard stacked charts styling.
+- Disallow rule imports with no changes.
+- http monitor API responds only once.
+- event-rules schedule checking uses TZ.
+- `server.rules.yml` validation is tightened up.
+
+## Changes
+- Added Dashboard activity when `server.rules.yml` is imported.
+- Added git commit message when importing rules
+- Docker base images updated to alpine3.17
+
+## NPM dependecies
+- lerna@6.3.0
+- xmldom -> @xmldom/xmldom@0.7.7
+- minimist@1.2.7
+
 
 # Panther 4.1.0
 

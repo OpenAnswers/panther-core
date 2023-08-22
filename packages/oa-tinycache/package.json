@@ -1,11 +1,11 @@
 {
   "name": "oa-tinycache",
-  "version": "4.1.0",
+  "version": "4.1.3",
   "private": true,
   "description": "A tiny cache",
   "main": "lib/tiny_cache.js",
   "engines": {
-    "node": ">=16.13.0 <17"
+    "node": ">=16.13.0 <19"
   },
   "files": [
     "lib/*.js"

@@ -1,4 +1,4 @@
-FROM node:gallium-alpine3.15
+FROM node:hydrogen-alpine3.18
 ARG APP_UID=1001
 LABEL product="oa/node-app"
 RUN adduser -u ${APP_UID} -D -s /bin/false -h /app app app

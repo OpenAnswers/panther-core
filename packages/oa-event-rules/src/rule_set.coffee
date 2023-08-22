@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -21,11 +21,19 @@
 { _
   throw_error }   = require 'oa-helpers'
 
-
+{ ruleset_validator, joi_error_summary } = require './validations'
 
 # The RuleSet is a generic store for a set of rules.
 
 class @RuleSet
+
+  @validate: ( yaml_def )->
+    {error, value} = ruleset_validator.validate yaml_def
+    if error
+      messages = joi_error_summary error
+      for message in messages
+        logger.error "Validation [RuleSet] failed ", message
+      throw new Errors.ValidationError "RuleSet"
 
   #@generate: ( yaml_def, event_rules_ref ) ->
   @generate: ( yaml_def ) ->
@@ -34,7 +42,7 @@ class @RuleSet
     #rules.event_rules = event_rules_ref
     
     throw_error 'No definition' unless yaml_def
-
+    
     if yaml_def.discard
       rules.combine Discard.generate(yaml_def.discard)
 

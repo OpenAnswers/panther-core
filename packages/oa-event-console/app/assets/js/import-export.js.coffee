@@ -1,10 +1,4 @@
 
-#class IOFile 
-#
-#  @uploader = {}
-#  @uploaderInput = new SocketIOFileUpload( socket )
-
-
 # onload
 $ ->
 
@@ -18,20 +12,22 @@ $ ->
 
   # hide the activate button on the page until ready
   $('#rule-activate').hide()
+  $('#git-commit-msg').hide()
 
   socket.on "event_rules::validation", (validation)->
-    console.log "Did rules validate?"
-    console.table validation
+    # console.table validation
     if validation.status is "success"
       $('#siofu_input').hide()
       $('#rule-activate').show()
+      if gitEnabled
+        $('#git-commit-msg').show()
       $('#rule-filename').text(validation.filename)
       ImportExport.validation( validation )
       Message.info "Rules validated - ready to activate"
+    else if validation.status is "failed"
+      Message.error validation.msg
     else
       Message.error "Rule import failed"
-
-      console.log "Failed validation"
 
   socket.on "event_rules::available", (availableRules)->
     if availableRules.names
@@ -60,6 +56,8 @@ class ImportExport
 
   startit: ->
     @uploader = new SocketIOFileUpload socket
+    @uploader.useBuffer = false
+
     inputElement =  $('#siofu_input')[0]
 
     @uploader.listenOnInput inputElement
@@ -86,13 +84,23 @@ class ImportExport
   @validation: (data)->
     @validated_filename = data.filename
 
+  @get_git_commit_msg: ()->
+    $('input[name=commit-msg]').val()
+
   @activate: ()->
-    socket.emit "event_rules::activate", {filename: @validated_filename}, (error, data)->
+
+    commit_msg = if gitEnabled then @get_git_commit_msg() else ''
+
+    socket.emit "event_rules::activate", {filename: @validated_filename, commit_msg}, (error, data)->
       if error
-        Message.error "Failed to activate rules"
+        Message.error error.message
       else
         Message.info "Rules activated"
 
-      $('#siofu_input').show()
-      console.log "activated rule", data
-      $('#rule-activate').hide()
+    ImportExport.reset()
+
+  @reset: ()->
+    $('#siofu_input').show()
+    $('#rule-filename').text('')
+    $('#rule-activate').hide()
+    $('#git-commit-msg').hide()

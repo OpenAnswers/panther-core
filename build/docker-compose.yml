@@ -4,12 +4,12 @@ services:
     build:
       context: ..
       dockerfile: Dockerfiles/Dockerfile-builder
-    image: 'panther-builder:gallium-alpine3.15'
+    image: 'panther-builder:hydrogen-alpine3.18'
   runtime:
     build:
       context: ..
       dockerfile: Dockerfiles/Dockerfile-runtime
-    image: 'panther-runtime:gallium-alpine3.15'
+    image: 'panther-runtime:hydrogen-alpine3.18'
 
   server:
     depends_on:

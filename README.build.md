@@ -30,7 +30,7 @@ The build system uses [Lerna](https://github.com/lerna/lerna) for co-ordinating 
 If these are not already installed you'll need to:
 
 ```bash
-npm i -g lerna@5 yarn@1.22
+npm i -g lerna@7 yarn@1.22
 ```
 
 ## Running the build
@@ -38,7 +38,7 @@ npm i -g lerna@5 yarn@1.22
 Install the `npm` dependencies
 
 ```bash
-NODE_ENV=development lerna bootstrap
+NODE_ENV=development yarn install
 ```
 
 Download external dependencies (fonts, JS), this only needed the first time

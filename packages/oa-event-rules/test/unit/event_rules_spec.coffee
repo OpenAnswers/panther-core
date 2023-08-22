@@ -7,6 +7,7 @@ path = require 'path'
 
 # Test setup
 {EventRules} = require '../../lib/event_rules'
+Errors = require 'oa-errors'
 
 
 # And the tests
@@ -26,6 +27,22 @@ describe 'EventRules', ->
       expect( rules ).to.be.an.instanceof EventRules
       done()
 
+  describe 'Invalid YAML', ->
+    event_rules = null
+    yaml_event_rules =
+      cant_be_here: true
+      globals:
+        rules: []
+      groups:
+        _order: []
+      schedules: []
+ 
+
+    it 'throws an error for an unexpected toplevel property', ->
+      fn = -> new EventRules( server: true, doc: yaml_event_rules )
+
+      expect( fn ).to.throw( Errors.ValidationError, /Property.*cant_be_here/ )
+
 
   describe 'YAML', ->
   
@@ -38,7 +55,7 @@ describe 'EventRules', ->
         'One':
           select: all: true
           rules: []
-          uuid: "xxxx-yaml"
+          uuid: '22889210-b974-11e7-9889-c70bd1bece51'
       schedules: []
  
     before ->
@@ -57,7 +74,7 @@ describe 'EventRules', ->
       expect( yaml ).to.eql yaml_event_rules
       
     it 'goes back to yaml, with hash', ->
-      yaml_event_rules.hash = "7ca2722057837fc10b17efb09da5ef827ed548da"
+      yaml_event_rules.hash = "607b2429c206296d7a4ea204108b474d5baf4e76"
       yaml = event_rules.to_yaml_obj(hash:true)
       delete yaml.metadata
       expect( yaml ).to.eql yaml_event_rules

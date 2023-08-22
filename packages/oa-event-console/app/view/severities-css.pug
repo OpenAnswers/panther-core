@@ -1,5 +1,5 @@
 //- 
-//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 //- All rights reserved.
 //- This file is subject to the terms and conditions defined in the Software License Agreement.
 //-  
@@ -27,26 +27,26 @@ for severity in severities
   
   | #{sev_value},
   | #{sev_label} {
-  |   background-color: #{bg_colour.rgbString()} !important;
-  |   border-top: 1px solid #{bg_colour.rgbString()} !important;
+  |   background-color: #{bg_colour.rgb().string()} !important;
+  |   border-top: 1px solid #{bg_colour.rgb().string()} !important;
   | }
   | #{sev_value}.w2ui-selected,
   | #{sev_label}.w2ui-selected {
-  |   background-color: #{bg_colour_select.rgbString()} !important;
-  |   border-top: 1px solid #{bg_colour_select_border.rgbString()} !important;
+  |   background-color: #{bg_colour_select.rgb().string()} !important;
+  |   border-top: 1px solid #{bg_colour_select_border.rgb().string()} !important;
   | }
   | .label-severity-#{severity.value},
   | .label-severity-#{severity.label} {
-  |   color: #{svg_text_colour.rgbString()};
-  |   background-color: #{bg_colour.rgbString()};  
+  |   color: #{svg_text_colour.rgb().string()};
+  |   background-color: #{bg_colour.rgb().string()};  
   | }
   | .severity-svg-#{severity.value},
   | .severity-svg-#{severity.label} {
-  |   fill: #{bg_colour.rgbString()};
-  |   stroke: #{bg_colour.rgbString()};
+  |   fill: #{bg_colour.rgb().string()};
+  |   stroke: #{bg_colour.rgb().string()};
   |   stroke-width: 1px;
   | }
   | .severity-svg-text-#{severity.value},
   | .severity-svg-text-#{severity.label} {
-  |   fill: #{svg_text_colour.rgbString()};
+  |   fill: #{svg_text_colour.rgb().string()};
   | }

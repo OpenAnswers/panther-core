@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -12,6 +12,8 @@
 { Select }    = require './select'
 { ActionSet } = require './action'
 { RuleSet }   = require './rule_set'
+Errors        = require 'oa-errors'
+{ group_validator, joi_error_summary } = require './validations'
 
 # npm modules
 nodeuuid = require 'uuid/v1'
@@ -24,17 +26,32 @@ nodeuuid = require 'uuid/v1'
 
 class @Group
 
+  @validate: ( yaml_def ) ->
+    {error, value} = group_validator.validate yaml_def
+    if error
+      messages = joi_error_summary error
+      for message in messages
+        logger.error "Validation [RuleSet] failed ", message
+      throw new Errors.ValidationError "RuleSet"
+    value
+
   # Generate a group from a yaml object
   @generate: ( name, yaml_def ) ->
     debug 'generating Group', name
+
+
     select = if yaml_def.select
+      validated_group = @validate yaml_def.select
       Select.generate yaml_def.select
     else
+      validated_group = @validate yaml_def
       Select.generate yaml_def
     # Generate an id if none exists
     unless yaml_def.uuid then yaml_def.uuid = nodeuuid()
     uuid    = yaml_def.uuid
-    rules   = RuleSet.generate yaml_def
+
+    # TODO check...
+    rules   = RuleSet.generate { rules: yaml_def.rules }
     group   = new Group name, select, rules, uuid
 
 
