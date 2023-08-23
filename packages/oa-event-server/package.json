@@ -1,7 +1,7 @@
 {
   "name": "oa-event-server",
   "description": "OpenAnswers Event Server",
-  "version": "4.1.0",
+  "version": "4.1.3",
   "private": true,
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
   "homepage": "http://openanswers.co.uk/",
@@ -23,31 +23,29 @@
     "tag_current": "version=$(node -e 'console.log(require(\"./package.json\").version)') && git tag v${version} && git push --tags"
   },
   "dependencies": {
-    "ajv": "^5.3.0",
     "async": "^1.5",
     "bluebird": "~3.0.6",
     "body-parser": "^1.17.2",
-    "connect": "~3.0",
-    "cookie-parser": "^1.4.5",
+    "connect": "3.7.0",
+    "cookie-parser": "^1.4.6",
     "eventemitter2": "~0.4",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "hooks": "^0.3.2",
     "joose": "^3.50.0",
     "lodash": "4.17.21",
-    "migrate-mongo": "=8.1.1",
-    "minimist": "1.2.6",
-    "mongoose": "=5.13.14",
+    "migrate-mongo": "~10.0.0",
+    "minimist": "1.2.8",
+    "mongoose": "=5.13.20",
     "multiparty": "^4.1.1",
     "nconf": "0.12.0",
     "needle": "^1.6.0",
-    "oa-errors": "^4.1.0",
-    "oa-event-rules": "^4.1.0",
-    "oa-logging": "^4.1.0",
+    "oa-errors": "^4.1.3",
+    "oa-event-rules": "^4.1.3",
+    "oa-logging": "^4.1.3",
     "opts": "^1.2.2",
-    "session-mongoose": "^0.5.2",
-    "socket.io": "1.7.4",
-    "socket.io-client": "1.7.4",
+    "socket.io": "4.7.1",
+    "socket.io-client": "4.7.1",
     "underscore": "1.12.1"
   },
   "keywords": [
@@ -60,7 +58,7 @@
     "panther"
   ],
   "engines": {
-    "node": ">=16.13.0 <17"
+    "node": ">=16.13.0 <19"
   },
   "license": "CPAL-1.0",
   "devDependencies": {
@@ -69,8 +67,7 @@
     "@types/express": "^4.0.35",
     "@types/express-session": "0.0.32",
     "@types/lodash": "^4.14.181",
-    "@types/socket.io": "^1.4.29",
-    "@types/socket.io-client": "^1.4.33",
+    "@xmldom/xmldom": "~0.7.7",
     "chai": "^1.10.0",
     "coffeescript": "1.12.7",
     "eslint": "8.19.0",
@@ -83,8 +80,6 @@
     "mocha": "9.2.2",
     "request": "~2.88",
     "sinon": "^1.17.2",
-    "tough-cookie": "2.5.0",
-    "typescript": "^2.3.4",
-    "xmldom": "^0.1.19"
+    "typescript": "^2.3.4"
   }
 }

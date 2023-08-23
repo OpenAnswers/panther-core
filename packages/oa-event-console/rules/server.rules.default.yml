@@ -9,7 +9,7 @@ globals:
 
 # ## Groups
 
-# One an event has gone through the global rule set, it will optionally
+# Once an event has gone through the global rule set, it will optionally
 # be matched into one group.
 # The `group` field will be set to the groups name and then the event
 # will be processed through that groups rule set. 

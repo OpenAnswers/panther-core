@@ -6,7 +6,7 @@ app:
   # The from email address used when:
   # - sending password resets
   # - commiting rules to git
-  email: 'you@example.com'
+  email: 'support@openanswers.co.uk'
 
   # The url that is used to access the web frontend
   url: 'http://localhost:3001'
@@ -62,7 +62,7 @@ http:
 
 # SMTP server used when sending emails
 smtp:
-  host: 'mta.example.com'
+  host: 'hlsmtppv71.openans.co.uk'
   port: 25
 
 session:

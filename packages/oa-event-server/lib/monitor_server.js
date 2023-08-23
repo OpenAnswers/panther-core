@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
  * All rights reserved.
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
@@ -15,7 +15,7 @@ var EventEmitter = require('events').EventEmitter;
 var http = require('http');
 
 var Class = require('joose').Class;
-var SocketIO = require('socket.io');
+const {Server} = require('socket.io');
 var lodashKeys = require('lodash/keys');
 let Joose = require('joose');
 let Promise = require('bluebird');
@@ -123,7 +123,7 @@ exports.MonitorServer = Class('MonitorServer', {
       });
 
       // Attach socketio to the web server
-      var sock = SocketIO.listen(http_srv, sock_options);
+      var sock = new Server(http_srv, sock_options);
 
       // save the master listening socket
       this.setListeningSocket(sock);

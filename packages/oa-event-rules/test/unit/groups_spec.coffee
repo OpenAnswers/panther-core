@@ -1,5 +1,7 @@
 
 debug   = require( 'debug' )( 'oa:test:unit:groups' )
+
+Errors = require 'oa-errors'
 helpers = require '../mocha_helpers'
 expect  = helpers.expect
 _       = helpers._
@@ -25,22 +27,24 @@ describe 'Groups', ->
     test_group_yaml =
       _order: [ 'More gro#$!-_up', "Test group 1" ]
       "Test group 1":
+        uuid: '22889210-b974-11e7-9889-c70bd1bece51'
         select:
           all: true
         rules: [{
             name: 'test'
             all: 'true'
             discard: 'true'
-            uuid: 'xxxx-test1'
+            uuid: '22889210-b974-11e7-9889-c70bd1bece51'
           }]
       "More gro#$!-_up":
+        uuid: '22889210-b974-11e7-9889-c70bd1bece51'
         select:
           none: true
         rules: [{
             name: 'test'
             none: true
             stop_rule_set: true
-            uuid: 'xxxx-test2'
+            uuid: '22889210-b974-11e7-9889-c70bd1bece51'
           }]
     group_yaml = _.cloneDeep test_group_yaml
 
@@ -97,10 +101,71 @@ describe 'Groups', ->
           none: true
 
   describe 'the groups order array', ->
-    
+
+    it 'should ensure store order has a stored group', ->
+      def = 
+        _order: ['one']
+        one:
+          select: none: true
+          rules: []
+      g = Groups.generate def
+
+    it 'throws a validation when stored group is not present in store order', ->
+      def = 
+        _order: ['one']
+        one:
+          select: none: true
+          rules: []
+        two:
+          select: none: true
+          rules: []
+
+      fn = -> Groups.generate def
+      expect( fn ).to.throw( Errors.ValidationError, /Groups/ )
+
+
+    it 'throws a validation when store order is not present in stored group', ->
+      def = 
+        _order: ['unknown']
+        one:
+          select: none: true
+          rules: []
+      fn = -> Groups.generate def
+      expect( fn ).to.throw( Errors.ValidationError, /Groups/ )
+
+    it 'throws a validation when store order starts with whitespace', ->
+      def = 
+        _order: ['  unknown']
+        one:
+          select: none: true
+          rules: []
+      fn = -> Groups.generate def
+      expect( fn ).to.throw( Errors.ValidationError, /Groups/ )
+
+    it 'throws a validation when store order ends with whitespace', ->
+      def = 
+        _order: ['unknown  ']
+        one:
+          select: none: true
+          rules: []
+      fn = -> Groups.generate def
+      expect( fn ).to.throw( Errors.ValidationError, /Groups/ )
+
+    xit 'throws a validation when group name starts with whitespace', ->
+      def = 
+        _order: []
+        "  one":
+          select: none: true
+          rules: []
+      fn = -> Groups.generate def
+      expect( fn ).to.throw( Errors.ValidationError, /Groups/ )
+
+
+
+
     it 'should fill in the store order when it is missing a stored groups', ->
       def =
-        _order: ['one']
+        _order: []
         one:
           select: none: true
           rules: []
@@ -109,9 +174,8 @@ describe 'Groups', ->
           rules: []
       g = Groups.generate def
 
-    it 'should warn and fix when the store order has more than whats in the stored groups', ->
-      def =
-        _order: ['one','two','three']
-        one:{ none: true, stop: true }
-        two:{ all: true, discard: true }
-      g = Groups.generate def
+      expect( g.store).to.have.keys 'one', 'two'
+      expect( g.store_order).to.have.length 2
+      expect( g.store_order[0]).to.equal 'one'
+      expect( g.store_order[1]).to.equal 'two'
+

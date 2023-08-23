@@ -1,4 +1,4 @@
-agent: 
+agent:
   type: graylog
   severity_map:
     '0': 5
@@ -17,11 +17,15 @@ globals:
       set:
         severity: 3
 groups:
+  _order:
+    - group_a
   group_a:
+    uuid: 22889210-b974-11e7-9889-c70bd1bece5e
     equals:
       node: group_node
     rules:
       - name: group_a test rule
+        uuid: 22889210-b974-11e7-9889-c70bd1bece5e
         match:
           summary: blarg new changes summary
         set:

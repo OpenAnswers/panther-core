@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -94,6 +94,8 @@ apply_socket_updates_db = ( type, ids, set_fields, push_fields, socket, socket_c
       
       if _.isFunction(socket_cb)
         socket_cb null, result.n
+      else
+        debug "Can not callback - nothing supplied"
 
       metadata = _.clone set_fields
       metadata.ids = ids

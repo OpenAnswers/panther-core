@@ -1,6 +1,6 @@
 
 #
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -52,6 +52,7 @@ class EvSocket
     @_event_filter = {}
     @_event_group = 'All'
     @ping_timer_id = null;
+    @_filter_room = null;
 
 
   init: ->
@@ -167,17 +168,19 @@ class EvSocket
       joinAndStart = () ->
         # join the new room
         debug 'joining filter room [%s] [%j]', self._filter_room, self._event_filter_running
-        self.socket.join self._filter_room, () ->
+        socket_joined = self.socket.join self._filter_room
           # Get a poll on the room, or create a new one
-          self.MongoPollers.fetch_id_and_start self._filter_room,
-            filter: self._event_filter_running
+        self.MongoPollers.fetch_id_and_start self._filter_room,
+          filter: self._event_filter_running
+        socket_joined
       
       # leave the old room if we were in one
       if old_filter_room?
         debug 'leaving filter room [%s]', @_filter_room
         # asynchronous call so requires 'joinAndStart' callback
-        @socket.leave old_filter_room, joinAndStart
-      else
+        socket_left = @socket.leave old_filter_room
+        joinAndStart()
+      else 
         joinAndStart()
 
     else

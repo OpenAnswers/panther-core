@@ -4,7 +4,8 @@ expect  = require( 'chai' ).expect
 sinon   = require 'sinon'
 {_}     = require 'oa-helpers'
 Promise = require 'bluebird'
-fs      = Promise.promisifyAll require 'fs'
+fs      = require 'node:fs'
+{ stat, mkdir } = require 'node:fs/promises'
 
 debug = require( 'debug' )( 'oa:test:helpers' )
 
@@ -22,12 +23,14 @@ rules_runner = ( ev, rules ) ->
   ev_processed
 
 mkdir_if_missing_Async = ( dir )->
-  fs.statAsync dir
+  stat dir
   .then (res)->
     debug 'stat dir res', dir, res
     'exists'
-  .catch code: 'ENOENT', ( error ) ->
-    fs.mkdirAsync dir
+  .catch (error)-> 
+    if error.code is 'ENOENT'
+      debug "MKDIRing"
+      mkdir dir
 
 git_remote_add_Async = ( repo, name, url )->
   repo.remote_addAsync( name, url )

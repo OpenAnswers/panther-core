@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -409,7 +409,7 @@ SocketIO.route_return 'event_rules::group::update_name', ( socket, request, sock
     throw new Errors.ValidationError("The groups name must only have alphanumeric characters and spaces [#{new_name}]")
 
   if new_name.match( / +$/ )
-    throw new Errors.ValidationError("The group name can't end a space [#{new_name}]")
+    throw new Errors.ValidationError("The group name can't end with whitespace [#{new_name}] - it will be stripped out")
 
   groups.update_group_name previous_name, new_name
   event_rules.set_edited_flag()
@@ -496,7 +496,7 @@ SocketIO.route_return 'event_rules::group::create_name', ( socket, request, sock
 
 # ### Socket route `event_rules::group::update_select`
 
-# Update a name for a group
+# Update a select for a group
 SocketIO.route_return 'event_rules::group::update_select', ( socket, request, socket_cb ) ->
   event_rules = validate_ruletype_request socket, request
   group = group_lookup request
@@ -528,12 +528,14 @@ SocketIO.route_return 'event_rules::group::update_select', ( socket, request, so
     group.update_select rule, index
   catch err
     debug "err", err
-    throw new Errors.ValidationError "parse error"
+    if err instanceof Errors.ValidationError
+      throw err
     msg =
       status: 'failed'
       message: 'parse error'
       type: request.type
       group: group.name
+    return msg
     
   event_rules.set_edited_flag()
   event_rules.append_edited_msg "Updated select: [#{request.type}]/[#{request.sub_type}]-> [#{request.group}]"

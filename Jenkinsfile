@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
  * All rights reserved.  
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
@@ -92,14 +92,14 @@ pipeline {
         stage('panther-builder'){
           steps {
             script {
-              docker.build("panther-builder:gallium-alpine3.15", " -f Dockerfiles/Dockerfile-builder .")
+              docker.build("panther-builder:hydrogen-alpine3.18", " -f Dockerfiles/Dockerfile-builder .")
             }
           }
         }
         stage('panther-runtime'){
           steps {
             script {
-              docker.build("panther-runtime:gallium-alpine3.15", " -f Dockerfiles/Dockerfile-runtime .")
+              docker.build("panther-runtime:hydrogen-alpine3.18", " -f Dockerfiles/Dockerfile-runtime .")
             }
           }
         }

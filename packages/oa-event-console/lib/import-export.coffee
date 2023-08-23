@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -16,6 +16,7 @@ Promise           = require 'bluebird'
 siofu             = require 'socketio-file-upload'
 moment            = require 'moment'
 { copy, move, remove } = require 'fs-extra'
+fs                = require 'fs'
 
 del               =require 'del'
 
@@ -33,7 +34,36 @@ Errors            = require './errors'
 
 class ImportExport
 
+  @compare_files: (pathA, pathB)->
+    statA = fs.statSync pathA
+    statB = fs.statSync pathB
+    return false unless statA.size == statB.size
+
+    fdA = fs.openSync pathA, 'r'
+    fdB = fs.openSync pathB, 'r'
+    bufA = new Buffer 6 *1024
+    bufB = new Buffer 6 *1024
+
+    readA = 1
+    readB = 1
+
+    while readA > 0
+      readA = fs.readSync fdA, bufA, 0, bufA.length, null
+      readB = fs.readSync fdB, bufB, 0, bufB.length, null
+
+      return false unless readA == readB
+
+      for i in [ 0...readA]
+        return false unless bufA[i] == bufB[i]
+
+    fs.closeSync fdA
+    fs.closeSync fdB
+    true
+
+
   @switch_to_imported: (importedPath, opts = {})->
+    # debug "switch to imported opts: ", opts
+
     currentRulesPath = config.rules_path("server")
     backoutRulesPath = config.rules_path("server") + ".bak"
 
@@ -42,11 +72,20 @@ class ImportExport
     # take backup copy of current
     copy currentRulesPath, backoutRulesPath
     .then ->
+      if ImportExport.compare_files currentRulesPath, importedPath
+        throw new Errors.ValidationError "import aborted - files are the same"
+
+    .then ->
       # install the import
       copy importedPath, currentRulesPath
       .then ->
         # git commit?
-        EventRules.git_commit_and_push currentRulesPath, "imported", opts
+        imported_msg = "imported"
+        { commit_msg } = opts
+        if commit_msg 
+          imported_msg += " " + commit_msg
+
+        EventRules.git_commit_and_push currentRulesPath, imported_msg, opts
       .then ->
         logger.info "Imported rules were installed"
         debug 'removing temporary imported file ', importedPath
@@ -94,11 +133,13 @@ class ImportExport
 
     uploader.on "saved", (ev)->
       logger.info "User [%s] uploaded new rules [%s], success: ", socket.ev.user(), ev.file.name,ev.file.success
-      debug "SIOFU meta ", ev.file.meta
+      debug "SIOFU saved: ", ev
       try
         # suggested filename my conflict, siofu could have renamed it
         # pathName will be the actual full path to file on disk
         uploadedPath = ev.file.pathName
+        throw new Errors.ValidationError 'No file found' unless uploadedPath
+        throw new Errors.ValidationError 'Empty file' if ev.file.size <= 0
 
         rulesDoc = EventRules.load uploadedPath
 
@@ -122,7 +163,7 @@ class ImportExport
         logger.error "RULES failed", error.message
         socket.emit "event_rules::validation", 
           status: "failed", 
-          msg: "incorrect file format"
+          msg: "incorrect file: " + error.message
         debug 'removing failed import'
 
 

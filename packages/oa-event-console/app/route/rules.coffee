@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -44,6 +44,7 @@ build_vars = ( req, override ) ->
     debug_pug:  debug
     pug:        pug
     uuid_enabled: config.app.uuid_enabled
+    gitEnabled: config.rules.git
     development: process.env.NODE_ENV == "development" ? true : false
 
   if override?
@@ -158,8 +159,5 @@ router.get '/info', (req, res)->
 
 router.get '/data/export', (req,res)->
   res.render 'data-export', build_vars req
-
-
-
 
 module.exports = router

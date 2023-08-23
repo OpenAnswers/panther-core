@@ -35,17 +35,13 @@ class StacksSvg
 
     @width  = @options.width  ?= @chart_el.node().clientWidth
     @height = @options.height ?= 50
-    @gap    = @options.gap    ?= 10
     @resize = @options.resize ?= false
 
-    @total_height = @data.length * ( @height + @gap )
     @last_resize = Date.now()
 
-    # adjust the div, just in case
     div = d3.select "##{@id}"
-      .style 'height', "#{@total_height}px"
 
-    @logger 'creating charts w[%s] h[%s] gap[%s]', @width, @height, @gap
+    @logger 'creating charts w[%s] h[%s]', @width, @height
 
     # Loop over all the array items, which equal a chart and build it
     for chart_def in @data

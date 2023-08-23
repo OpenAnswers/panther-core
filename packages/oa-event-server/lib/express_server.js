@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+ * Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
  * All rights reserved.
  * This file is subject to the terms and conditions defined in the Software License Agreement.
  */
@@ -18,12 +18,7 @@ var Class = Joose.Class;
 
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-// var expressLayouts = require('express-ejs-layouts');
-var SocketIO = require('socket.io');
-// var connect = require("connect");
-// var session = require("express-session");
-
-//var MongoSessionStore = require("session-mongoose")(connect);
+const {Server} = require('socket.io');
 
 /*
  * create a server configuration object by parsing in the command line
@@ -69,23 +64,6 @@ var ExpressServer = (exports.ExpressServer = Class('ExpressServer', {
     setup: function () {
       var self = this;
       var express = require('express');
-      // var connect = require("connect");
-
-      // Setup the session handling
-      /*
-      this.sessionStore = new MongoSessionStore({
-        url: server_config.DbConnectionString(),
-        interval: 120000,
-      });
-
-      this.sessionStore_session = session({
-        store: self.sessionStore,
-        secret: "4&lope1$23z=314kj343po4[ld[ae;f]fdlka",
-        name: "express.sid",
-        resave: false,
-        saveUninitialized: false,
-      });
-      */
 
       // Create and configure the server
       this.app = express();
@@ -102,16 +80,6 @@ var ExpressServer = (exports.ExpressServer = Class('ExpressServer', {
       // Some bits for the socket/cookie auth
       this.app.use(bodyParser.urlencoded({ extended: false }));
       this.app.use(cookieParser());
-
-      // Tell express to use the session storage
-      // this.app.use(this.sessionStore_session);
-
-      // support the old layouts in new express
-      // this.app.use(expressLayouts);
-
-      // Specify the public document root
-      // var dir = path.join(oamonhome.getServerDir(), '/public');
-      // this.app.use(express.static(dir));
 
       // Setup a generic error handler
       function errorHandler(err, req, res, next) {
@@ -149,7 +117,8 @@ var ExpressServer = (exports.ExpressServer = Class('ExpressServer', {
         pingInterval: 10000,
       };
 
-      var sio = SocketIO.listen(this.server, sock_opts);
+
+      var sio = new Server(this.server, sock_opts);
 
       // Piggy back on the express sessions
       sio.use(function (socket, next) {

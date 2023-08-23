@@ -10,25 +10,25 @@ agent:
     6: 1
     7: 1
   rules:
-   - name: 'test'
-     all: true
-     discard: true
-     skip: true
-   - name: 'replace'
-     none: true
-     replace:
-       this: foo
-       with: bar
-       field: somefield
-   - name: 'replace2'
-     all: true
-     replace:
-      - this: foo
+    - name: 'test'
+      all: true
+      discard: true
+      skip: true
+    - name: 'replace'
+      none: true
+      replace:
+        this: foo
         with: bar
         field: somefield
-      - this: bar
-        with: sum
-        field: somefield
+    - name: 'replace2'
+      all: true
+      replace:
+        - this: foo
+          with: bar
+          field: somefield
+        - this: bar
+          with: sum
+          field: somefield
 globals:
   rules:
     - name: global test rule
@@ -37,6 +37,10 @@ globals:
       set:
         severity: 3
 groups:
+  _order:
+    - group_a
+    - group_b
+    - selec_c
   group_a:
     equals:
       node: group_node
@@ -51,7 +55,7 @@ groups:
       node: 'test'
     rules: []
   selec_c:
-    select: 
+    select:
       equals:
         node: 'selectnode'
     rules:

@@ -11,16 +11,10 @@ $ ->
       { field: 'Phone',   type: 'int', required: true },
       { field: 'Pi', type: 'float', required: true },
       { field: 'Birth date',  type: 'date' },
-      { field: 'List',  type: 'list', required: true, options:
-        items: ['Pluto', 'Lassie', 'Laika', 'Scooby' ]
-      }
-      { field: 'Enum', type: 'enum', required: true, options:
-        items: ['Adams, John', 'Johnson, Peter', 'Lewis, Frank', 'Cruz, Steve', 'Donnun, Nick']
-      },
+      { field: 'List',  type: 'list', required: true, options: { items: [ 'Pluto', 'Lassie', 'Laika', 'Scooby' ] } }
+      { field: 'Enum', type: 'enum', required: true, options: { items: ['Adams, John', 'Johnson, Peter', 'Lewis, Frank', 'Cruz, Steve', 'Donnun, Nick'] } },
       { field: 'field_textarea', type: 'text'},
-      { field: 'field_select', type: 'select', required: false, options:
-        items: ['eu-west-1', 'us-east-1', 'ap-south-1']
-      },
+      { field: 'field_select', type: 'select', required: false, options: { items: ['eu-west-1', 'us-east-1', 'ap-south-1'] } },
       { field: 'Event Console', type: 'checkbox', required: false },
     ]
     actions:

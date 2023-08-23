@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -15,7 +15,8 @@ tmp     = Promise.promisifyAll require('tmp')
 moment  = require 'moment'
 
 # node modules
-fs      = Promise.promisifyAll require('fs')
+{ readFileSync, watch } = require('node:fs')
+{ writeFile, stat } = require('node:fs/promises')
 mvAsync = Promise.promisify require('mv')
 path    = require 'path'
 git     = Promise.promisifyAll require('gift')
@@ -36,6 +37,8 @@ Errors          = require 'oa-errors'
 {Agents}  = require './agents'
 {Schedules} = require './schedules'
 
+{validate_server_rules, joi_error_summary} = require './validations'
+
 
 
 
@@ -53,17 +56,28 @@ class @EventRules
   @load: (path) ->
 
     debug 'Reading yaml file', path
-    data = fs.readFileSync path
 
-    # this is an _unsafe_ load for regex objects
-    doc  = yaml.load data
+    try
+      data = readFileSync path, 'utf8'
+      debug "loaded data", data
+      y = yaml.load data
+      debug "loaded yaml", y
+      y
+    catch err
+      debug "loading failed", err
+      if err instanceof yaml.YAMLException
+        logger.error 'Invalid YAML', err.reason
+        throw_error 'Invalid YAML'
+      else
+        logger.error 'Unknown error ', err
+        throw_error 'Unknown error loading rule file'
 
     #catch e
       #logger.error 'Error loading yaml', e
 
   # convenience static to commit and push a file
   @git_commit_and_push: (yaml_path, msg, opts = {})->
-    unless opts.git_push
+    unless opts.git 
       logger.warn "Attempting to commit,push but GIT is disabled at #{yaml_path}"
       return Promise.resolve true
 
@@ -78,7 +92,10 @@ class @EventRules
         author: "#{opts.user_name} <#{opts.user_email}>"
       .then (res)->
         logger.info "Committed", res
-        repo.remote_pushAsync 'origin', 'master'
+        if opts.git_push
+          repo.remote_pushAsync 'origin', 'master'
+        else
+          res
       .then ( res )->
         resolve res
       .catch (err)->
@@ -156,10 +173,10 @@ class @EventRules
     watch_dir = path.dirname @path
     watch_file = path.basename @path
     logger.info 'Setting up file watch on [%s] for [%s]', watch_dir, watch_file
-    @watch = fs.watch watch_dir, ( event, path )->
+    @watch = watch watch_dir, ( event, path )->
       debug 'change detected ev[%s] path[%s]', event, path
       return unless path is watch_file
-      logger.info "Rules file changed, waiting 1 seconds for node fs.watch", path, event
+      logger.info "Rules file changed, waiting 1 seconds for node fs:watch", path, event
       
       self.watch_events.push {event: event, path: path}
       
@@ -293,11 +310,11 @@ class @EventRules
 
         # Now write the tmp yaml file, create a backup
         logger.info 'Writing yaml document to [%s]', tmp_path
-        fs.writeFileAsync tmp_path, doc
+        writeFile tmp_path, doc
 
       .then ( res )->
         debug 'save_yaml: after tmp write', res
-        fs.statAsync yaml_path
+        stat yaml_path
       .then ( stat )->
 
         # Backup the current file
@@ -361,7 +378,7 @@ class @EventRules
       repo = Promise.promisifyAll git(path_repo)
       repo_index = null
       
-      fs.writeFileAsync yaml_path, doc
+      writeFile yaml_path, doc
       .then ( res )->
         debug 'save_yaml_git: yaml written to file', yaml_path
         logger.info "YAML rules file written [#{yaml_path}]"
@@ -476,9 +493,20 @@ class @EventRules
   # Generate all the data from the yaml definitions
   # Server
   generate_rules_server: ->
+
+    {error, value } = validate_server_rules @doc
+
+    if error
+      for err in error.details
+        logger.info "Validation failed", err.message
+
+      summaries = joi_error_summary error
+
+      throw new Errors.ValidationError "Server Rules: " + summaries.join(',')
+    
+
     # Schedules
     # must be parsed first as they are refrenced after
-
     @schedules = Schedules.generate @doc.schedules, @
 
     # Globals

@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -18,6 +18,8 @@
 {inventory_delete_schema} = require './inventory'
 
 {schedule_update_days_schema, schedule_delete_schema} = require './schedule'
+
+{git_commit_msg_schema} = require './import_rules'
 
 module.exports =
     empty_schema: empty_schema
@@ -45,3 +47,5 @@ module.exports =
     user_delete_schema: user_delete_schema
     user_update_schema: user_update_schema
     user_reset_password_schema: user_reset_password_schema
+
+    git_commit_msg_schema: git_commit_msg_schema

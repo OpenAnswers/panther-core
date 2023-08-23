@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -13,14 +13,27 @@
 { _ }           = require 'oa-helpers'
 Errors          = require 'oa-errors'
 
+{ validate_server_groups_section, joi_error_summary } = require './validations'
 
 # Groups holds a set of groups to match against
 # 1 layer of the rule checking
 class Groups
 
+  @validate: ( yaml_def, schedule_names = [] )->
+    {error, value} = validate_server_groups_section yaml_def, schedule_names
+    if error
+      messages = joi_error_summary error
+      for message in messages
+        logger.error "Validation Groups: ", message
+      throw new Errors.ValidationError "Groups"
+    value
+
+
   @generate: ( yaml_def )->
     groups = new Groups
 
+    # enabling validation requires a schedule_names[] 
+    validated_groups = @validate yaml_def, []
 
     # Create all the groups
     for group, info of yaml_def when group isnt '_order'
@@ -34,25 +47,38 @@ class Groups
         throw new Errors.ValidationError "Group store_order must be an array"
       
       groups.store_order = _.clone yaml_def._order
-      keys = _.keys yaml_def
-      keys = _.without keys, '_order'
+      # Acquire all the Group name keys
+      rule_group_name_keys = _.keys yaml_def
+      # and remove the special _order
+      rule_group_name_keys = _.without rule_group_name_keys, '_order'
+      # keys is now all the group names we have
 
-      extra = _.difference( yaml_def._order, keys )
+      # Validate that all entries in `_order: [...]` have a corresponding Group entry 
+
+
+
+
+      #
+      # Apply fixups to the rules...
+      #
+      # 1. find and remove any keys from _order that do not have an identically named group
+      extra = _.difference( yaml_def._order, rule_group_name_keys )
       if extra.length > 0
-        logger.error "Group store_order [%s] has extra group keys [%s] "+
+        logger.warn "Group store_order [%s] has extra group keys [%s] "+
           " compared to the group keys [%s]"+
-          " Appending missing groups to the end of _order",
-          groups.store_order.join(', '), extra.join(','), keys
+          " Removing missing groups from store_order",
+          groups.store_order.join(', '), extra.join(','), rule_group_name_keys
 
-        groups.store_order = _.without groups.store_order, extra
+        groups.store_order = _.without groups.store_order, extra...
         logger.info "Store order is now [%s]", groups.store_order.join(', ')
 
-      missing = _.difference( keys, yaml_def._order )
+      # 2. any group names that are missing from _order are appended to _order
+      missing = _.difference( rule_group_name_keys, yaml_def._order )
       if missing.length > 0
-        logger.error "Group store_order [%s] is missing keys [%s]."+
+        logger.warn "Group store_order [%s] is missing keys [%s]."+
           " compared to the group keys [%s]"+
           " Appending missing groups to the end of _order",
-          groups.store_order.join(', '), missing.join(','), keys
+          groups.store_order.join(', '), missing.join(','), rule_group_name_keys
         groups.store_order.push missing...
         logger.info "Store order is now [%s]", groups.store_order.join(', ')
 

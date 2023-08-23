@@ -1,5 +1,5 @@
 //- 
-//- Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+//- Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 //- All rights reserved.
 //- This file is subject to the terms and conditions defined in the Software License Agreement.
 //-  
@@ -23,7 +23,7 @@ block pagenav
       ul.dropdown-menu(role='menu')
         each link,name in { 'Create New Rule':'/rules/new' }
           li
-            a(href=link)= name
+            a(href=link target="_blank")= name
         li.divider
         each link,name in { 'Global Rules':'/rules/globals', 'Group Rules':'/rules/groups', 'Schedules':'/rules/schedules' }
           li

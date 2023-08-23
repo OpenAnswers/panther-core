@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -13,7 +13,7 @@
 
 # npm modules
 Promise           = require 'bluebird'
-socket_io         = require 'socket.io'
+{ Server }        = require 'socket.io'
 passportSocketIo  = require 'passport.socketio'
 cookieParser      = require 'cookie-parser'
 uuid              = require 'node-uuid'
@@ -54,7 +54,7 @@ class SocketIO
     @app  = app
 
     # Attach socketio to the Express `app`s http server
-    @io   = socket_io @app.http,
+    @io   = new Server @app.http,
       pingTimeout:  31000
       pingInterval: 15000
       cookie: false
@@ -217,7 +217,7 @@ class SocketIO
       cb(content) if _.isFunction(cb)
 
     # Setup SocketIO File Uploader
-    if socket.request.user.group is "admin"
+    if socket.request?.user?.group is "admin"
       @init_admin socket
 
     @init_routes socket
@@ -419,14 +419,13 @@ class SocketIO
     @io.sockets.adapter.rooms
 
   @room: (name)->
-    @rooms()[name]
+    @rooms().has(name)
 
   @room_has_members: (name)->
     unless room = @room name
       logger.warn "No room #{name}"
-      return false
 
-    _.size(room) > 0
+    room
 
 
 
