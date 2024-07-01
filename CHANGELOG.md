@@ -1,3 +1,7 @@
+# Panther 4.1.6
+
+- Additional logfile for capturing http-monitors event payload
+
 # Panther 4.1.3
 
 ## Changes

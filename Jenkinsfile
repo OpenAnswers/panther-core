@@ -39,7 +39,7 @@ pipeline {
     booleanParam(defaultValue: true, description: 'bump prepatch version', name: 'NPM_BUMP_PREPATCH')
 
     booleanParam(defaultValue: true, description: 'Publish to nexus', name: 'PUBLISH_TO_NEXUS')
-    booleanParam(defaultValue: true, description: 'Perform Anchore scan', name: 'ANCHORE_SCAN')
+    booleanParam(defaultValue: true, description: 'Perform Grype scan', name: 'GRYPE_SCAN')
     extendedChoice(
       name: 'BUILDTIME_ENV',
       description: 'Build time $NODE_ENV',
@@ -103,6 +103,14 @@ pipeline {
             }
           }
         }
+      }
+    }
+    stage('Grype Code'){
+      when {
+        expression { params.GRYPE_SCAN == true }
+      }
+      steps {
+        grypeScan scanDest: "dir:.", repName: "grype-code.txt", autoInstall: true
       }
     }
     stage('Build') {
@@ -267,52 +275,14 @@ pipeline {
 
         }
     }
-
-    stage('Anchore Scan') {
+    stage('Grype Image'){
+      when {
+        expression { params.GRYPE_SCAN == true }
+      }
       steps {
-        script {
-          if(params.PUBLISH_TO_NEXUS) {
-            if(params.ANCHORE_SCAN) {
-
-              def images = []
-
-              if(params.BUILD_PANTHER_CONSOLE){
-                images.push( params.REGISTRY_URL.replaceAll('https?:\\/\\/', '') + "/" + params.DOCKER_IMG_EVENT_CONSOLE + ":" + params.VERSION )
-              }
-              if(params.BUILD_PANTHER_SERVER){
-                images.push( params.REGISTRY_URL.replaceAll('https?:\\/\\/', '') + "/" + params.DOCKER_IMG_EVENT_SERVER + ":" + params.VERSION )
-              }
-              if(params.BUILD_PANTHER_MONITORS){
-                images.push( params.REGISTRY_URL.replaceAll('https?:\\/\\/', '') + "/" + params.DOCKER_IMG_EVENT_MONITORS + ":" + params.VERSION )
-              }
-
-              if( images.size() > 0){
-                writeFile file: 'anchore_images', text: images.join('\n')
-
-                ANCHORE_IMAGES = readFile('anchore_images').trim()
-                println "ANCHORE_IMAGES = ${ANCHORE_IMAGES}"
-
-                try {
-                  anchore name: 'anchore_images', bailOnFail: false, engineRetries: "0"
-                } catch (Exception e) {
-                  // Catch wait timeout as we don't want to wait for the scan to complete
-                  if (e.getMessage().indexOf('Timed out waiting for anchore-engine analysis') != -1) {
-                    println "Ignore the Anchore exception above, not waiting for anchore-engine to scan image"
-                  } else {
-                    throw e;
-                  }
-                }
-              } else {
-                println "no images included for anchore scan"
-              }
-
-            } else {
-              println "Skipping Anchore scan"
-            }
-          } else {
-            println "Skipping Anchore scanning as image not pushed to nexus"
-          }
-        }
+        grypeScan scanDest: "docker:${env.DOCKER_IMG_EVENT_SERVER}", repName: "grype-image-server.txt", autoInstall: true
+        grypeScan scanDest: "docker:${env.DOCKER_IMG_EVENT_CONSOLE}", repName: "grype-image-console.txt", autoInstall: true
+        grypeScan scanDest: "docker:${env.DOCKER_IMG_EVENT_MONITORS}", repName: "grype-image-monitors.txt", autoInstall: true
       }
     }
   }

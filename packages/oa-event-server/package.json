@@ -1,7 +1,7 @@
 {
   "name": "oa-event-server",
   "description": "OpenAnswers Event Server",
-  "version": "4.1.3",
+  "version": "4.1.5",
   "private": true,
   "author": "OpenAnswers <support+panther@openanswers.co.uk>",
   "homepage": "http://openanswers.co.uk/",
@@ -41,7 +41,7 @@
     "nconf": "0.12.0",
     "needle": "^1.6.0",
     "oa-errors": "^4.1.3",
-    "oa-event-rules": "^4.1.3",
+    "oa-event-rules": "^4.1.5",
     "oa-logging": "^4.1.3",
     "opts": "^1.2.2",
     "socket.io": "4.7.1",
