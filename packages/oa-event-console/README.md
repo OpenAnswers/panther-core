@@ -2,7 +2,7 @@
 
 Front end for the event management system. Turn your data into manageable events
 
-Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 All rights reserved.
 
 ## Application Details

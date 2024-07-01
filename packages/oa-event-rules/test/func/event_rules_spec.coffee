@@ -40,18 +40,20 @@ describe 'EventRules', ->
   describe 'file save/backup', ->
 
     # Copy the _original fixture files into place for tests
-    before (done)->
+    before ->
       copyFileAsync( yaml_src_path, yaml_test_path )
       .then (res)->
-        debug 'copy res', res
+        debug 'copy res', res, yaml_src_path, yaml_load_path
         copyFileAsync( yaml_src_path, yaml_load_path )
       .then (res)->
         debug 'copy res', res
-        done()
-      .catch (err)->
-        done(err)
+        #done()
+      #.catch (err)->
+      #  debug 'before: ', err
+        #done(err)
 
-    it 'saves event_rules in the same format as the original file', (done)->
+    it 'saves event_rules in the same format as the original file', ->
+      debug "new rules..."
       rules = new EventRules
         path: yaml_load_path
 
@@ -67,11 +69,9 @@ describe 'EventRules', ->
         expect( rules.agent.to_yaml_obj() ).to.eql rules_yml_ori.agent
         expect( rules.groups.to_yaml_obj() ).to.eql rules_yml_ori.groups
         expect( rules.globals.to_yaml_obj() ).to.eql rules_yml_ori.globals.rules
-        done()
 
       .catch ( error )->
         console.error error
-        done error
 
     it 'gets an event back out of saved rules', ->
       rules = new EventRules
@@ -90,7 +90,7 @@ describe 'EventRules', ->
 
       rules_change = null
 
-      before ( done )->
+      before ->
         rules_change = new EventRules
           path: yaml_test_path
         
@@ -100,8 +100,6 @@ describe 'EventRules', ->
 
         copyFileAsync( yaml_changes_path, yaml_test_path )
         .delay(1500)
-        .then -> done()
-        .catch(done)
 
 
       describe 'and the agent object matches', ->
@@ -168,7 +166,7 @@ describe 'EventRules', ->
     repo = null
 
     # Copy the _original fixture files into place for tests
-    before (done)->
+    before ->
 
       yaml_load_path = path.join path_yaml_repo, "#{yaml_file}.load"
       yaml_test_path = path.join path_yaml_repo, "#{yaml_file}.saved"
@@ -195,11 +193,8 @@ describe 'EventRules', ->
         repo.commitAsync( 'initial func test setup' )
       .then ->
         debug 'committed'
-        done()
-      .catch (err)->
-        done(err)
 
-    it 'event_rules in the same format as the original file', (done)->
+    it 'event_rules in the same format as the original file', ->
       rules = new EventRules
         path: yaml_load_path
 
@@ -217,11 +212,7 @@ describe 'EventRules', ->
         expect( rules.agent.to_yaml_obj() ).to.eql rules_yml_ori.agent
         expect( rules.groups.to_yaml_obj() ).to.eql rules_yml_ori.groups
         expect( rules.globals.to_yaml_obj() ).to.eql rules_yml_ori.globals.rules
-        done()
 
-      .catch ( error )->
-        console.error error
-        done error
 
 
   describe 'git commit and push', ->
@@ -229,7 +220,7 @@ describe 'EventRules', ->
     path_yaml_repo_remote = path.join path_test_fixture, 'repo_remote'
     repo = null
 
-    before (done)->
+    before ->
 
       yaml_load_path = path.join path_yaml_repo_remote, "#{yaml_file}.load"
       yaml_test_path = path.join path_yaml_repo_remote, "#{yaml_file}.saved"
@@ -276,15 +267,11 @@ describe 'EventRules', ->
         repo.commitAsync 'initial func test setup'
       .then ->
         debug 'git commit'
-        done()
       .catch {finish:true}, (err)->
         debug 'repo dir already existed'
-        done()
-      .catch (err)->
-        done(err)
 
 
-    it 'event_rules in the same format as the original', (done)->
+    it 'event_rules in the same format as the original', ->
       rules = new EventRules
         path: yaml_load_path
 
@@ -303,8 +290,7 @@ describe 'EventRules', ->
         expect( rules.agent.to_yaml_obj() ).to.eql rules_yml_ori.agent
         expect( rules.groups.to_yaml_obj() ).to.eql rules_yml_ori.groups
         expect( rules.globals.to_yaml_obj() ).to.eql rules_yml_ori.globals.rules
-        done()
 
       .catch ( error )->
         console.error error
-        done error
+        throw error

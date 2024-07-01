@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -20,21 +20,14 @@ Errors = require 'oa-errors'
 # npm modules
 nodeuuid = require 'uuid/v1'
 moment = require 'moment'
+momentZone = require 'moment-timezone'
+{schedule_validator} = require './validations'
 
 # ### Group
 
 # Holds a groups worth of rules.
 # Includes a matcher for the group
 #  and an action to set the group name
-
-schema_schedule = Joi.object
-  name: Joi.string().regex(/^[a-zA-Z0-9_\- ]+$/).required()
-  uuid: Joi.string().guid().optional().default( nodeuuid() )
-  start: Joi.string().regex(/^[012][0-9]:[0-5][0-9]$/).required()
-  end: Joi.string().regex(/^[012][0-9]:[0-5][0-9]$/).required()
-  days: Joi.array().items( Joi.string().valid(['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'])) 
-
-compiled_schedule = Joi.compile schema_schedule
 
 default_validate_options =
   allowUnknown: false
@@ -43,11 +36,12 @@ class @Schedule
 
   # returns Promise<yaml_def>
   @validate: (yaml_def) ->
-    Joi.validate yaml_def, compiled_schedule, default_validate_options
-    .catch (error) ->
-      logger.error "Joi Validation failed on Schedule: ", error
-      Errors.throw_a Errors.ValidationError "Incorrect schedule definition"
 
+    {error, value} = schedule_validator.validate yaml_def, default_validate_options
+    if error
+      logger.error "Joi Validation failed on Schedule: ", error
+      return Promise.reject (Errors.ValidationError "Incorrect schedule definition")
+    Promise.resolve value
 
   # expects:
   #   name: "some name"
@@ -60,7 +54,7 @@ class @Schedule
   @generate: ( yaml_def ) ->
     debug 'generating Schedule', yaml_def
 
-    @validate yaml_def, compiled_schedule
+    @validate yaml_def
     .then (result)->
       logger.info "JOI validated", result
     .catch ( error)->
@@ -114,6 +108,8 @@ class @Schedule
     unless @name?
       throw new Error "new Schedule requires a name first"
 
+    @zone = process.env.TZ || 'Europe/London'
+
     @isoDays = []
     # how many times is this schedule referenced by a rule?
     @ref_count = 0
@@ -159,7 +155,7 @@ class @Schedule
     debug 'to_yaml_obj', obj
     obj
 
-  is_in: (momentNow = moment()) ->
+  is_in: (momentNow = momentZone.tz( @zone )) ->
     logger.info "is_in() today is ", momentNow.isoWeekday()
     logger.info "is_in() rule days ", @isoDays
     # @start, @end HH:MM

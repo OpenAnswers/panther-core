@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #  
@@ -107,7 +107,7 @@ class @SelectSchedule  extends SelectBaseFieldValue
       Errors.throw_a Errors.ValidationError, "Schedule generate: must have a name", yaml_def unless fieldname == "name"
 
       valid_schedule = Schedules.find_by_name value
-      Errors.throw_a Errors.ValidationError, "Schedule generate: schedule name does not exist", yaml_def unless valid_schedule?
+      Errors.throw_a Errors.ValidationError, "Schedule generate: schedule name does not exist" unless valid_schedule?
 
       debug 'Match generate fieldname,value', fieldname, value
 

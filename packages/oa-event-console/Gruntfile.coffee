@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022, Open Answers Ltd http://www.openanswers.co.uk/
+# Copyright (C) 2023, Open Answers Ltd http://www.openanswers.co.uk/
 # All rights reserved.
 # This file is subject to the terms and conditions defined in the Software License Agreement.
 #
@@ -184,18 +184,6 @@ module.exports = (grunt) ->
         files:
           'app/assets/bootstrap_less': 'bootstrap/less'
 
-    # Download a file via curl to a local dir
-    curl:
-      font_source_sans:
-        dest: '/tmp/source-sans-pro.zip'
-        src:  'http://www.fontsquirrel.com/fonts/download/source-sans-pro'
-      font_roboto:
-        dest: '/tmp/roboto.zip'
-        src: 'https://material-design.storage.googleapis.com/publish/material_v_4/material_ext_publish/0B0J8hsRkk91LRjU4U1NSeXdjd1U/RobotoTTF.zip'
-      font_lato:
-        dest: '/tmp/lato2.zip'
-        src: 'http://www.latofonts.com/download/Lato2OFLWeb.zip'
-
     # Unzip a file form a localdir
     unzip:
       font_source_sans:
@@ -205,7 +193,7 @@ module.exports = (grunt) ->
           return null
 
         dest: 'public/font'
-        src: ['/tmp/source-sans-pro.zip']
+        src: ['distributed/source-sans-pro.zip']
 
       font_roboto:
         router: (path) ->
@@ -214,7 +202,7 @@ module.exports = (grunt) ->
           return null
 
         dest: 'public/font'
-        src: ['/tmp/roboto.zip']
+        src: ['distributed/roboto.zip']
 
       font_lato:
         router: (path) ->
@@ -225,7 +213,7 @@ module.exports = (grunt) ->
           return null
 
         dest: 'public/font'
-        src: ['/tmp/lato2.zip']
+        src: ['distributed/lato2.zip']
 
 
   # Load all the tasks that we use
@@ -238,7 +226,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-bowercopy'
   grunt.loadNpmTasks 'grunt-zip'
-  grunt.loadNpmTasks 'grunt-curl'
 
 
   # Define your own tasks
@@ -249,8 +236,7 @@ module.exports = (grunt) ->
     'bowercopy:assets'
     'bowercopy:bootstrap_bits'
   ]
-  grunt.registerTask 'font',    [ 'curl:font_roboto', 'unzip:font_roboto', 'curl:font_source_sans', 'unzip:font_source_sans', 'curl:font_lato', 'unzip:font_lato' ]
-  #grunt.registerTask 'font',    [ 'curl:font_lato', 'unzip:font_lato' ]
+  grunt.registerTask 'font',    [ 'unzip:font_roboto', 'unzip:font_source_sans', 'unzip:font_lato' ]
   grunt.registerTask 'w2ui',    [ 'exec:pull_git_modules', 'exec:w2ui_less', 'exec:w2ui_build', 'exec:w2ui_copy_js' ]
   grunt.registerTask 'w2ui-dev',    [ 'exec:w2ui_less', 'exec:w2ui_build', 'exec:w2ui_copy_js' ]
   # Pull in all the dependencies
