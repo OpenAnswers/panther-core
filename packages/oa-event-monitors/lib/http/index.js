@@ -16,8 +16,10 @@ var express = require('express');
 //var passport    = require('passport')
 var Promise = require('bluebird');
 var bodyParser = require('body-parser');
-var _ = require('lodash');
+var lodashMerge = require('lodash').merge;
+var fs = require('node:fs');
 var needle = Promise.promisifyAll(require('needle'));
+var moment = require('moment');
 
 var Errors = require('oa-errors');
 var AgentRole = require('../utils/agent_role').Role;
@@ -36,7 +38,7 @@ var DEFAULT_APIKEY_TOKEN = 'uuid-blah-uuid';
 exports.Agent = Class('AgentHttp', {
   my: {
     has: {
-      properties: { is: 'ro', init: ['port', 'apikeyserver', 'apikeytoken', 'app'] },
+      properties: { is: 'ro', init: ['port', 'apikeyserver', 'apikeytoken', 'app', 'weblog'] },
     },
   },
 
@@ -47,6 +49,7 @@ exports.Agent = Class('AgentHttp', {
     apikeytoken: { is: 'rw', init: DEFAULT_APIKEY_TOKEN },
     apikeyserver: { is: 'rw', init: DEFAULT_APIKEY_SERVER },
     app: { is: 'rw', init: null },
+    weblog: { is: 'rw', init: null },
   },
 
   after: {
@@ -56,6 +59,7 @@ exports.Agent = Class('AgentHttp', {
       this.setPort(self.getProps().port || DEFAULT_HTTP_PORT);
       this.setApikeytoken(self.getProps().apikeytoken || DEFAULT_APIKEY_TOKEN);
       this.setApikeyserver(self.getProps().apikeyserver || DEFAULT_APIKEY_SERVER);
+      this.setWeblog(self.getProps().weblog || null);
     },
   },
 
@@ -65,7 +69,7 @@ exports.Agent = Class('AgentHttp', {
       var self = this;
       return new Promise(function (resolve, reject) {
         // Check local cache
-        cached_body = self.token_cache.get(token, 60);
+        const cached_body = self.token_cache.get(token, 60);
         if (cached_body) return resolve(cached_body);
 
         // Else request
@@ -107,7 +111,7 @@ exports.Agent = Class('AgentHttp', {
     setup: function (cb) {
       var self = this;
 
-      app = express();
+      let app = express();
       this.setApp(app);
 
       // request logging
@@ -226,6 +230,7 @@ exports.Agent = Class('AgentHttp', {
             // queue CB
             debug('queue result', err, result);
             if (err) return res.status(400).json({ error: err.name, message: err.message });
+            writeWebLog(self.getWeblog(), req.body.event);
 
             res.json({ status: 'Queued' });
           }
@@ -244,8 +249,10 @@ exports.Agent = Class('AgentHttp', {
             // check there was a result
             if (!result) return res.status(400).json({ error: 'empty', message: 'result from server was empty' });
 
+            writeWebLog(self.getWeblog(), req.body.event);
+
             var data = { status: 'Created', message: '', event: {} };
-            res.json(_.merge(data, { message: result.message, event: result.event }));
+            res.json(lodashMerge(data, { message: result.message, event: result.event }));
           },
           undefined, // queue CB
           function (err2, responseObj) {
@@ -255,16 +262,16 @@ exports.Agent = Class('AgentHttp', {
             }
 
             var data = { status: '', message: '', event: {} };
-            res.json(_.merge(data, responseObj));
+            res.json(lodashMerge(data, responseObj));
           }
         );
       });
 
       app.use(function (error, req, res, next) {
         if (error.name === 'ValidationError' && !error.code) error.code = 400;
-        code = error.code ? error.code : 500;
+        const code = error.code ? error.code : 500;
         if (error.code !== 404 && error.code !== 401) logger.error(error.message, error.stack);
-        response = { error: { message: 'An error occurred' } };
+        const response = { error: { message: 'An error occurred' } };
         if (error.message !== undefined) response.error.message = error.message;
         if (error.name !== undefined) response.error.name = error.name;
         if (error.type !== undefined) response.error.type = error.type;
@@ -288,3 +295,21 @@ exports.Agent = Class('AgentHttp', {
     },
   },
 });
+
+const writeWebLog = (logfile, event) => {
+  if (logfile === null) {
+    return;
+  }
+  try {
+    const syslogDate = moment().format('YYYY-MM-DDTHH:mm:ss');
+    const syslogNode = event.node || 'unknown-node';
+    const syslogTag = event.tag || 'unknown-tag';
+    const syslogSummary = event.summary || 'unknown-summary';
+
+    const syslogMsg = `${syslogDate} ${syslogNode} ${syslogTag}: ${syslogSummary}\n`;
+
+    fs.writeFileSync(logfile, syslogMsg, { flag: 'a+' });
+  } catch (err) {
+    logger.error(`Failed to write weblog entry: ${err}`);
+  }
+};
