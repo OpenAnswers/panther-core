@@ -1,0 +1,31 @@
+FROM panther-builder:24.15.0-alpine3.23 AS builder
+
+FROM panther-runtime:24.15.0-alpine3.23 AS base
+
+LABEL component="panther/server"
+
+# Install application
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/bin ./bin
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/lib ./lib
+COPY --from=builder /build/packages/oa-event-server/etc/alertdef.js ./etc/
+COPY --from=builder --chmod=0644 /build/packages/oa-event-server/etc/server.ini.dist ./etc/server.ini
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/external_commands ./external_commands
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/automations ./automations
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/models ./models
+COPY --from=builder /build/packages/oa-event-server/package.json ./
+COPY --from=builder /build/packages/oa-event-server/node_modules/ ./node_modules/
+
+# Install migration files
+COPY --from=builder --chmod=0644 /build/packages/oa-event-server/migrate-mongo-config.js ./migrate-mongo-config.js
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/migrations ./migrations
+
+#install an entrypoint
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/docker/entrypoint.sh ./docker-entrypoint.sh
+COPY --from=builder --chmod=0755 /build/packages/oa-event-server/docker/wait-for-it.sh ./wait-for-it.sh
+
+EXPOSE 4002/tcp
+
+USER app
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+

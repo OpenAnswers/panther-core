@@ -1,0 +1,94 @@
+{
+  "name": "panther-core",
+  "version": "5.0.5",
+  "description": "Core Panther products",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "build:builder": "docker build -t panther-builder:24.15.0-alpine3.23 -f Dockerfiles/Dockerfile-builder .",
+    "build:runtime": "docker build -t panther-runtime:24.15.0-alpine3.23 -f Dockerfiles/Dockerfile-runtime .",
+    "build:console": "docker build -t event-console -f Dockerfiles/Dockerfile-event-console .",
+    "build:server": "docker build -t event-server -f Dockerfiles/Dockerfile-event-server .",
+    "build:monitors": "docker build -t event-monitors -f Dockerfiles/Dockerfile-event-monitors .",
+    "build:docker": "npm run build:builder && npm run build:runtime && npm run build:console && npm run build:server && npm run build:monitors",
+    "start/all": "NODE_ENV=production lerna run --parallel start",
+    "test": "npm run unit && npm run ui && npm run integration && npm run e2e",
+    "unit": "lerna run unit",
+    "integration": "lerna run integration",
+    "ui": "npm exec --workspace=oa-event-console -- vitest run",
+    "vitest": "npm exec --workspace=oa-event-console -- vitest run",
+    "e2e": "lerna run e2e",
+    "pre-commit": "lerna run unit",
+    "coverage": "rm -rf coverage && npm run coverage:unit && npm run coverage:integration && npm run coverage:ui && npm run coverage:report",
+    "coverage:unit": "NODE_V8_COVERAGE=$(pwd)/coverage/tmp lerna run --no-bail coverage:unit",
+    "coverage:integration": "NODE_V8_COVERAGE=$(pwd)/coverage/tmp lerna run --no-bail coverage:integration",
+    "coverage:ui": "NODE_V8_COVERAGE=$(pwd)/coverage/tmp npm exec --workspace=oa-event-console -- vitest run",
+    "coverage:report": "NODE_V8_COVERAGE=$(pwd)/coverage/tmp c8 report --reports-dir=coverage --reporter=text --reporter=text-summary --reporter=lcov --reporter=cobertura --reporter=json-summary",
+    "format": "prettier --write \"**/*.{js,ts}\"",
+    "format:check": "prettier --check \"**/*.{js,ts}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenAnswers/panther.git"
+  },
+  "keywords": [
+    "Panther"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "CPAL-1.0",
+  "devDependencies": {
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/sinon": "^21.0.1",
+    "c8": "^11.0.0",
+    "fs-extra": "8.1.0",
+    "lerna": "9.0.7",
+    "prettier": "3.6.2",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "overrides": {
+    "mincer": "2.1.0",
+    "jquery": "3.7.1",
+    "utf7": {
+      "semver": "5.7.2"
+    },
+    "swagger-jsdoc": {
+      "js-yaml": "3.14.2"
+    },
+    "follow-redirects": "1.16.0",
+    "lodash": "4.18.1",
+    "optimist": {
+      "minimist": "0.2.4"
+    },
+    "qs": "6.14.2",
+    "serialize-javascript": "7.0.5",
+    "tough-cookie": "4.1.4",
+    "cookie": "0.7.2",
+    "diff": "^8.0.3",
+    "markdown-it": "^14.1.1",
+    "passport": "^0.7.0",
+    "esbuild": "^0.27.0",
+    "underscore": "1.13.8",
+    "fast-xml-parser": "5.7.1",
+    "@xmldom/xmldom": "0.9.10",
+    "form-data": "4.0.5",
+    "tar-fs": "3.1.2",
+    "ws": "8.20.0",
+    "socket.io-parser": "4.2.6",
+    "validator": "13.15.35",
+    "flatted": "3.4.2",
+    "micromatch": "4.0.8",
+    "picomatch": "4.0.4",
+    "semver": "7.7.2",
+    "tar": "7.5.11",
+    "on-headers": "1.1.0",
+    "nx": {
+      "minimatch": "10.2.4"
+    },
+    "minimatch@3": "3.1.4"
+  }
+}

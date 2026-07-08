@@ -1,0 +1,7 @@
+node_modules/
+npm-debug.log*
+docs/public/fonts/
+docs/public/images/
+*.swp
+lib/
+pkg/

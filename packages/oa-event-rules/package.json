@@ -1,0 +1,66 @@
+{
+  "name": "oa-event-rules",
+  "version": "5.0.5",
+  "private": true,
+  "description": "OA Event Rules model",
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "^24.0.0"
+  },
+  "scripts": {
+    "test": "npm run unit && npm run integration",
+    "unit": "npm run compile && mocha $NPM_MOCHA_OPTS test/unit test/unit/*_spec.ts",
+    "integration": "npm run compile && mocha $NPM_MOCHA_OPTS test/int test/int/*_spec.ts",
+    "coverage:unit": "npm run compile && c8 --no-clean mocha $NPM_MOCHA_OPTS test/unit test/unit/*_spec.ts",
+    "coverage:integration": "npm run compile && c8 --no-clean mocha $NPM_MOCHA_OPTS test/int test/int/*_spec.ts",
+    "build": "rimraf lib && tsc",
+    "pack": "npm run build && cd ./pkg && npm pack ../",
+    "compile": "tsc",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ] || ( echo \"git[$git]\"; exit 1 )"
+  },
+  "bin": {
+    "verify-rules": "./bin/verify-rules"
+  },
+  "files": [
+    "bin/",
+    "lib/*.js"
+  ],
+  "keywords": [
+    "oa",
+    "openanswers",
+    "panther",
+    "events",
+    "DSL",
+    "console",
+    "rules",
+    "yaml"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "CPAL-1.0",
+  "devDependencies": {
+    "chai": "5.1.0",
+    "mocha": "^11.0.0",
+    "rimraf": "^3.0.2",
+    "sinon": "19.0.0",
+    "tsx": "^4.19.0"
+  },
+  "dependencies": {
+    "bluebird": "~3.1.1",
+    "debug": "4.3.4",
+    "farmhash": "^5.0.1",
+    "gift": "0.10.2",
+    "joi": "^17.6.0",
+    "js-yaml": "3.14.2",
+    "lodash": "4.18.1",
+    "minimist": "1.2.8",
+    "moment": "2.30.1",
+    "moment-timezone": "0.5.45",
+    "mv": "~2.1.1",
+    "oa-errors": "^5.0.5",
+    "oa-helpers": "^5.0.5",
+    "oa-logging": "^5.0.5",
+    "tmp": "0.2.5",
+    "uuid": "^11.0.0"
+  }
+}

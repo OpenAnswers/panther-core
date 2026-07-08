@@ -1,0 +1,17 @@
+//- 
+//- Copyright (C) 2026, Open Answers Ltd https://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+//- Third party libraries (static vendor files — no npm equivalent)
+//- Must use defer so they execute after the jQuery module in <head>
+script(src='/assets/vendor/jquery-ui.js' defer)
+
+//- Our JavaScript
+!= js('rules_mgmt')
+
+//- Pass some simple express data in
+script(type="text/javascript" charset="utf-8").
+  var type = "#{type}";
+  var sub_type = "#{sub_type}";

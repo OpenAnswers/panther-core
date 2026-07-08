@@ -1,0 +1,14 @@
+{ 
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "description": "Event Response",
+  "properties": {
+    "message":  { 
+      "type": "string"
+    },
+    "status": { 
+      "type": "string"
+    }
+  },
+  "required": [ "status" ]
+}

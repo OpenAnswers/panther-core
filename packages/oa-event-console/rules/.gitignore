@@ -1,0 +1,13 @@
+server.rules.yml
+server.rules.yml.bak
+server.rules.yml.[0-9]*
+graylog.rules.yml
+graylog.rules.yml.bak
+graylog.rules.yml.[0-9]*
+http.rules.yml
+http.rules.yml.bak
+http.rules.yml.[0-9]*
+syslogd.rules.yml
+syslogd.rules.yml.bak
+syslogd.rules.yml.[0-9]*
+git/[^.]*

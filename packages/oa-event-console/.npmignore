@@ -1,0 +1,11 @@
+w2ui/
+node_modules/
+pkg/
+test/screenshots
+config.yml
+results.txt
+dev/
+*.swp
+npm-debug.log*
+.vagrant
+dist/

@@ -1,0 +1,22 @@
+FROM panther-builder:24.15.0-alpine3.23 AS builder
+
+FROM panther-runtime:24.15.0-alpine3.23 AS base
+
+LABEL component="panther/monitors"
+
+ARG AGENT
+
+# Install application
+COPY --from=builder /build/packages/oa-event-monitors/package.json .
+COPY --from=builder --chmod=0755 /build/packages/oa-event-monitors/bin ./bin
+COPY --from=builder --chmod=0755 /build/packages/oa-event-monitors/lib ./lib
+COPY --from=builder --chmod=0755 /build/packages/oa-event-monitors/common ./common
+COPY --from=builder --chmod=0755 /build/packages/oa-event-monitors/docker/entrypoint.sh ./docker-entrypoint.sh
+COPY --from=builder --chmod=0755 /build/packages/oa-event-monitors/docker/*.ini ./etc/
+COPY --from=builder --chmod=0755 /build/packages/oa-event-monitors/node_modules/ ./node_modules/
+
+USER app
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+CMD ["${AGENT}"]

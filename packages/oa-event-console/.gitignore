@@ -1,0 +1,25 @@
+app/assets/vendor/
+node_modules/
+public/assets/bld/
+public/assets/vendor/
+public/assets/css/
+public/font/*
+!public/font/roboto-regular-webfont.*
+npm-debug.log*
+tags
+results.txt
+dev/
+*.swp
+.vagrant/
+rules/git
+dist/
+build/
+
+# Playwright
+test/e2e/.auth/user.json
+test/e2e/.runtime/
+test-results/
+playwright-report/
+
+# Timestamped rule-file backups produced by tests
+test/fixture/rules/*.rules.yml.[0-9]*

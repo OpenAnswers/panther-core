@@ -1,0 +1,8 @@
+api-token:
+  description: Console generated API token that must be provided in the header
+  type: x-api-token
+  describedBy:
+    headers:
+      x-api-token:
+        description: Valid API token
+        type: string

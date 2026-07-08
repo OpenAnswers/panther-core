@@ -1,0 +1,18 @@
+{
+  "all": false,
+  "exclude": [
+    "**/test/**",
+    "**/dist/**",
+    "**/builtAssets/**",
+    "**/public/**",
+    "**/scripts/**",
+    "**/node_modules/**",
+    "**/coverage/**",
+    "**/.mocharc.{js,cjs}",
+    "**/*.config.{js,cjs,mjs,ts}",
+    "**/vite.config.*",
+    "**/playwright.config.*"
+  ],
+  "reporter": ["text-summary", "lcov", "cobertura", "json-summary"],
+  "reports-dir": "coverage"
+}

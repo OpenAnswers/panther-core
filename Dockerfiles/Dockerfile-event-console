@@ -1,0 +1,41 @@
+FROM panther-builder:24.15.0-alpine3.23 AS builder
+
+
+FROM panther-runtime:24.15.0-alpine3.23 AS base
+
+LABEL component="panther/console"
+
+# required for using git to version control rules
+RUN apk add --no-cache git openssh-client
+
+# Install application
+# Mirror the dev layout under /app so runtime path resolution (Path.base = dist/lib/../..)
+# and `require('../../package.json')` from dist/lib work the same in Docker as locally.
+COPY --from=builder --chmod=0755 /build/packages/oa-event-console/dist ./dist
+COPY --from=builder /build/packages/oa-event-console/package.json ./package.json
+COPY --from=builder --chmod=0755 /build/packages/oa-event-console/public ./public
+COPY --from=builder --chmod=0755 /build/packages/oa-event-console/app/view ./app/view
+COPY --from=builder --chmod=0755 /build/packages/oa-event-console/app/emails ./app/emails
+COPY --from=builder --chmod=0755 /build/packages/oa-event-console/node_modules/ ./node_modules/
+
+# install rules files
+COPY --from=builder --chown=app:app /build/rules/server.rules.yml /build/rules/http.rules.yml /build/rules/syslogd.rules.yml ./rules/
+
+# install the example Event Source config archives
+COPY --from=builder --chown=app:app /build/packages/oa-event-console/docker/private/ ./private/
+
+# install config.yml
+COPY --from=builder /build/packages/oa-event-console/docker/config.yml ./config.yml
+# install swagger definition
+COPY --from=builder /build/packages/oa-event-console/docker/swagger.json ./swagger.json
+# install entrypoint
+COPY --from=builder --chmod=0755 /build/packages/oa-event-console/docker/entrypoint.sh ./docker-entrypoint.sh
+
+EXPOSE 3001/tcp
+
+VOLUME ./rules
+
+USER app
+
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+

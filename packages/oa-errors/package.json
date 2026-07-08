@@ -1,0 +1,41 @@
+{
+  "name": "oa-errors",
+  "version": "5.0.5",
+  "private": true,
+  "description": "Generic OA Error classes",
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "^24.0.0"
+  },
+  "files": [
+    "lib/*.js"
+  ],
+  "scripts": {
+    "test": "npm run compile && mocha $NPM_MOCHA_OPTS test/unit test/unit/*_spec.ts",
+    "unit": "npm run compile && mocha $NPM_MOCHA_OPTS test/unit test/unit/*_spec.ts",
+    "coverage:unit": "npm run compile && c8 --no-clean mocha $NPM_MOCHA_OPTS test/unit test/unit/*_spec.ts",
+    "pack": "npm run build && cd pkg && npm pack ../",
+    "compile": "tsc",
+    "build": "rimraf lib && tsc",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ] || ( echo \"git[$git]\"; exit 1)",
+    "devrun": "devRun.pl -c \"$DRCMD\" -dir . -dwe '^.git/|^node_modules/|^lib/'"
+  },
+  "keywords": [
+    "oa",
+    "openanswers",
+    "error",
+    "errors"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "CPAL-1.0",
+  "devDependencies": {
+    "chai": "5.1.0",
+    "debug": "4.3.4",
+    "mocha": "^11.0.0",
+    "rimraf": "^3.0.2",
+    "sinon": "19.0.0",
+    "source-map-support": "^0.5.0",
+    "tsx": "^4.19.0"
+  }
+}

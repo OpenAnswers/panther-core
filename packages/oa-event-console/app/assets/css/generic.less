@@ -1,0 +1,64 @@
+
+@import "../oa_less/variables.less";
+
+// These are so text fields don't look so out of place
+// among unput fields. I doubt 7px is a scalable solution
+.generic-values-fieldview,
+.generic-inputtext-padding,
+.generic-glyph-padding {
+  padding: 7px
+}
+
+
+.generic-delete-button {
+  color: #D0D0D0;
+  text-align: center;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.generic-delete-button:hover {
+  opacity: 1.0;
+  color: #AA1111;
+}
+
+
+
+////////////////////////////////////////
+
+.generic-grouping-subtitle {
+  float: left;
+  font-size: 0.8em;
+  color: @text-color-header;
+  margin-left: 10px;
+  padding-top: 8px;
+  display: none;
+}
+
+.generic-grouping-icon {
+  height: 35px;
+  width: 32px;
+  padding-top: 7px;
+  font-size: 1em;
+  color: #9E9E9E;
+  cursor: pointer;
+  text-align: right;
+  float: right;
+  color: #BDBDBD;
+  font-size: 1.0em;
+  margin-left: 4px;
+}
+
+.generic-grouping-icon .grabber {
+  cursor: move;
+}
+
+.generic-grouping-icon:hover {
+  color: #919191;
+}
+
+.generic-grouping-empty {
+  width: 100%;
+  text-align: center;
+  color: #9E9E9E;
+}

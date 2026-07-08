@@ -1,0 +1,47 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "packages/oa-errors"
+    },
+    {
+      "path": "packages/oa-event-console"
+    },
+    {
+      "path": "packages/oa-event-monitors"
+    },
+    {
+      "path": "packages/oa-event-rules"
+    },
+    {
+      "path": "packages/oa-event-server"
+    },
+    {
+      "path": "packages/oa-helpers"
+    },
+    {
+      "path": "packages/oa-logging"
+    },
+    {
+      "path": "packages/oa-tinycache"
+    }
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+    "files.exclude": {
+      "**/.DS_Store": true,
+      "**/.git": true,
+      "**/.hg": true,
+      "**/.svn": true,
+      "**/CVS": true,
+      "**/dist": true,
+      "**/node_modules": true,
+      "**/oa-event-rules/lib": true,
+      "**/oa-helpers/lib": true,
+      "**/oa-logging/lib": true,
+      "**/oa-tinycache/lib": true
+    }
+  }
+}

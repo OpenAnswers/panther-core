@@ -1,0 +1,70 @@
+@import '../w2ui_less/w2ui.less';
+@import '../oa_less/variables.less';
+
+/* 
+    Below are the overrides for the base w2ui css (less). 
+    We use the distributed less from a git repo as 
+    the `w2ui-selected` css needed to be deleted for our row highlighting
+    
+    We also have some js customisations, so a fork
+    of the w2ui repo has been included as a git submodule 
+
+*/
+
+.w2ui-col-header {
+  font-family: helvetica, arial, verdana, sans-serif;
+  font-size: 14px !important;
+  font-weight: bold;
+  padding-left: 10px !important;
+  color: @text-color;
+  background-color: @foreground !important;
+}
+
+.w2ui-grid .w2ui-grid-body table .w2ui-head {
+  border-right: 1px solid @border;
+  border-bottom: 1px solid @border;
+}
+
+.w2ui-grid .w2ui-grid-body table .w2ui-head:nth-last-of-type(2) {
+  border-right: 0px solid transparent;
+  border-bottom: 1px solid @border;
+}
+
+/* Grid Row - Even and Odd */
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd,
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even {
+  background-color: @foreground;
+  color: #333;
+}
+
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover,
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover {
+  background-color: @foreground-element;
+
+  &.w2ui-empty-record {
+    background-color: @foreground-element;
+  }
+}
+
+/* Grid Row - Borders */
+.w2ui-grid .w2ui-grid-body table td {
+  border: 0px;
+}
+
+/* Grid Row - Text and Padding */
+.w2ui-grid .w2ui-grid-body table td.w2ui-grid-data > div {
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 13px !important;
+  padding: 8px 8px 8px 8px;
+}
+
+/* Grid Row - Remove Column Drop Shadow */
+.w2ui-grid .w2ui-grid-body .w2ui-grid-columns {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -mozilla-box-shadow: none;
+}
+
+#inventory-grid.w2ui-grid .w2ui-grid-body table td {
+  cursor: context-menu;
+}

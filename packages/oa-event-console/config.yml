@@ -1,0 +1,87 @@
+# This is an event console config
+
+app:
+  name: 'Panther'
+  console: 'Default'
+  # The from email address used when:
+  # - sending password resets
+  # - commiting rules to git
+  email: 'support@openanswers.co.uk'
+
+  # The url that is used to access the web frontend
+  url: 'http://localhost:3001'
+
+  # external support URL, defaults to the Panther documentation project
+  # support_url: "https://openanswers.github.io/panther-docs"
+
+  # view_limit: <number> maximum number of events to display on the web frontend
+  view_limit: 2000
+
+  assets_build_dir: dist/builtAssets
+
+  swagger_docs: true
+  swagger_json: './dist/swagger.json'
+  key:
+    apikey:
+      'uuid-blag-uuid': event_monitor_http
+
+  upload:
+    maxsize: 5532768
+
+  archive_time:
+    clear: 72
+    delete: 8
+
+  syslog_port: 5000
+
+# Location of the Panther event-server
+event_server:
+  host: localhost
+  port: 4002
+
+event_monitors:
+  syslogd:
+    host: localhost
+    port: 1503
+  http:
+    host: localhost
+    port: 5001
+
+# mongoDB connection and collection details
+mongodb:
+  uri: 'mongodb://127.0.0.1:27017/panther'
+  database: panther
+  collection: 'alerts'
+  # 12 seconds
+  timer: 12000
+  max_connects: 20
+
+# event-console listening port that the browser should connect to
+http:
+  port: 3001
+
+# SMTP server used when sending emails
+smtp:
+  host: 'localhost'
+  port: 25
+
+session:
+  # secret: <string> set the session secret. login session will persit over restarts
+  #  - can be blank and a random session secret will be generated each time the server is started.
+  # secret: "some-random-string"
+
+  # timeout: session lifetime in seconds ( 1209600 = two weeks)
+  timeout: 1209600
+
+# Configuration location for the server and monitor rules file.
+# The path must be accessible to the Panther:
+# - event-server
+# - event-console
+# - event-monitors-*
+rules:
+  path: '../../rules'
+  git: false
+  push: false
+  agents:
+    - http
+    - syslogd

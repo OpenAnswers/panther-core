@@ -1,0 +1,28 @@
+2.1.0   15/12/2015
+
+Move to using a 'select' key to house the group `select`
+
+- Improve error messages on constructors
+- Fix genric type taking over http
+- Improve some error message's as they can leak out to clients
+- Add support for multiple replaces
+  a `replace:` key can either be an object or an array
+  of replace objects. support this in rules
+- Add support for using `select:` instead of munging it with rules
+- Make select: the default for writing out
+- Load both old and new formats
+- Fix functional test as they werent doing anything
+- decrease the fs.watch wait to 1 second
+- add fs.watch cleanup so EventRules instances can be cleaned up
+
+2.0.0  - 17/11/2015 Move to generic agent processing. 
+
+Generic agent rules with a `type`
+Add syslog, graylog, http agent class
+Differentiate between `server` and `agent` rule sets
+Rule file watch + reload on change event
+Move to `Date` fields from timestamps
+Fix occurrence spelling
+`to_yaml` fixes for Group SelectMatch
+Improvements to SelectEquals to allow arrays of values like SelectMatch
+

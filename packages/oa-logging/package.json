@@ -1,0 +1,44 @@
+{
+  "name": "oa-logging",
+  "version": "5.0.5",
+  "private": true,
+  "description": "OpenAnswers Logging setup",
+  "type": "commonjs",
+  "main": "lib/logging.js",
+  "engines": {
+    "node": "^24.0.0"
+  },
+  "files": [
+    "lib/*.js"
+  ],
+  "scripts": {
+    "test": "npm run compile && mocha test/*_spec.ts",
+    "coverage:unit": "npm run compile && c8 --no-clean mocha test/*_spec.ts",
+    "build": "rimraf lib && tsc",
+    "compile": "tsc",
+    "pack": "npm run build && cd pkg && npm pack ../",
+    "check_git_status": "git=$(git status --porcelain) && [ -z \"$git\" ]"
+  },
+  "keywords": [
+    "logging",
+    "log",
+    "openanswers",
+    "oa",
+    "debug"
+  ],
+  "author": "OpenAnswers <support+panther@openanswers.co.uk>",
+  "license": "CPAL-1.0",
+  "dependencies": {
+    "debug": "4.3.4",
+    "oa-helpers": "^5.0.5",
+    "winston": "2.4.6"
+  },
+  "devDependencies": {
+    "chai": "5.1.0",
+    "mocha": "^11.0.0",
+    "rimraf": "^3.0.2",
+    "sinon": "19.0.0",
+    "tsx": "^4.19.0",
+    "winston-spy": "^0.2.0"
+  }
+}

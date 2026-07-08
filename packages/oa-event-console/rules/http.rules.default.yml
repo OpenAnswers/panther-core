@@ -1,0 +1,23 @@
+# ## Syslog specific settings
+
+agent:
+  type: http
+
+  # Make some changes to event console fields
+  # Possible options are:
+  #  - `lower_case`
+  field_transform:
+    node: 'to_lower_case'
+
+  # Event console Identifier. 
+  # The identifier is the key used by the console to aggregate
+  # multiple log entries into one event. 
+  # This is the default that will be applied unlesss you set 
+  # a different `identifier` field in your rule set 
+  identifier: '{node}:{severity}:{summary}'
+
+  rules:
+    - name: 'HTTP useragent' 
+      all: true
+      set:
+        client: '{input.useragent}'

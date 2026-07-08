@@ -1,0 +1,36 @@
+FROM node:24.15.0-alpine3.23
+
+ARG APP_UID=1001
+
+ENV NODE_ENV=production
+
+LABEL product="oa/node-app"
+
+RUN set -eux; \
+    apk upgrade --no-cache; \
+    apk add --no-cache ca-certificates libcurl libxml2; \
+    addgroup -g "${APP_UID}" app; \
+    adduser  -u "${APP_UID}" -G app -H -h /app -s /sbin/nologin -D app; \
+    npm -g update;
+
+WORKDIR /app
+
+ONBUILD COPY --from=builder /build/node_modules ./node_modules
+
+ONBUILD COPY --from=builder /build/packages/oa-errors/lib ./packages/oa-errors/lib
+ONBUILD COPY --from=builder /build/packages/oa-errors/package.json ./packages/oa-errors/package.json
+
+ONBUILD COPY --from=builder /build/packages/oa-helpers/lib ./packages/oa-helpers/lib
+ONBUILD COPY --from=builder /build/packages/oa-helpers/package.json ./packages/oa-helpers/package.json
+
+ONBUILD COPY --from=builder /build/packages/oa-logging/lib ./packages/oa-logging/lib
+ONBUILD COPY --from=builder /build/packages/oa-logging/package.json ./packages/oa-logging/package.json
+
+ONBUILD COPY --from=builder /build/packages/oa-tinycache/lib ./packages/oa-tinycache/lib
+ONBUILD COPY --from=builder /build/packages/oa-tinycache/package.json ./packages/oa-tinycache/package.json
+
+ONBUILD COPY --from=builder /build/packages/oa-event-rules/lib ./packages/oa-event-rules/lib
+ONBUILD COPY --from=builder /build/packages/oa-event-rules/package.json ./packages/oa-event-rules/package.json
+
+ONBUILD COPY --from=builder /build/packages/oa-helpers/node_modules ./packages/oa-helpers/node_modules
+ONBUILD COPY --from=builder /build/packages/oa-event-rules/node_modules ./packages/oa-event-rules/node_modules

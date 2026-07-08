@@ -1,0 +1,103 @@
+globals:
+
+  rules:
+
+    - name: '1 Testing Rule'
+      match:
+          summary: '/(.*)/'
+      set:
+          node: 'fake_node'
+          summary: 'fake_summary'
+      replace:
+          field: 'summary'
+          this: 'a'
+          with: 'b'
+      stop: true
+      stop_rule_set: true
+      skip: true
+      discard: true
+
+
+    - name: '2 local stuff oa'
+      starts_with:
+        node: host1
+      set:
+        whatever: 'local1!'
+
+
+    - name: '3 local stuff home'
+      starts_with:
+        node: host2
+      set:
+        whatever: 'local2!'
+
+
+    - name: 4 If statement on node again to set customer field
+      match:
+        node: /app1|app2|app3|_bridge/i
+      set:
+        customer: 'ExampleCustomer'
+
+
+    # Set owner to system on auto-cleared (severity 0) alerts so owner-based
+    # monitoring queries don't pick them up.
+    - name: Set system owner on cleared alerts
+      equals:
+        severity: '0'
+      set:
+        owner: 'system'
+
+
+# ## Groups
+
+# Once an event has gone through the global rule set, it will optionally
+# be matched into one group.
+# The `group` field will be set to the groups name and then the event
+# will be processed through that groups rule set. 
+
+groups:
+ 
+  _order:
+    - Local
+    - Security
+    - TestGroup
+    - TestUpdateSelect
+
+  Local:
+    match:
+      node:
+        - host2.local
+        - /^host1/
+    rules:
+      - name: First Local
+        match: 
+          summary: /whatever whatever whatever/
+        set:
+          summary: 'whatever*3'
+
+  TestGroup:
+    match:
+      node:
+        - /app1/
+        - /app2/
+        - /app3/
+        - /_bridge/
+
+    rules:
+      - name: 'Setting node aliases'
+        equals:
+          node:  'host3.example.com'
+        set:
+          node_alias: 'host3.example.com'
+          node: 'appnode01'
+
+  TestUpdateSelect:
+    select:
+      match:
+        facility: '/auth/i'
+    rules: []
+
+  Security:
+    match:
+      facility: '/auth/i'
+    rules: []

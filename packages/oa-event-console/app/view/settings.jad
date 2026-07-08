@@ -1,0 +1,22 @@
+//- 
+//- Copyright (C) 2026, Open Answers Ltd https://www.openanswers.co.uk/
+//- All rights reserved.
+//- This file is subject to the terms and conditions defined in the Software License Agreement.
+//-  
+
+extends _template
+
+block nav
+  include ./settings-nav.jade
+  
+block content
+  docheadings.markdown_toc
+    nav.col-xs-3.bs-docs-sidebar
+      ul#books.sidebar.nav.nav-stacked.fixed
+        li
+          a(href="#order")      Order
+
+  .markdown(data-spy='scroll' data-target='#docheadings')
+    include:markdown-it settings.md
+
+  .markdown_anchor_gap

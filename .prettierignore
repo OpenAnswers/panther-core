@@ -1,0 +1,14 @@
+node_modules
+dist
+lib
+coverage
+build/output
+packages/*/dist
+packages/*/lib
+packages/*/coverage
+
+# vendor / built assets
+packages/oa-event-console/public
+packages/oa-event-console/app/assets/js/w2ui.js
+packages/oa-event-console/app/assets/js/notify-combined.js
+*.min.js

@@ -1,0 +1,38 @@
+rules_file:
+  version: 1.0.0
+  api: 1.0.0
+
+# ## HTTP specific settings
+# Not much here, most should be passed straight through
+
+agent:
+
+  type: generic
+
+  # Syslog fields are mapped to event console fields
+  field_map:
+    #host: 'node'
+
+  # Make some changes to event console fields
+  # Possible options are:
+  #  - `to_lower_case`
+  field_transform:
+    node: 'to_lower_case'
+
+  # Event console Identifier. 
+  # The identifier is the key used by the console to aggregate
+  # multiple log entries into one event. 
+  # This is the default that will be applied unlesss you set 
+  # a different `identifier` field in your rule set 
+  identifier: '{node}:{severity}:{tag}:{summary}'
+
+
+  # The tag/daemon rules should go here
+  rules:
+
+    - name: 'Trim any whitespace from the end of summary'
+      match:
+        summary: '/([\s\S]*?)\s+$/'
+      set:
+        summary: "{match.1}"
+

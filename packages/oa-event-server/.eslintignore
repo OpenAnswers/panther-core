@@ -1,0 +1,12 @@
+.idea/
+.git/
+.vscode/
+public/
+views/
+node_modules/
+sessions/
+templating/
+test/
+# production.js has templated values
+env/production.js
+

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "moduleDetection": "force"
+  },
+  "include": [
+    "app/**/*.ts",
+    "lib/**/*.ts",
+    "bin/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "app/assets",
+    "vite.config.ts",
+    "scripts"
+  ]
+}

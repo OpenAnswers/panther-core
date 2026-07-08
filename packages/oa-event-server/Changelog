@@ -1,0 +1,7 @@
+3.0.0 - Rules  
+Adds oa-event-rules 3.0.0
+Global and Group rules are processed in server
+Correct alert model occurrence spellings and become Dates
+Make ack a boolean
+
+2.1.0  Stop silently ignoreing 11000 errors on insert. 

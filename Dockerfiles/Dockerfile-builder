@@ -1,0 +1,39 @@
+FROM node:24.15.0-alpine3.23
+
+# Production image builder. Alpine + musl. Native modules (notably libxmljs2)
+# are rebuilt against musl when consumers run `npm install` here. The
+# trixie-based test runner lives in Dockerfile-builder-test and is used by
+# CI only.
+
+RUN <<EOT
+    set -eux
+    apk update
+    apk upgrade --no-cache
+    apk add --no-cache \
+      git bash python3 gcc g++ make openssl openssh-client py3-setuptools \
+      ca-certificates \
+      libxml2 libxml2-dev
+    npm install -g --ignore-scripts node-gyp
+EOT
+
+
+ENV CXXFLAGS="-march=nocona -mno-aes -mno-f16c -mno-avx -mno-avx2 -mno-bmi2"
+ENV NODE_ENV=development
+
+WORKDIR /build
+
+COPY . .
+
+RUN --mount=type=cache,sharing=private,target=/var/cache/npm <<EOT
+  set -e
+  npm ci --ignore-scripts --cache=/var/cache/npm
+  npx lerna run install-deps
+  npx lerna run build
+  npm prune --omit=dev --workspaces --include-workspace-root
+  find /build -path '*/node_modules/*/yarn.lock' -delete
+EOT
+
+
+
+
+

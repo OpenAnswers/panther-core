@@ -1,0 +1,110 @@
+---
+
+monitor:
+  args:
+    name: syslogd
+    loglevel: INFO
+  command: node bin/oamon.js --name %{name} --loglevel=%{loglevel}
+
+sample:
+
+  run:
+    args:
+      name: sample
+      loglevel: DEBUG
+    command: node bin/oamon.js --name sample --loglevel=%{loglevel}
+    rep_command: :monitor args
+
+  test:
+    args:
+      sleep: 5
+      start: 1
+      step: 1
+      logfile: /tmp/sample.log
+      message: "sdffasfdsafsd%safdsfdsafds\tpopopopo%spoppoppopopoop\tnmnmnm%smnmmnmnmnmnmnmnmnmnmnmnm\t%s"
+    command: |
+      echo > %{logfile}
+      sleep 0.5
+      i=%{start}
+      j=0
+      while true; do 
+        let i=i+%{step}
+        let j=j+1
+        printf "$i "
+        printf "%{message}\n" "$i" "$i" "$i" "$i" >> %{logfile}
+        sleep %{sleep} 
+        if [[ $j -gt 1000 ]]; then 
+          date=$(date); echo [1000 - $date]; j=0; 
+        fi
+      done
+
+
+syslog:
+ 
+  run:
+    args:
+      name: syslogd
+      loglevel: DEBUG
+    command: node bin/oamon.js --name syslogd --loglevel=%{loglevel}
+    rep_command: :monitor args
+
+
+  test:
+    args:
+      sleep: 5
+      start: 1
+      step: 1
+      level: 3
+      message: "this is the syslog testing message from commands.yml"
+      report: 1000
+    command: |
+      i=%{start}
+      j=0
+      while true; do
+        let i=i+%{step}
+        let j=j+1
+        printf "$i "
+        logger -p %{level} "%{message} $i"
+        sleep %{sleep}
+        if [[ $j -gt %{report} ]]; then
+          echo "[%{report} $(date)]"
+          j=0
+        fi
+      done
+
+  random:
+    args:
+      sleep: 10
+      start: 1
+      step: 1
+      message: "random logger testing"
+    command: |
+     i=%{start}
+     while true; do 
+       for r in $(jot -r 20, 1, 7); do 
+         logger -p$r "logger testing random $i - $r";
+         let i=i+1
+         sleep 0.1
+       done
+     done
+
+graylog:
+  run:
+    args:
+      name: graylog
+      loglevel: DEBUG
+    command: node bin/oamon.js --name %{name} --loglevel=%{loglevel
+  
+  test:
+    args:
+      sleep: 5
+      start: 1
+      sleep: 5
+    command: |
+      i=%{start}
+      while true; do 
+        let i=i+1
+        echo -e '{"version": "1.1","host":"example.org","short_message":"Short message","full_message":"Backtrace here\n\nmore stuff","level":1,"_user_id":9001,"_some_info":"foo","_some_env_var":"bar"}\0' | nc -w 1 localhost 12202
+        printf "rc[$?] i[$i]\n" 
+        sleep %{sleep}
+      done

@@ -1,0 +1,56 @@
+agent:
+  type: syslogd
+  identifier: '{node}:{severity}:{tag}:{summary}'
+  field_map:
+    facility: facility
+    message: summary
+    host: node
+  field_transform:
+    node:
+      - to_lower_case
+  rules:
+    - name: 'rfc5424 app tag'
+      field_exists: input.appName
+      set:
+        tag: '{input.appName}'
+    - name: 'Separate rfc3164 tag[pid] and message ("]: " in the first 64 characters)'
+      match:
+        summary: '/^(.{1,63}?\]):\s([\s\S]*)$/'
+      field_missing: tag
+      set:
+        tag: '{match.1}'
+        summary: '{match.2}'
+    - name: 'Separate rfc3164 tag and message (":" and/or " " in the first 32 characters)'
+      match:
+        summary: '/^(.{1,32}?):?\s([\s\S]*)$/'
+      field_missing: tag 
+      set:
+        tag: '{match.1}'
+        summary: '{match.2}'
+    - name: Trim any leading and trailing whitespace from summary
+      match:
+        summary: '/^\s*([\s\S]*?)\s*$/m'
+      set:
+        summary: '{match.1}'
+    - name: Add newline to match rfc5424
+      match:
+        summary: '/[^\n]$/'
+      set: 
+        summary: "{summary}\n"
+      skip: true
+    - name: 'Seperate syslog tag that contains a [pid]'
+      match:
+        tag: '/(.*?)\[(\d+)\]/'
+      set:
+        tag: '{match.1}'
+        pid: '{match.2}'
+
+  severity_map:
+    '0': 5
+    '1': 5
+    '2': 4
+    '3': 3
+    '4': 2
+    '5': -1
+    '6': -1
+    '7': -1

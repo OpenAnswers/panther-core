@@ -1,0 +1,7 @@
+lerna-debug.log
+node_modules/
+yarn-error.log
+test-results
+coverage/
+.nyc_output/
+packages/oa-event-console/test/int/.runtime/

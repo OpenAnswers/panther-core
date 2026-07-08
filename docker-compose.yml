@@ -1,0 +1,85 @@
+services:
+  mongodb:
+    image: mongo:7.0.28
+    container_name: mongo
+    hostname: mongodb
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+    expose:
+      - '27017'
+    ports:
+      - '27017:27017'
+
+  event-console:
+    image: openanswers/panther-console:5
+    container_name: event-console
+    hostname: console
+    restart: unless-stopped
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+      - ADMIN_EMAIL=you@example.com
+    depends_on:
+      - mongodb
+    expose:
+      - 3001
+    ports:
+      - 3001:3001
+    links:
+      - mongodb
+    volumes:
+      - rules-vol:/app/rules:rw
+
+  event-server:
+    image: openanswers/panther-server:5
+    container_name: event-server
+    hostname: server
+    restart: unless-stopped
+    expose:
+      - 4002
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    volumes:
+      - rules-vol:/app/rules:ro
+
+  event-monitors-http:
+    image: openanswers/panther-monitors:5
+    container_name: event-monitors-http
+    hostname: event-monitors-http
+    restart: unless-stopped
+    ports:
+      - '5001:5001'
+    command: http
+    depends_on:
+      - event-console
+      - event-server
+    volumes:
+      - rules-vol:/app/rules:ro
+
+  event-monitors-syslogd:
+    image: openanswers/panther-monitors:5
+    container_name: event-monitors-syslogd
+    hostname: event-monitors-syslogd
+    restart: unless-stopped
+    ports:
+      - '1514:1514'
+    command: syslogd
+    depends_on:
+      - event-console
+      - event-server
+    volumes:
+      - rules-vol:/app/rules:ro
+
+  maildev:
+    image: maildev/maildev:2.1.0
+    restart: always
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+
+
+volumes:
+  rules-vol:

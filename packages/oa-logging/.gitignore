@@ -1,0 +1,9 @@
+pkg/
+lib/
+node_modules/
+npm-debug.log
+docs/public/fonts/
+docs/public/images/
+tags
+*.swp
+yarn-error.log

@@ -1,0 +1,17 @@
+{ 
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "description": "Event API Error",
+  "properties": {
+    "message":  { 
+      "type": "string" 
+    },
+    "error": { 
+      "type": "string" 
+    },
+    "code": {
+      "type": "number"
+    }
+  },
+  "required": [ "error" ]
+}

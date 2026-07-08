@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "lib": ["ES2017", "DOM"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["app/assets/js/**/*.ts"],
+  "exclude": ["node_modules"]
+}
