@@ -30,7 +30,7 @@ COPY --from=builder /build/packages/oa-event-console/docker/config.yml ./config.
 COPY --from=builder /build/packages/oa-event-console/docker/swagger.json ./swagger.json
 # install entrypoint
 COPY --from=builder --chmod=0755 /build/packages/oa-event-console/docker/entrypoint.sh ./docker-entrypoint.sh
-COPY --from=builder --chmod=0755 /build/hooks/install-runtime-plugins.sh ./install-runtime-plugins.sh
+COPY --from=builder --chmod=0755 /build/build/scripts/install-runtime-plugins.sh ./install-runtime-plugins.sh
 
 EXPOSE 3001/tcp
 

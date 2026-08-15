@@ -17,11 +17,6 @@ services:
     hostname: console
     restart: unless-stopped
     env_file: .env
-    # Optional runtime plugin install. Useful when testing the same flow as the
-    # stock DockerHub images instead of baking plugins into your custom image.
-    # environment:
-    #   - PANTHER_PLUGIN_INSTALL=["file:/plugins/panther-plugin-sso"]
-    #   - PANTHER_PLUGIN_DIR=/tmp/panther-plugins
     depends_on:
       - mongodb
     expose:
@@ -32,9 +27,9 @@ services:
       - mongodb
     volumes:
       - rules-vol:/app/rules:rw
-      # Optional plugin/config mount. The plugin path above is resolved inside
-      # the container, not relative to this compose file.
-      # - ./plugins:/plugins:ro
+      # Mount additional plugin repo and custom config (to load the plugin) files into the container
+      # - ../panther-my-plugin/configs/docker-console-config.yml:/app/config.yml:ro
+      # - ../panther-my-plugin:/plugins/panther-my-plugin
 
   event-server:
     image: event-server
@@ -44,19 +39,15 @@ services:
     expose:
       - 4002
     env_file: .env
-    # Add the same install target here when the plugin also implements
-    # applyServer() or is otherwise needed by the event-server process.
-    # environment:
-    #   - PANTHER_PLUGIN_INSTALL=["file:/plugins/panther-plugin-sso"]
-    #   - PANTHER_PLUGIN_DIR=/tmp/panther-plugins
     depends_on:
       - mongodb
     links:
       - mongodb
     volumes:
       - rules-vol:/app/rules:ro
-      # Optional plugin/config mount shared with event-console.
-      # - ./plugins:/plugins:ro
+      # Mount additional plugin repo and custom config (to load the plugin) files into the container
+      # - ../panther-my-plugin/configs/docker-server.ini:/app/etc/server.ini:ro
+      # - ../panther-my-plugin:/plugins/panther-my-plugin
 
   event-monitors-http:
     image: event-monitors
