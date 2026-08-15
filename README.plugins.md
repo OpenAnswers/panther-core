@@ -1,25 +1,22 @@
 # Panther Plugin Extensions
 
-This repository now supports config-driven extension packages for the event server and event console.
-
-The important constraint is package resolution, not repository layout. A plugin does not need to live under `packages/` as long as the relevant Panther process can `require()` it by package name.
+Panther includes support for custom plugins that can be installed and configured separately from the core service packages. This allows customisation to things like the event console, event schema and the authentication process.
 
 ## Overview
 
 Panther loads plugins separately in each service:
 
-- `oa-event-server` reads `plugins` from `packages/oa-event-server/etc/server.ini` by default, or from `OA_SERVER_CONFIG_FILE` when that environment variable is set.
-- `oa-event-console` reads `plugins` from `packages/oa-event-console/config.yml` by default, or from `OA_CONSOLE_CONFIG_FILE` when that environment variable is set. `OA_CONFIG_FILE` remains supported as the older console override name.
+- `oa-event-server` reads `plugins` from `packages/oa-event-server/etc/server.ini` by default, or using the `OA_SERVER_CONFIG_FILE` environment variable.
+- `oa-event-console` reads `plugins` from `packages/oa-event-console/config.yml` by default, or using the `OA_CONSOLE_CONFIG_FILE` environment variable.
 
 Each plugin entry names an npm package and can optionally point to a plugin-specific config file.
 
 Installing a plugin package is not enough on its own. Panther only loads plugins that are explicitly listed in the effective service config for the process that should use them:
 
-- add the plugin to `packages/oa-event-console/config.yml` if the console should load it
-- add the plugin to `packages/oa-event-server/etc/server.ini` if the server should load it
-- add it to both only when the plugin participates in both services
+- add the plugin to `config.yml` for the event console
+- add the plugin to `server.ini` for the event server
 
-If you want to avoid editing tracked Panther config files, keep plugin-owned config files in the plugin repository and point Panther at them with the environment-variable overrides above.
+The preference is to use environment variables to point at customised versions of these config files, rather than overwriting the configs.
 
 Server config:
 
@@ -35,10 +32,7 @@ plugins:
     config: ../../etc/panther-example-plugin.yml
 ```
 
-The `config` path is passed into the plugin's `configure()` function. If the plugin resolves it with `path.resolve(process.cwd(), configFile)`, paths are relative to the service process working directory:
-
-- local source runs: the package directory for that service
-- Docker images: `/app`
+The `config` path is passed into the plugin's `configure()` function, allowing any custom configuration for plugins to be maintained separately from the core service packages.
 
 ## Plugin Contract
 
@@ -159,7 +153,14 @@ Use this hook for auth-specific or route-specific work such as:
 
 - registering Passport strategies
 - mounting `/auth/...` routes and callbacks
-- replacing the built-in local login flow
+- replacing the built-in `POST /login` behavior when local auth has first been disabled in `applyConsole()`
+
+Important behavior notes:
+
+- `applyConsoleAuth()` runs after the built-in routes have been mounted.
+- `GET /login` remains Panther's built-in login page renderer.
+- `POST /login` only falls through to later middleware or plugin-mounted handlers when `setLocalAuthEnabled(false)` has been called during `applyConsole()`.
+- For OIDC, SAML, and Entra-style integrations, the preferred pattern is usually to add provider buttons via `registerAuthProvider()` and mount dedicated `/auth/...` and callback routes in `applyConsoleAuth()`.
 
 The intended split is:
 
@@ -252,7 +253,7 @@ cd /path/to/panther-core
 export NODE_PATH="$(pwd)/.."
 
 cd packages/oa-event-console
-OA_CONFIG_FILE=../../../panther-example-plugin/configs/local-config.yml npm start
+OA_CONSOLE_CONFIG_FILE=../../../panther-example-plugin/configs/local-config.yml npm start
 ```
 
 This avoids changing `packages/oa-event-server/etc/server.ini` and `packages/oa-event-console/config.yml` in the Panther repository.
