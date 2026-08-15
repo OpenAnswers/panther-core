@@ -72,6 +72,8 @@ class Config {
   smtp: any;
   session: any;
   rules: any;
+  auth: any;
+  plugins: any;
 
   static load_file( config_path, name ) {
     name ??= 'default';
@@ -204,6 +206,17 @@ class Config {
     };
 
     this.session = _.merge(session_defaults, opts.session);
+
+
+    // ### Auth
+    const auth_defaults = {
+      local: {
+        enabled: true,
+      },
+      providers: [],
+    };
+
+    this.auth = _.merge(auth_defaults, opts.auth);
     
 
     // ### Rules
@@ -228,6 +241,7 @@ class Config {
     };
 
     this.rules = _.merge(rules_defaults, opts.rules);
+    this.plugins = opts.plugins || [];
     
     debug('Config setup from %s', this.config_file, this);
     logger.info('Generated new config name [%s]', name);

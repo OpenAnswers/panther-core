@@ -4,6 +4,8 @@ FROM panther-runtime:24.15.0-alpine3.23 AS base
 
 LABEL component="panther/server"
 
+RUN apk add --no-cache git openssh-client
+
 # Install application
 COPY --from=builder --chmod=0755 /build/packages/oa-event-server/bin ./bin
 COPY --from=builder --chmod=0755 /build/packages/oa-event-server/lib ./lib
@@ -22,6 +24,7 @@ COPY --from=builder --chmod=0755 /build/packages/oa-event-server/migrations ./mi
 #install an entrypoint
 COPY --from=builder --chmod=0755 /build/packages/oa-event-server/docker/entrypoint.sh ./docker-entrypoint.sh
 COPY --from=builder --chmod=0755 /build/packages/oa-event-server/docker/wait-for-it.sh ./wait-for-it.sh
+COPY --from=builder --chmod=0755 /build/hooks/install-runtime-plugins.sh ./install-runtime-plugins.sh
 
 EXPOSE 4002/tcp
 

@@ -16,6 +16,7 @@ _Watch your Events like a Panther!_
 - [Description](#description)
   - [Table of Contents](#table-of-contents)
 - [Documentation](#documentation)
+- [Plugin Extensions](#plugin-extensions)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
     - [Software versions](#software-versions)
@@ -38,6 +39,10 @@ _Watch your Events like a Panther!_
 # Documentation
 
 Panther's user documentation is available at [**openanswers.github.io/panther-docs**](https://openanswers.github.io/panther-docs/#/).
+
+# Plugin Extensions
+
+Repository-level plugin development and deployment guidance is documented in [PLUGIN_EXTENSIONS.md](/PLUGIN_EXTENSIONS.md). That guide covers the backend and frontend hook points, the recommended `panther-*` plugin naming convention, and the supported installation paths for both source builds and pre-built Docker images.
 
 # Getting Started
 

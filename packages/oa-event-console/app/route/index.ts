@@ -24,14 +24,38 @@ const { Activities } = require('../../lib/activities');
 
 const config = require('../../lib/config').get_instance();
 
-// Create a passport authentication stategy from the model
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+const authProviders = function (app) {
+  return Array.isArray(app.locals.authProviders) ? app.locals.authProviders : [];
+};
+
+const localAuthEnabled = function (app) {
+  return app.locals.localAuthEnabled !== false;
+};
+
+const loginViewData = function (app, redirectUrl) {
+  return {
+    title: 'Login',
+    redirectUrl,
+    authProviders: authProviders(app),
+    localAuthEnabled: localAuthEnabled(app),
+  };
+};
 
 // We create a `route` function that is the main
 // export for `express` to require and run.
 const route = function (app) {
+  const authConfig = config.auth && typeof config.auth === 'object' ? config.auth : {};
+  const providerList = Array.isArray(authConfig.providers) ? authConfig.providers : [];
+
+  app.locals.authProviders = providerList;
+  app.locals.localAuthEnabled = !(authConfig.local && authConfig.local.enabled === false);
+
+  passport.serializeUser(User.serializeUser());
+  passport.deserializeUser(User.deserializeUser());
+  if (app.locals.localAuthEnabled) {
+    passport.use(User.createStrategy());
+  }
+
   // The `status` route is a special case which populates some info on
   // app.locals. Need a better way to pass it `app` or do this
   // setup elsewhere.
@@ -60,10 +84,7 @@ const route = function (app) {
         user: req.user,
       });
     } else {
-      return res.render('index', {
-        title: 'Login',
-        redirectUrl,
-      });
+      return res.render('index', loginViewData(app, redirectUrl));
     }
   });
 
@@ -79,15 +100,17 @@ const route = function (app) {
 
   // Not needed
   app.get('/login', (req, res) =>
-    res.render('index', {
-      title: 'Login',
-    })
+    res.render('index', loginViewData(app, null))
   );
 
   // Passport can produce non intuitive errors here.
   // Probably need to setup a custom callback to handle
   // errors (like form fields missing:400)
   app.post('/login', function (req, res, next) {
+    if (!localAuthEnabled(app)) {
+      return next();
+    }
+
     debug('/login auth', req.body);
     //res.redirect '/dashboard'
 

@@ -27,6 +27,30 @@ var oamonhome = new OAmonHome();
 
 var ExpressServer = require('./express_server').ExpressServer;
 
+var loadConfiguredPlugins = function (pluginEntries) {
+  if (typeof pluginEntries === 'string' && pluginEntries.trim().charAt(0) === '[') {
+    try {
+      pluginEntries = JSON.parse(pluginEntries);
+    } catch (e) {
+      throw new Error('Invalid plugins JSON: ' + e.message);
+    }
+  }
+  if (!Array.isArray(pluginEntries)) pluginEntries = [pluginEntries];
+  return pluginEntries
+    .filter(function (entry) {
+      return !!entry;
+    })
+    .map(function (entry) {
+      var pkgName = typeof entry === 'object' ? entry.package : entry;
+      var configFile = typeof entry === 'object' ? entry.config : null;
+      var plugin = require(pkgName);
+      if (typeof plugin.configure === 'function') {
+        return plugin.configure({ configFile: configFile, packageName: pkgName });
+      }
+      return plugin;
+    });
+};
+
 // Create a server configuration object by parsing in the command line
 // arguments and reading the server config file
 var ServerConfig = require('./server_config');
@@ -116,16 +140,39 @@ OAmonServer.prototype.start = function (started_cb) {
         var alerts = new AlertsLoader();
         self.alerts = alerts;
 
-        alerts.setup();
+        alerts.setup(function (setupErr) {
+          if (setupErr) return cb(setupErr);
 
-        logger.debug('LOADER all: ' + inspect(alerts.getAllColumns()));
-        alerts.registerAlertsSchema(self.db, function (err, lerts) {
-          /*
-           * lerts is the Mongoose Schema for an Alert
-           */
-          // make Alerts a global
-          Alerts = lerts;
-          cb(err, lerts);
+          var plugins;
+          try {
+            plugins = loadConfiguredPlugins(nconf.get('plugins') || []);
+          } catch (e) {
+            logger.error('Failed to load plugin: ' + e.message);
+            return cb(e);
+          }
+
+          async.eachSeries(
+            plugins,
+            function (plugin, next) {
+              if (plugin && typeof plugin.applyServer === 'function') {
+                return plugin.applyServer({ alerts: alerts, mongoose: Mongoose, nconf: nconf, logger: logger }, next);
+              }
+              next(null);
+            },
+            function (pluginErr) {
+              if (pluginErr) return cb(pluginErr);
+
+              logger.debug('LOADER all: ' + inspect(alerts.getAllColumns()));
+              alerts.registerAlertsSchema(self.db, function (err, lerts) {
+                /*
+                 * lerts is the Mongoose Schema for an Alert
+                 */
+                // make Alerts a global
+                Alerts = lerts;
+                cb(err, lerts);
+              });
+            }
+          );
         });
       },
 

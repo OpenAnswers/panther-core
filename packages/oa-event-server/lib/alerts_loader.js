@@ -102,6 +102,72 @@ var AlertsLoader = (exports.AlertsLoader = Class('AlertsLoader', {
       debug('All columns', this.allColumnNames.join(', '));
       if (cb) cb(null);
     },
+
+    addColumnDefinitions: function (definitions) {
+      var self = this;
+
+      if (!Array.isArray(definitions) || definitions.length === 0) return;
+
+      definitions.forEach(function (defn) {
+        var coldef = new ColumnDefinition(defn);
+        if (self.columns[coldef.getName()] != undefined) {
+          logger.warn('Duplicate column definition for { name: ' + coldef.getName() + ' }');
+          return;
+        }
+
+        self.columns[coldef.getName()] = coldef;
+        self.allColumnNames.push(coldef.getName());
+        if (coldef.isMandatory()) self.mandatoryColumnNames.push(coldef.getName());
+      });
+
+      debug('Mandatory columns', this.mandatoryColumnNames.join(', '));
+      debug('All columns', this.allColumnNames.join(', '));
+    },
+
+    migrateColumnDefinitions: function (definitions, cb) {
+      var async = require('async');
+
+      if (!Array.isArray(definitions) || definitions.length === 0) return cb(null);
+
+      var alertsCollection = mongoose.connection.collection('alerts');
+      var tasks = [];
+
+      definitions.forEach(function (colDef) {
+        var fieldName = colDef.name;
+
+        if (colDef.idx || colDef.uniq) {
+          tasks.push(function (done) {
+            var indexSpec = {};
+            indexSpec[fieldName] = 1;
+            var indexOpts = colDef.uniq ? { unique: true, sparse: true } : { sparse: true };
+            alertsCollection.createIndex(indexSpec, indexOpts, function (err) {
+              if (err) logger.warn('Index creation for [' + fieldName + ']: ' + err.message);
+              else logger.info('Index ensured for column: ' + fieldName);
+              done(null);
+            });
+          });
+        }
+
+        if (colDef.default !== undefined) {
+          tasks.push(function (done) {
+            var query = {};
+            query[fieldName] = { $exists: false };
+            var update = { $set: {} };
+            update.$set[fieldName] = colDef.default;
+            alertsCollection.updateMany(query, update, function (err, result) {
+              if (err) logger.warn('Migration backfill for [' + fieldName + ']: ' + err.message);
+              else if (result.modifiedCount > 0)
+                logger.info('Migrated ' + result.modifiedCount + ' documents for new column: ' + fieldName);
+              done(null);
+            });
+          });
+        }
+      });
+
+      if (tasks.length === 0) return cb(null);
+      async.series(tasks, cb);
+    },
+
     getMandatoryColumns: function () {
       return this.mandatoryColumnNames;
     },
