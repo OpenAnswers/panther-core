@@ -47,7 +47,7 @@ for (const file of fs.readdirSync(RULES_DIR)) {
   }
 }
 
-process.env.OA_CONFIG_FILE = FIXTURE_CONFIG;
+process.env.OA_CONSOLE_CONFIG_FILE = FIXTURE_CONFIG;
 
 // First require — module-level config load runs here against the fixture.
 const appModule = require('../../../app/index');
@@ -66,6 +66,54 @@ describe('Unit::EventConsole::app/index start() error branches', function () {
   it('throws when mkdirp on the upload directory fails', function () {
     sinon.stub(mkdirp, 'sync').throws(new Error('mkdir-fail'));
     expect(() => appModule.start(() => {})).to.throw(/mkdir-fail/);
+  });
+
+  it('lets console plugins disable local auth and register auth providers before express boot', function () {
+    const plugin = {
+      name: 'test-sso',
+      applyConsole(context: any) {
+        context.setLocalAuthEnabled(false);
+        context.registerAuthProvider({
+          id: 'entra',
+          label: 'Sign in with Entra',
+          url: '/auth/entra',
+        });
+      },
+    };
+    const testConfig: any = { consoleAdminSections: [] };
+
+    appModule._internal.applyConsolePlugins([plugin], testConfig, {
+      Field: {},
+      SocketIO: {},
+      logger: { info() {}, warn() {}, error() {} },
+    });
+
+    expect(testConfig.auth.local.enabled).to.equal(false);
+    expect(testConfig.auth.providers).to.deep.equal([
+      { id: 'entra', label: 'Sign in with Entra', url: '/auth/entra', className: '' },
+    ]);
+  });
+
+  it('runs post-express auth hooks with app and passport context', function () {
+    const seen: any[] = [];
+    const plugin = {
+      applyConsoleAuth(context: any) {
+        seen.push(context.app, context.express, context.passport);
+      },
+    };
+    const app = {};
+    const express = { app };
+    const fakePassport = { use() {} };
+
+    appModule._internal.applyConsoleAuthPlugins([plugin], {}, {
+      app,
+      express,
+      passport: fakePassport,
+    });
+
+    expect(seen[0]).to.equal(app);
+    expect(seen[1]).to.equal(express);
+    expect(seen[2]).to.equal(fakePassport);
   });
 });
 
