@@ -70,7 +70,7 @@ describe('Unit::EventConsole::app/index start() error branches', function () {
 });
 
 describe('Unit::EventConsole::app/index module-load failure', function () {
-  // Clears app/index from the require cache and points OA_CONFIG_FILE at a
+  // Clears app/index from the require cache and points OA_CONSOLE_CONFIG_FILE at a
   // non-existent file to drive the catch on line 28.
   //
   // Notably we do NOT re-require app/index in the finally block: the default
@@ -81,14 +81,14 @@ describe('Unit::EventConsole::app/index module-load failure', function () {
   // because no other unit spec requires it; integration specs go through the
   // _helpers/console_app helper which patches load_file to mutate-in-place.
   it('throws when the config file cannot be loaded', function () {
-    const orig_config = process.env.OA_CONFIG_FILE;
+    const orig_config = process.env.OA_CONSOLE_CONFIG_FILE;
     const app_path = require.resolve('../../../app/index');
     delete require.cache[app_path];
     try {
-      process.env.OA_CONFIG_FILE = '/no/such/config.yml';
+      process.env.OA_CONSOLE_CONFIG_FILE = '/no/such/config.yml';
       expect(() => require('../../../app/index')).to.throw();
     } finally {
-      process.env.OA_CONFIG_FILE = orig_config;
+      process.env.OA_CONSOLE_CONFIG_FILE = orig_config;
       // Cache stays cleared. Original singleton (now mutated by other tests)
       // remains the get_instance() result for any subsequent specs.
     }

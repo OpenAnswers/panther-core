@@ -21,8 +21,8 @@ if (argv.c) {
 if (argv.config) {
   config_file = argv.config;
 }
-if (process.env.OA_CONFIG_FILE) {
-  config_file = process.env.OA_CONFIG_FILE;
+if (process.env.OA_CONSOLE_CONFIG_FILE) {
+  config_file = process.env.OA_CONSOLE_CONFIG_FILE;
 }
 if (config_file == null) {
   config_file = 'config.yml';

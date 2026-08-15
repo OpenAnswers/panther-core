@@ -8,16 +8,18 @@ The important constraint is package resolution, not repository layout. A plugin 
 
 Panther loads plugins separately in each service:
 
-- `oa-event-server` reads `plugins` from `packages/oa-event-server/etc/server.ini`.
-- `oa-event-console` reads `plugins` from `packages/oa-event-console/config.yml`.
+- `oa-event-server` reads `plugins` from `packages/oa-event-server/etc/server.ini` by default, or from `OA_SERVER_CONFIG_FILE` when that environment variable is set.
+- `oa-event-console` reads `plugins` from `packages/oa-event-console/config.yml` by default, or from `OA_CONSOLE_CONFIG_FILE` when that environment variable is set. `OA_CONFIG_FILE` remains supported as the older console override name.
 
 Each plugin entry names an npm package and can optionally point to a plugin-specific config file.
 
-Installing a plugin package is not enough on its own. Panther only loads plugins that are explicitly listed in the service config for the process that should use them:
+Installing a plugin package is not enough on its own. Panther only loads plugins that are explicitly listed in the effective service config for the process that should use them:
 
 - add the plugin to `packages/oa-event-console/config.yml` if the console should load it
 - add the plugin to `packages/oa-event-server/etc/server.ini` if the server should load it
 - add it to both only when the plugin participates in both services
+
+If you want to avoid editing tracked Panther config files, keep plugin-owned config files in the plugin repository and point Panther at them with the environment-variable overrides above.
 
 Server config:
 
@@ -196,58 +198,13 @@ If a team wants workspace-style development for a private plugin, they can clone
 
 ### Local Development Without Rebuilding Docker Images
 
-For active development from a source checkout, the current repository layout is intentionally optimized for:
+For active development from source, there are two practical models.
 
-```bash
-npm install
-lerna run build
-npm run start/all
-```
+#### Model A: Plugin Lives Inside This Repository
 
-When developing a new plugin inside this repository, wire it in as both:
+Use this when the plugin is part of the Panther workspace and should participate in the repo's normal install/build flow.
 
-- a root workspace/Lerna package so `lerna run build` includes it
-- a root `dependencies` entry so Node can resolve it from the Panther service packages at runtime
-
-You should also add it as a `file:` dependency of each Panther service package that loads it.
-
-When developing the plugin in a separate repository or in a folder outside this repo, do not add it to this repo's workspace list. In that case, Panther only needs to be able to resolve it at runtime, for example via:
-
-- a `file:` dependency pointing at a local checkout outside this repo, for example `file:../../panther-example-plugin` or `file:../../../some/other/path/panther-example-plugin`
-- a normal package dependency from npm or an internal registry
-- a runtime install path such as `PANTHER_PLUGIN_INSTALL` for Docker images
-
-For a local plugin folder outside this repo:
-
-- do not add it to this repo's `workspaces` list
-- do not add it to this repo's `lerna.json` package list
-- do add it as a root dependency in this repo's `package.json` so Node can resolve it at runtime
-- do add it as a `file:` dependency in each Panther service package that loads it
-- do build that external plugin separately if it has its own TypeScript or other build step, because `lerna run build` in this repo will not build code that lives outside this repo
-
-A local plugin can be included as:
-
-- a root npm workspace
-- a Lerna package
-- a root `dependencies` entry so Node can resolve it from service packages via the top-level `node_modules`
-- a `file:` dependency of both `oa-event-console` and `oa-event-server`
-
-That means a normal root install/build will:
-
-1. install the plugin from its root-level directory, for example `./panther-example-plugin`
-2. build the plugin when `lerna run build` runs
-3. make the package resolvable to both services when `npm run start/all` starts them
-
-To ensure a local plugin loads while developing locally:
-
-1. add the plugin to `packages/oa-event-console/config.yml` if the console should load it
-2. add the plugin to `packages/oa-event-server/etc/server.ini` if the server should load it
-3. run `npm install` again after dependency or workspace changes
-4. run `npm run build && npm run start/all` from the repository root
-
-If you change plugin TypeScript source, rerun `npm run build` before restarting Panther so the plugin's `lib/` output is refreshed.
-
-Checklist for an in-repo plugin:
+Checklist:
 
 1. create the plugin at the repository root, for example `./panther-example-plugin`
 2. add that directory to the root `workspaces` list in `package.json`
@@ -255,22 +212,52 @@ Checklist for an in-repo plugin:
 4. add the plugin to the root `dependencies` in `package.json`
 5. add the plugin as a `file:` dependency in `packages/oa-event-console/package.json` if the console loads it
 6. add the plugin as a `file:` dependency in `packages/oa-event-server/package.json` if the server loads it
-7. add the plugin to `packages/oa-event-console/config.yml` if the console should load it
-8. add the plugin to `packages/oa-event-server/etc/server.ini` if the server should load it
-9. run `npm install`
-10. run `npm run build && npm run start/all`
+7. add the plugin to the effective console and server config files, or point Panther at plugin-owned config files using `OA_CONSOLE_CONFIG_FILE` and `OA_SERVER_CONFIG_FILE`
+8. run `npm install`
+9. run `npm run build`
+10. start Panther
 
-Checklist for a local plugin outside this repo:
+#### Model B: Plugin Lives In A Separate Sibling Repository
 
-1. keep the plugin in its own local folder, for example `../panther-example-plugin`
-2. add the plugin to the root `dependencies` in this repo's `package.json`, for example `"panther-example-plugin": "file:../panther-example-plugin"`
-3. add the plugin as a `file:` dependency in `packages/oa-event-console/package.json` if the console loads it
-4. add the plugin as a `file:` dependency in `packages/oa-event-server/package.json` if the server loads it
-5. add the plugin to `packages/oa-event-console/config.yml` if the console should load it
-6. add the plugin to `packages/oa-event-server/etc/server.ini` if the server should load it
-7. run `npm install`
-8. build the external plugin in its own folder if needed
-9. run `npm run build && npm run start/all`
+Use this when you want to develop the plugin outside `panther-core` and avoid editing tracked files in this repo.
+
+This is now a supported source-development path. Panther only needs:
+
+1. the plugin to be resolvable by package name at runtime
+2. plugin-enabled console and server config files
+
+The tested workflow is:
+
+1. keep the plugin in a sibling folder, for example `../panther-example-plugin`
+2. build that plugin in its own repository so its runtime output exists
+3. create plugin-owned config files in the plugin repository for the console and server
+4. set `NODE_PATH` to the parent directory that contains both repositories so `require('panther-example-plugin')` resolves without installing the plugin into `panther-core`
+5. start `oa-event-server` with `OA_SERVER_CONFIG_FILE=/path/to/plugin-owned/server.ini npm start`
+6. start `oa-event-console` with `OA_CONSOLE_CONFIG_FILE=/path/to/plugin-owned/config.yml npm start`
+
+Example:
+
+```bash
+cd /path/to/panther-core
+export NODE_PATH="$(pwd)/.."
+
+cd packages/oa-event-server
+OA_SERVER_CONFIG_FILE=../../../panther-example-plugin/configs/local-server.ini npm start
+```
+
+In a second terminal:
+
+```bash
+cd /path/to/panther-core
+export NODE_PATH="$(pwd)/.."
+
+cd packages/oa-event-console
+OA_CONFIG_FILE=../../../panther-example-plugin/configs/local-config.yml npm start
+```
+
+This avoids changing `packages/oa-event-server/etc/server.ini` and `packages/oa-event-console/config.yml` in the Panther repository.
+
+If you change plugin TypeScript source, rerun that plugin's own build before restarting Panther so the plugin's runtime output is refreshed.
 
 ### Option 2: Runtime Install for Pre-Built DockerHub Images
 
@@ -280,6 +267,8 @@ The console and server entrypoints now support:
 
 - `PANTHER_PLUGIN_INSTALL`: JSON array of npm install targets
 - `PANTHER_PLUGIN_DIR`: optional writable install directory, default `/tmp/panther-plugins`
+- `OA_CONSOLE_CONFIG_FILE`: optional path to a console config file to load instead of `/app/config.yml`
+- `OA_SERVER_CONFIG_FILE`: optional path to a server config file to load instead of `/app/etc/server.ini`
 
 At container startup Panther will:
 
@@ -287,7 +276,7 @@ At container startup Panther will:
 2. prepend `$PANTHER_PLUGIN_DIR/node_modules` to `NODE_PATH`
 3. continue normal Panther startup, so configured plugins can be resolved by package name
 
-Example `docker-compose.yml` fragment:
+Example `docker-compose.yml` fragment using plugin-owned config files and no Panther config overmounts:
 
 ```yaml
 services:
@@ -295,20 +284,20 @@ services:
     image: openanswers/panther-console:5
     environment:
       PANTHER_PLUGIN_INSTALL: '["git+https://github.com/acme/panther-oidc-auth.git#v1.2.3"]'
+      OA_CONSOLE_CONFIG_FILE: /plugins/panther-oidc-auth/configs/docker-console-config.yml
     volumes:
-      - ./plugins:/plugins:ro
-      - ./config/console.yml:/app/config.yml:ro
+      - ./plugins/panther-oidc-auth:/plugins/panther-oidc-auth:ro
 
   event-server:
     image: openanswers/panther-server:5
     environment:
       PANTHER_PLUGIN_INSTALL: '["git+https://github.com/acme/panther-oidc-auth.git#v1.2.3"]'
+      OA_SERVER_CONFIG_FILE: /plugins/panther-oidc-auth/configs/docker-server.ini
     volumes:
-      - ./plugins:/plugins:ro
-      - ./config/server.ini:/app/etc/server.ini:ro
+      - ./plugins/panther-oidc-auth:/plugins/panther-oidc-auth:ro
 ```
 
-If the plugin needs its own config file, mount that file into the container and reference it from Panther config using a path that is valid from `/app`, for example:
+In that model, the plugin repository carries the Docker-specific Panther config files as well as any plugin-specific config payload. Those plugin-owned Docker config files should still list the plugin explicitly, for example:
 
 ```ini
 plugins = [{"package":"panther-oidc-auth","config":"/plugins/panther-oidc-auth/config.yml"}]
