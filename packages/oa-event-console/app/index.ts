@@ -57,6 +57,7 @@ const { statSync } = require('fs');
 const mkdirp = require('mkdirp');
 const listEndpoints = require('express-list-endpoints');
 const passport = require('passport');
+const { User } = require('./model/user');
 
 // Logging to file
 //EventLogger.add_file Path.logs + '/all.log'
@@ -186,6 +187,7 @@ const applyConsoleAuthPlugins = function (plugins, consoleConfig, extraContext =
         config: consoleConfig,
         logger,
         passport,
+        User,
         registerAuthProvider(provider) {
           return registerAuthProvider(consoleConfig, provider);
         },
