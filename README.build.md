@@ -8,6 +8,7 @@
 - [Login](#login)
   - [Default login details](#default-login-details)
 - [Configuration](#configuration)
+  - [Plugin extensions](#plugin-extensions)
   - [Panther rules](#panther-rules)
 - [Sending events to Panther](#sending-events-to-panther)
   - [Sending events using syslog](#sending-events-using-syslog)
@@ -100,6 +101,18 @@ An initial admin user was created during the setup process, credentials are as f
 # Configuration
 
 The following applies only when running without Docker, the instructions can be adopted to run within the Docker container but this is not yet documented.
+
+## Plugin extensions
+
+For plugin development and installation details, see [PLUGIN_EXTENSIONS.md](/PLUGIN_EXTENSIONS.md).
+
+For local source development inside this repository, a plugin should be added as a root workspace/Lerna package and as a root dependency, then referenced from the service packages that load it. That is what makes both `npm run build` and `npm run start/all` work from the repo root.
+
+If the plugin lives in a separate repository or simply in a local folder outside this repo, it does not need to be added to this repo's workspace list; it only needs to be installed in a way that the Panther services can resolve at runtime. In practice that usually means a root `file:` dependency pointing at the external folder, plus `file:` dependencies in the Panther service packages that load it.
+
+For source builds more generally, the important rule is that each plugin must be installed as a dependency of the Panther service package that loads it. A plugin does not need to be copied into `packages/` unless you explicitly want workspace-style development inside this repository.
+
+Also note that Panther only loads plugins that are listed in the relevant service config. After installing a plugin, add it to `packages/oa-event-console/config.yml` for console loading, `packages/oa-event-server/etc/server.ini` for server loading, or both if it spans both services.
 
 There are two main configuration files located here:
 

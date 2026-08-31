@@ -9,6 +9,8 @@ export MONGO_URL="mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}"
 
 cd "$(dirname "$0")"
 
+. ./install-runtime-plugins.sh
+
 ./wait-for-it.sh -h "${MONGO_HOST}" -p "${MONGO_PORT}" -t 20 -- \
   ./node_modules/.bin/migrate-mongo up
 

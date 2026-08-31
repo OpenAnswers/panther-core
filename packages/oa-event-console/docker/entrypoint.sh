@@ -8,6 +8,8 @@ set -e
 
 cd "$(dirname "$0")"
 
+. ./install-runtime-plugins.sh
+
 if [ -n "${ADMIN_USERNAME}" ] && [ -n "${ADMIN_PASSWORD}" ] && [ -n "${ADMIN_EMAIL}" ]
 then
     node dist/bin/setup_user.js -c config.yml --user "${ADMIN_USERNAME}" --password "${ADMIN_PASSWORD}" --email "${ADMIN_EMAIL}" -g admin

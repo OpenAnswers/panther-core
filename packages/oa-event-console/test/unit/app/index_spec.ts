@@ -47,7 +47,7 @@ for (const file of fs.readdirSync(RULES_DIR)) {
   }
 }
 
-process.env.OA_CONFIG_FILE = FIXTURE_CONFIG;
+process.env.OA_CONSOLE_CONFIG_FILE = FIXTURE_CONFIG;
 
 // First require — module-level config load runs here against the fixture.
 const appModule = require('../../../app/index');
@@ -67,10 +67,58 @@ describe('Unit::EventConsole::app/index start() error branches', function () {
     sinon.stub(mkdirp, 'sync').throws(new Error('mkdir-fail'));
     expect(() => appModule.start(() => {})).to.throw(/mkdir-fail/);
   });
+
+  it('lets console plugins disable local auth and register auth providers before express boot', function () {
+    const plugin = {
+      name: 'test-sso',
+      applyConsole(context: any) {
+        context.setLocalAuthEnabled(false);
+        context.registerAuthProvider({
+          id: 'entra',
+          label: 'Sign in with Entra',
+          url: '/auth/entra',
+        });
+      },
+    };
+    const testConfig: any = { consoleAdminSections: [] };
+
+    appModule._internal.applyConsolePlugins([plugin], testConfig, {
+      Field: {},
+      SocketIO: {},
+      logger: { info() {}, warn() {}, error() {} },
+    });
+
+    expect(testConfig.auth.local.enabled).to.equal(false);
+    expect(testConfig.auth.providers).to.deep.equal([
+      { id: 'entra', label: 'Sign in with Entra', url: '/auth/entra', className: '' },
+    ]);
+  });
+
+  it('runs post-express auth hooks with app and passport context', function () {
+    const seen: any[] = [];
+    const plugin = {
+      applyConsoleAuth(context: any) {
+        seen.push(context.app, context.express, context.passport);
+      },
+    };
+    const app = {};
+    const express = { app };
+    const fakePassport = { use() {} };
+
+    appModule._internal.applyConsoleAuthPlugins([plugin], {}, {
+      app,
+      express,
+      passport: fakePassport,
+    });
+
+    expect(seen[0]).to.equal(app);
+    expect(seen[1]).to.equal(express);
+    expect(seen[2]).to.equal(fakePassport);
+  });
 });
 
 describe('Unit::EventConsole::app/index module-load failure', function () {
-  // Clears app/index from the require cache and points OA_CONFIG_FILE at a
+  // Clears app/index from the require cache and points OA_CONSOLE_CONFIG_FILE at a
   // non-existent file to drive the catch on line 28.
   //
   // Notably we do NOT re-require app/index in the finally block: the default
@@ -81,14 +129,14 @@ describe('Unit::EventConsole::app/index module-load failure', function () {
   // because no other unit spec requires it; integration specs go through the
   // _helpers/console_app helper which patches load_file to mutate-in-place.
   it('throws when the config file cannot be loaded', function () {
-    const orig_config = process.env.OA_CONFIG_FILE;
+    const orig_config = process.env.OA_CONSOLE_CONFIG_FILE;
     const app_path = require.resolve('../../../app/index');
     delete require.cache[app_path];
     try {
-      process.env.OA_CONFIG_FILE = '/no/such/config.yml';
+      process.env.OA_CONSOLE_CONFIG_FILE = '/no/such/config.yml';
       expect(() => require('../../../app/index')).to.throw();
     } finally {
-      process.env.OA_CONFIG_FILE = orig_config;
+      process.env.OA_CONSOLE_CONFIG_FILE = orig_config;
       // Cache stays cleared. Original singleton (now mutated by other tests)
       // remains the get_instance() result for any subsequent specs.
     }

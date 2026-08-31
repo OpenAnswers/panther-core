@@ -5,12 +5,16 @@
 //-  
 
 .form.pull-right
-  form#nav-login-form.form-inline.nav-login(role='form' action='/login' method='post')
-    .form-group
-      input.form-control(type='text' name='username' placeholder='user')
-    .form-group
-      input.form-control(type='password' name='password' placeholder='password')
-    button.btn.btn-primary(type='submit') Log in
+  if localAuthEnabled !== false
+    form#nav-login-form.form-inline.nav-login(role='form' action='/login' method='post')
+      .form-group
+        input.form-control(type='text' name='username' placeholder='user')
+      .form-group
+        input.form-control(type='password' name='password' placeholder='password')
+      button.btn.btn-primary(type='submit') Log in
+  else if authProviders && authProviders.length
+    each provider in authProviders
+      a.btn.btn-primary.marginleft5(href=provider.url class=provider.className || '')= provider.label
 
 .name
   h2.text-muted #{name}

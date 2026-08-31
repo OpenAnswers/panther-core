@@ -13,8 +13,9 @@ const { expect, sinon } = require('../../mocha_helpers');
 const { useMongo } = require('../../helpers/mongo');
 const express = require('express');
 const request = require('supertest');
+const config = require('../../../lib/config').get_instance();
 
-// Load the module under test. It triggers passport.use() at import, which needs
+// Load the module under test. It configures passport inside route(), which needs
 // the mongoose connection to exist so we rely on useMongo below.
 require('../../../app/model/user');
 const routeIndex = require('../../../app/route/index');
@@ -46,6 +47,10 @@ function makeApp(opts: { user?: any; skipMongoGate?: boolean } = {}) {
   // the mongoose-ready gate from firing on non-gated paths.
   routeIndex.route(app);
 
+  if ((opts as any).afterRoute) {
+    (opts as any).afterRoute(app);
+  }
+
   app.use(function (err: any, _req: any, _res: any, next: any) {
     next(err);
   });
@@ -55,8 +60,15 @@ function makeApp(opts: { user?: any; skipMongoGate?: boolean } = {}) {
 describe('Unit::EventConsole::route::index', function () {
   useMongo(this);
 
+  let originalAuth: any;
+
+  beforeEach(function () {
+    originalAuth = config.auth;
+  });
+
   afterEach(function () {
     sinon.restore();
+    config.auth = originalAuth;
   });
 
   describe('GET /', function () {
@@ -81,6 +93,20 @@ describe('Unit::EventConsole::route::index', function () {
       const app = makeApp();
       const res = await request(app).get('/?redirectUrl=/views/foo');
       expect(res.body.redirectUrl).to.equal('/views/foo');
+    });
+
+    it('renders configured SSO providers and hides local auth when disabled', async function () {
+      config.auth = {
+        local: { enabled: false },
+        providers: [{ id: 'entra', label: 'Sign in with Entra', url: '/auth/entra' }],
+      };
+
+      const app = makeApp();
+      const res = await request(app).get('/');
+
+      expect(res.body._view).to.equal('index');
+      expect(res.body.localAuthEnabled).to.equal(false);
+      expect(res.body.authProviders).to.deep.equal([{ id: 'entra', label: 'Sign in with Entra', url: '/auth/entra' }]);
     });
   });
 
@@ -119,6 +145,27 @@ describe('Unit::EventConsole::route::index', function () {
       const res = await request(app).get('/ping');
       expect(res.status).to.equal(200);
       expect(res.text).to.equal('pong!');
+    });
+  });
+
+  describe('POST /login', function () {
+    it('falls through when local auth is disabled so an SSO plugin route can handle it', async function () {
+      config.auth = {
+        local: { enabled: false },
+        providers: [{ id: 'entra', label: 'Sign in with Entra', url: '/auth/entra' }],
+      };
+
+      const app = makeApp({
+        afterRoute(nextApp: any) {
+          nextApp.post('/login', function (_req: any, res: any) {
+            res.status(204).end();
+          });
+        },
+      } as any);
+
+      const res = await request(app).post('/login').send({ username: 'alice', password: 'secret' });
+
+      expect(res.status).to.equal(204);
     });
   });
 });

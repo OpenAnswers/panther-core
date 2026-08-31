@@ -27,6 +27,9 @@ services:
       - mongodb
     volumes:
       - rules-vol:/app/rules:rw
+      # Mount additional plugin repo and custom config (to load the plugin) files into the container
+      # - ../panther-my-plugin/configs/docker-console-config.yml:/app/config.yml:ro
+      # - ../panther-my-plugin:/plugins/panther-my-plugin
 
   event-server:
     image: event-server
@@ -42,6 +45,9 @@ services:
       - mongodb
     volumes:
       - rules-vol:/app/rules:ro
+      # Mount additional plugin repo and custom config (to load the plugin) files into the container
+      # - ../panther-my-plugin/configs/docker-server.ini:/app/etc/server.ini:ro
+      # - ../panther-my-plugin:/plugins/panther-my-plugin
 
   event-monitors-http:
     image: event-monitors

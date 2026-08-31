@@ -4,6 +4,11 @@
 // This file is subject to the terms and conditions defined in the Software License Agreement.
 //
 
+import childProcess = require('child_process');
+import fs = require('fs');
+import os = require('os');
+import path = require('path');
+
 const { expect, sinon } = require('../mocha_helpers');
 
 const { ServerConfig } = require('../../lib/server_config');
@@ -51,6 +56,47 @@ describe('ServerConfig', function () {
     expect(comps).to.be.an('array');
     expect(comps).to.include('server');
     expect(comps).to.include('trigger');
+  });
+
+  it('allows the config path to be overridden by environment variable', function () {
+    const tmp_dir = fs.mkdtempSync(path.join(os.tmpdir(), 'server-config-'));
+    const config_path = path.join(tmp_dir, 'custom-server.ini');
+
+    fs.writeFileSync(
+      config_path,
+      ['port = 4321', '', '[db]', 'hostname = env-host', 'port = 27018', 'collection = env_panther', ''].join('\n')
+    );
+
+    try {
+      const output = childProcess.execFileSync(
+        process.execPath,
+        [
+          '-e',
+          [
+            "const { ServerConfig } = require('./lib/server_config');",
+            'const config = new ServerConfig({});',
+            'process.stdout.write(JSON.stringify({',
+            '  port: config.Port(),',
+            '  host: config.DbHostname(),',
+            '  dbPort: config.DbPort(),',
+            '  collection: config.DbCollection()',
+            '}));',
+          ].join(' '),
+        ],
+        {
+          cwd: path.resolve(__dirname, '../..'),
+          env: { ...process.env, OA_SERVER_CONFIG_FILE: config_path },
+        }
+      );
+
+      const parsed = JSON.parse(output.toString());
+      expect(parsed.port).to.equal(4321);
+      expect(parsed.host).to.equal('env-host');
+      expect(Number(parsed.dbPort)).to.equal(27018);
+      expect(parsed.collection).to.equal('env_panther');
+    } finally {
+      fs.rmSync(tmp_dir, { recursive: true, force: true });
+    }
   });
 
   describe('numeric validation', function () {

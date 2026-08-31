@@ -46,3 +46,26 @@ The app uses [NodeJS](https://nodejs.org/), [Express4](https://expressjs.com/), 
 `test/unit/*_spec.ts` Unit tests.
 
 `test/func/*_spec.ts` Functional tests.
+
+## Plugin Hooks
+
+See [PLUGIN_EXTENSIONS.md](/PLUGIN_EXTENSIONS.md) for the full cross-service plugin guide.
+
+Configured console plugins can now extend authentication in two phases:
+
+- `applyConsole(context)` runs before the Express app is created. Use it to call `setLocalAuthEnabled(false)` and `registerAuthProvider({ id, label, url, className? })` so the built-in login views can expose SSO entry points.
+- `applyConsoleAuth(context)` runs after the Express app is created and receives `app`, `express`, and `passport`. Use it to register Passport strategies and mount routes such as `/auth/entra` and callback handlers.
+
+The console config now accepts:
+
+```yaml
+auth:
+	local:
+		enabled: false
+	providers:
+		- id: entra
+			label: Sign in with Entra
+			url: /auth/entra
+```
+
+With local auth disabled, the built-in `POST /login` handler falls through so a plugin can mount its own handler if it needs to reuse that path.

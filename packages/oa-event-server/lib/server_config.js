@@ -48,8 +48,11 @@ var ServerConfig = (exports.ServerConfig = Class('ServerConfig', {
       var self = this;
       nconf.argv();
 
+      var envConfigFile = process.env.OA_SERVER_CONFIG_FILE;
+
       // use commandline --configfile path if it was specified
       if (nconf.get('configfile')) this.setConfigFile(nconf.get('configfile'));
+      else if (envConfigFile) this.setConfigFile(envConfigFile);
       else if (props.configFile == undefined)
         // otherwise use the default value
         this.setConfigFile(path.join(oamonhome.getServerEtcDir(), 'server.ini'));

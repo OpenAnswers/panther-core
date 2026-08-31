@@ -78,12 +78,17 @@ block content
               #admin-integrations-content
                 include admin/integrations
 
-      .info.marginbottom15.development
+    each section in config.consoleAdminSections || []
+      .info.marginbottom15.plugin-admin-section(class=section.className)
         .card.card-generic
           .inner
-            a(name="console_fields")
-            .title Console Fields
+            a(name=section.anchor || section.id)
+            .title
+              | #{section.title}
+              if section.plugin
+                small.text-muted(style='margin-left: 8px;') Provided by plugin #[strong #{section.plugin}]
             .content
-              .help Setup extra console fields on top of the defaults. You rules can then populate fields specific to your events.
-              #admin-fields-content
-                include admin/fields
+              if section.help
+                .help #{section.help}
+              div(id=section.containerId || section.id)
+                != section.html

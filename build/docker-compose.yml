@@ -4,12 +4,12 @@ services:
     build:
       context: ..
       dockerfile: Dockerfiles/Dockerfile-builder
-    image: 'panther-builder:iron-alpine3.21'
+    image: 'panther-builder:24.15.0-alpine3.23'
   runtime:
     build:
       context: ..
       dockerfile: Dockerfiles/Dockerfile-runtime
-    image: 'panther-runtime:iron-alpine3.21'
+    image: 'panther-runtime:24.15.0-alpine3.23'
 
   server:
     depends_on:

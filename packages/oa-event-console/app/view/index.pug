@@ -26,15 +26,24 @@ block content
       p#login-error-failed.alert.alert-danger.hidden Invalid login, please try again
       p#login-error-locked.alert.alert-danger.hidden Too many failed logins, please wait and try again
 
-      form#form-public-login(role='form' action='/login' method='post')
-        input(type='hidden' value=redirectUrl name='redirectUrl')
-        .form-group.margintop15
-          input.form-control(type='text' name='username' placeholder='User name')
-        .form-group
-          input.form-control(type='password' name='password' placeholder='Password')
-        .form-group.text-center
-          button.btn.btn-primary.marginright5(type='submit' value='Log in') Log in
-          a.btn.btn-link(href='/password') Forgotten password?
+      if localAuthEnabled !== false
+        form#form-public-login(role='form' action='/login' method='post')
+          input(type='hidden' value=redirectUrl name='redirectUrl')
+          .form-group.margintop15
+            input.form-control(type='text' name='username' placeholder='User name')
+          .form-group
+            input.form-control(type='password' name='password' placeholder='Password')
+          .form-group.text-center
+            button.btn.btn-primary.marginright5(type='submit' value='Log in') Log in
+            a.btn.btn-link(href='/password') Forgotten password?
+
+      if authProviders && authProviders.length
+        .form-group.text-center(class=localAuthEnabled !== false ? 'margintop15' : 'margintop15')
+          each provider in authProviders
+            a.btn.btn-default.marginright5(href=provider.url class=provider.className || '')= provider.label
+
+      if localAuthEnabled === false && (!authProviders || authProviders.length === 0)
+        p.text-muted.margintop15 No login methods are configured.
 
     +unauth_card('Web Browser Support')#login-notchrome.hidden
       p We recommend using a recent version of Chrome to access your Panther console.

@@ -20,6 +20,10 @@ services:
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=admin
       - ADMIN_EMAIL=you@example.com
+      # Optional runtime plugin install for stock DockerHub images.
+      # Install targets must be valid npm specs, for example:
+      # - PANTHER_PLUGIN_INSTALL=["git+https://github.com/acme/panther-plugin-sso.git#v1.2.3"]
+      # - PANTHER_PLUGIN_DIR=/tmp/panther-plugins
     depends_on:
       - mongodb
     expose:
@@ -30,12 +34,20 @@ services:
       - mongodb
     volumes:
       - rules-vol:/app/rules:rw
+      # Optional plugin config mount. Reference the same absolute path from
+      # config.yml or server.ini when the plugin expects configFile.
+      # - ./plugins:/plugins:ro
 
   event-server:
     image: openanswers/panther-server:5
     container_name: event-server
     hostname: server
     restart: unless-stopped
+    environment:
+      # If a plugin is used by both server and console, configure the same
+      # install target here as well so both processes can resolve it.
+      # - PANTHER_PLUGIN_INSTALL=["git+https://github.com/acme/panther-plugin-sso.git#v1.2.3"]
+      # - PANTHER_PLUGIN_DIR=/tmp/panther-plugins
     expose:
       - 4002
     depends_on:
@@ -44,6 +56,8 @@ services:
       - mongodb
     volumes:
       - rules-vol:/app/rules:ro
+      # Optional plugin config mount shared with event-console.
+      # - ./plugins:/plugins:ro
 
   event-monitors-http:
     image: openanswers/panther-monitors:5

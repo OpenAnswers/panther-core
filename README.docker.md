@@ -6,6 +6,7 @@
     - [Running the build](#running-the-build)
     - [Starting Panther](#starting-panther)
 - [Configuration](#configuration)
+  - [Plugin extensions](#plugin-extensions)
 
 # Getting Started
 
@@ -54,3 +55,9 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin
 ADMIN_EMAIL=me@my.domain
 ```
+
+## Plugin extensions
+
+For plugin hook documentation and service config examples, see [PLUGIN_EXTENSIONS.md](/PLUGIN_EXTENSIONS.md).
+
+For pre-built Docker images, the console and server containers now support runtime plugin installation with `PANTHER_PLUGIN_INSTALL`, which accepts a JSON array of npm install targets. This is the recommended way to add third-party plugins to stock DockerHub images without rebuilding them.

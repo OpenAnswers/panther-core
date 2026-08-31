@@ -353,6 +353,29 @@ class Field {
     })();
   }
 
+  static extend(extraDefinition, extraDefaultFields) {
+    extraDefinition ??= {};
+    extraDefaultFields ??= [];
+
+    for (const name in extraDefinition) {
+      const defn = extraDefinition[name];
+      if (this.definition[name]) {
+        logger.warn(`Plugin tried to redefine existing field [${name}] - skipped`);
+      } else {
+        this.definition[name] = defn;
+      }
+    }
+
+    for (const fieldName of extraDefaultFields) {
+      if (!this.w2_fields.includes(fieldName)) {
+        this.w2_default_fields.push(fieldName);
+        this.w2_fields.push(fieldName);
+      }
+    }
+
+    this.w2ColumnDefinition = this.w2BuildColumnDefinition(this.w2_default_fields);
+  }
+
   static list() {
     return _.keys(this.definition);
   }
